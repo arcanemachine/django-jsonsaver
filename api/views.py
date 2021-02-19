@@ -1,14 +1,14 @@
 from rest_framework import generics, viewsets
 
 from . import serializers
-from jsonsaver.models import JsonItem
+from jsonsaver.models import JsonStore
 
 
-class JsonItemList(generics.ListAPIView):
-    queryset = JsonItem.objects.all()
-    serializer_class = serializers.JsonItemSerializer
+class JsonStoreList(generics.ListAPIView):
+    queryset = JsonStore.objects.all()
+    serializer_class = serializers.JsonStoreSerializer
 
 
-class JsonItemViewSet(viewsets.ModelViewSet):
-    queryset = JsonItem.objects.all()
-    serializer_class = serializers.JsonItemSerializer
+class JsonStoreViewSet(viewsets.ModelViewSet):
+    queryset = JsonStore.objects.all()
+    serializer_class = serializers.JsonStoreSerializer

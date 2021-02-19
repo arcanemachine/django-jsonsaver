@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Register New User{% endblock %}
+{% block body_title %}Register New User{% endblock %}
+
+{% block content %}
+
+<p>Please enter your account information:</p>
+
+{% include 'base_form.html' %}
+
+<ul class="bottom-links">
+  <li><a href="{% url 'users:login' %}">Login to an existing account</a></li>
+</ul>
+
+{% endblock content %}

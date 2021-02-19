@@ -1,0 +1,54 @@
+<form class="form" method="post">{% csrf_token %}
+
+  <div class="form-item-container">
+    {{ form.as_p }}
+  </div>
+
+  <div class="form-button-container">
+    <span>
+      <button type="submit" class="form-button form-button-submit">Submit</button>
+    </span>
+    <span>
+      <button type="button" class="form-button form-button-cancel" onclick="history.go(-1)">Cancel</button>
+    </span>
+  </div>
+
+</form>
+
+<style>
+
+.form-item-container {
+  margin: 2rem 2rem 3rem;
+}
+
+.form-button {
+  margin-right: 0.5rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-size: 1.1rem;
+  border-style: none;
+  border-radius: 0.5rem;
+}
+
+.form-button-submit {
+  background-color: #3273dc;
+  color: white;
+}
+
+.form-button-cancel {
+  background-color: #696969;
+  color: white;
+}
+
+.form-item-container > p:not(:first-child) {
+	margin-top: 1.5rem;
+}
+
+.form-item-container > ul {
+	list-style-type: none;
+}
+
+.form-item-container > ul > li:not(:first-child) {
+	margin-top: 0.5rem;
+}
+</style>

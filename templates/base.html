@@ -1,0 +1,68 @@
+{% load static %}<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{% endblock title %}</title>
+
+    <!--link rel="shortcut icon" type="image/png" href="{# static 'favicon.ico' #}"-->
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+
+   
+    {% block head_script %}{% endblock head_script %}
+    {% block style %}{% endblock style %}
+
+
+  </head>
+  <body>
+
+    <noscript>
+      <h3>This page requires JavaScript. Please enable JavaScript to continue.</h3>
+    </noscript>
+
+    <div id="page-container" class="page-container">
+
+      <div class="header-container">
+
+        <div class="header-title-container">
+          <h2><a class="unstyled-link" href="{% url 'project_root' %}">{{ PROJECT_NAME }}</a></h2>
+        </div>
+
+        <section class="nav-item-container">
+          {% if not user.is_authenticated %}
+          <div class="nav-item"><a href="{% url 'users:login' %}" class="unstyled-link">Login</a></div>
+          <div class="nav-item"><a href="{% url 'users:register' %}" class="unstyled-link">Register</a></div>
+          {% elif user.is_authenticated %}
+          <div class="nav-item"><a href="{% url 'users:user_detail' %}" class="unstyled-link">{{ user.username }}</a></div>
+          <div class="nav-item"><a href="{% url 'users:logout' %}" class="unstyled-link">Logout</a></div>
+          {% endif %}
+
+        </section>
+
+      </div>
+
+      <div class="main-container">
+
+  {% if messages %}
+			<div id="info-message-container" class="info-message-container">
+    {% for message in messages %}
+				<div class="info-message-item">
+					<strong>{{ message }}</strong>
+				</div>
+    {% endfor %}
+			</div>
+  {% endif %}
+
+				<div class="content-container">
+					<div class="body-title-container">
+						<h2 class="body-title">{% block body_title %}{% endblock body_title %}</h2>
+						<h3 class="body-subheading">{% block body_subheading %}{% endblock body_subheading %}</h3>
+					</div>
+  {% block content %}{% endblock content %}
+				</div>
+      </div>
+    </div>
+  {% block body_end_script %}{% endblock body_end_script %}
+
+	</body>
+</html>

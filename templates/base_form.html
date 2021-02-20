@@ -1,7 +1,9 @@
+{% load crispy_forms_tags %}
+
 <form class="form" method="post">{% csrf_token %}
 
   <div class="form-item-container">
-    {{ form.as_p }}
+    {{ form|crispy }}
   </div>
 
   <div class="form-button-container">

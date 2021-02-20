@@ -6,8 +6,10 @@
 
 {% block content %}
 
-<p>Please enter your login details:</p>
-
 {% include 'base_form.html' %}
+
+<ul class="bottom-links">
+  <li><a href="{% url 'users:register' %}">Create a new account</a></li>
+</ul>
 
 {% endblock content %}

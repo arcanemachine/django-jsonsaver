@@ -10,6 +10,7 @@ django-cors-headers = "*"
 ipython = "*"
 django-simple-captcha = "*"
 pillow = "*"
+django-crispy-forms = "*"
 
 [dev-packages]
 

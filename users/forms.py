@@ -16,4 +16,7 @@ class NewUserCreationForm(UserCreationForm):
     def clean_email(self):
         if UserModel.objects.filter(email=self.cleaned_data['email']).exists():
             raise ValidationError("This email address is taken.")
-        return self.cleaned_data['email']
+        return self.cleaned_data['email'].lower()
+
+    def clean_username(self):
+        return self.cleaned_data['username'].lower()

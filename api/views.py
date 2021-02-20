@@ -25,7 +25,6 @@ class JsonStoreViewSet(viewsets.ModelViewSet):
             raise PermissionDenied
         return super().list(request)
 
-
     def get_object(self):
         obj = super().get_object()
         user = self.request.user

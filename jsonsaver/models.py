@@ -8,6 +8,7 @@ class JsonStore(models.Model):
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
 
     ref = models.CharField(max_length=255, blank=True, null=True, unique=True)
+    is_public = models.BooleanField(default=False)
 
     data = models.JSONField(default=dict, blank=False, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)

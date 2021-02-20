@@ -71,6 +71,11 @@ class UserLoginView(SuccessMessageMixin, LoginView):
 class UserDetailView(LoginRequiredMixin, DetailView):
     template_name = 'users/user_detail.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['stores'] = self.get_object().jsonstore_set.order_by('-id')
+        return context
+
     def get_object(self):
         return self.request.user
 

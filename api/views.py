@@ -38,8 +38,11 @@ class JsonStoreRefDetail(generics.RetrieveAPIView):
     serializer_class = serializers.JsonStoreRefSerializer
 
     def dispatch(self, request, *args, **kwargs):
-        if not self.get_object():
+        obj = self.get_object()
+        if not obj:
             raise NotFound
+        elif not obj.is_public and request.user != obj.user:
+            raise PermissionDenied
         return super().dispatch(request, *args, **kwargs)
 
     def get_object(self):

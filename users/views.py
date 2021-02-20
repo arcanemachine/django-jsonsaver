@@ -1,6 +1,5 @@
 from django.contrib import messages
 from django.conf import settings
-from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -35,8 +34,8 @@ class UserRegisterView(CreateView):
         self.object.is_active = False
         self.object.save()
         messages.success(
-            self.request,
-            "Please check your email inbox for your confirmation message.")
+            self.request, "Success! Please check your email inbox for "
+            "your confirmation message.")
         helpers.send_welcome_email(user=self.object)
         return HttpResponseRedirect(self.get_success_url())
 
@@ -53,7 +52,7 @@ def user_confirm(request, confirmation_code):
 
 
 class UserLoginView(SuccessMessageMixin, LoginView):
-    form_class = AuthenticationForm
+    form_class = forms.UserAuthenticationForm
     template_name = 'users/login.html'
     redirect_authenticated_user = True
     success_message = "You are now logged in."

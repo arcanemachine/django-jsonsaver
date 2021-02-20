@@ -12,6 +12,11 @@ class JsonStore(models.Model):
     data = models.JSONField(default=dict, blank=False, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
 
+    def __str__(self):
+        return f"id: {self.id}, "\
+            f"user: {self.user.username}, "\
+            f"ref: {self.ref if self.ref else 'N/A'}"
+
 
 """
 store = {

@@ -1,14 +1,19 @@
 from django.conf import settings
 from django.db import models
-from rest_framework.authtoken.models import Token
+from django.urls import reverse
+from django.utils.text import slugify
 
 
 class JsonStore(models.Model):
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
+    user = \
+        models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
-    ref = models.CharField(max_length=255, blank=True, null=True, unique=True)
-    is_public = models.BooleanField(default=False)
+    name = models.CharField(
+        max_length=128,
+        help_text="Note: Name will be converted to lowercase and hyphenated")
+    is_public = models.BooleanField(
+        "Make this store publicly accessible using the name as a lookup value",
+        default=False)
 
     data = models.JSONField(default=dict, blank=False, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
@@ -16,7 +21,17 @@ class JsonStore(models.Model):
     def __str__(self):
         return f"id: {self.id}, "\
             f"user: {self.user.username}, "\
-            f"ref: {self.ref if self.ref else 'N/A'}"
+            f"name: {self.name if self.name else 'N/A'}"
+
+    def get_absolute_url(self):
+        return reverse('users:user_detail')
+
+    def save(self, *args, **kwargs):
+        if not self.name:
+            self.name = str(self.pk)
+        if self.name and self.name != slugify(self.name):
+            self.name = slugify(self.name)
+        super().save(*args, **kwargs)
 
 
 """

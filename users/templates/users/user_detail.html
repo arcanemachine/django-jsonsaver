@@ -12,13 +12,15 @@
 {% if stores %}
 <ul>
   {% for store in stores %}
-  <li>{{ store }}</li>
+  <li>{{ store.name }}</li>
   {% endfor %}
 </ul>
 </ul>
 {% else %}
 <p>There's nothing here yet.</p>
 {% endif %}
+
+<p><a href="{% url 'jsonsaver:jsonstore_create' %}">Create new store</a></p>
 
 <h2 class="mt-6">Account Settings</h2>
 

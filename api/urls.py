@@ -12,10 +12,10 @@ urlpatterns = router.urls + [
     path('',
          views.api_root,
          name='api_root'),
-    path('json/ref/',
-         views.ref_root,
-         name='ref_root'),
-    path('json/ref/<str:ref>/',
-         views.JsonStoreRefDetail.as_view(),
-         name='ref_detail')
+    path('json/name/',
+         views.name_root,
+         name='name_root'),
+    path('json/name/<str:name>/',
+         views.JsonStoreNameDetail.as_view(),
+         name='name_detail')
 ]

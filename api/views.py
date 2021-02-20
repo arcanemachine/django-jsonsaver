@@ -12,7 +12,7 @@ def api_root(request):
     return HttpResponseRedirect(reverse('project_root'))
 
 
-def ref_root(request):
+def name_root(request):
     return HttpResponseRedirect(reverse('project_root'))
 
 
@@ -33,9 +33,9 @@ class JsonStoreViewSet(viewsets.ModelViewSet):
         raise PermissionDenied
 
 
-class JsonStoreRefDetail(generics.RetrieveAPIView):
+class JsonStoreNameDetail(generics.RetrieveAPIView):
     queryset = JsonStore.objects.all()
-    serializer_class = serializers.JsonStoreRefSerializer
+    serializer_class = serializers.JsonStoreNameSerializer
 
     def dispatch(self, request, *args, **kwargs):
         obj = self.get_object()
@@ -46,4 +46,4 @@ class JsonStoreRefDetail(generics.RetrieveAPIView):
         return super().dispatch(request, *args, **kwargs)
 
     def get_object(self):
-        return JsonStore.objects.filter(ref=self.kwargs['ref']).first()
+        return JsonStore.objects.filter(name=self.kwargs['name']).first()

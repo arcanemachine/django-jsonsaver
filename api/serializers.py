@@ -6,7 +6,7 @@ from jsonsaver.models import JsonStore
 class JsonStoreSerializer(serializers.ModelSerializer):
     class Meta:
         model = JsonStore
-        fields = ['id', 'user', 'ref', 'data']
+        fields = ['id', 'user', 'name', 'data']
         read_only_fields = ['user']
 
     def create(self, validated_data):
@@ -17,7 +17,7 @@ class JsonStoreSerializer(serializers.ModelSerializer):
         return jsonstore
 
 
-class JsonStoreRefSerializer(serializers.ModelSerializer):
+class JsonStoreNameSerializer(serializers.ModelSerializer):
     class Meta:
         model = JsonStore
         fields = ['data']

@@ -1,22 +1,22 @@
 from django.conf import settings
 from django.db import models
+from rest_framework.authtoken.models import Token
 
 
 class JsonStore(models.Model):
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
 
-    ref = models.CharField(max_length=255, blank=True, null=True)
-    store_token = models.CharField(max_length=255, blank=True, null=True)
-    access_tokens = models.JSONField(default=dict, blank=False, null=True)
+    ref = models.CharField(max_length=255, blank=True, null=True, unique=True)
 
     data = models.JSONField(default=dict, blank=False, null=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True)
 
 
 """
 store = {
   "user": 1,
-  "store_token": "75948753497637690",
+  "token": "75948753497637690",
   "ref": "dog-food",
   "access_tokens": {
     "1": {

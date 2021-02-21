@@ -23,15 +23,13 @@ class JsonStoreSerializer(serializers.ModelSerializer):
 
         stores_with_same_name = JsonStore.objects.filter(
             name=slugify(name)).order_by('-updated_at')
-        public_stores_with_same_name = \
-            stores_with_same_name.filter(is_public=True)
+        non_user_public_stores_with_same_name = \
+            stores_with_same_name.exclude(user=current_user, is_public=True)
         user_stores_with_same_name = \
             stores_with_same_name.filter(user=current_user)
 
-        if is_public and public_stores_with_same_name.count() \
-                and not hasattr(self.instance, 'user') \
-                or is_public and public_stores_with_same_name.count() \
-                and public_stores_with_same_name.last().user != current_user:
+        
+        if is_public and non_user_public_stores_with_same_name.exists():
             raise serializers.ValidationError(
                 "There is already a publicly accessible store with this name.")
         elif user_stores_with_same_name.count() \

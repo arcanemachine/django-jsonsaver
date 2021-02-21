@@ -7,7 +7,7 @@ from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse, reverse_lazy
-from django.views.generic import CreateView, DetailView, DeleteView
+from django.views.generic import CreateView, DetailView, DeleteView, ListView
 from django.views.generic.edit import UpdateView
 
 from . import forms
@@ -17,6 +17,12 @@ from .models import JsonStore
 @login_required
 def jsonsaver_root(request):
     return HttpResponseRedirect(reverse(settings.LOGIN_URL))
+
+
+# list
+class JsonStoreListView(LoginRequiredMixin, ListView):
+    model = JsonStore
+    context_object_name = 'jsonstores'
 
 
 # create

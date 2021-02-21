@@ -6,8 +6,8 @@ app_name = 'jsonsaver'
 
 urlpatterns = [
     path('',
-         views.jsonsaver_root,
-         name='jsonsaver_root'),
+         views.JsonStoreListView.as_view(),
+         name='jsonstore_list'),
 
     # create
     path('new/',

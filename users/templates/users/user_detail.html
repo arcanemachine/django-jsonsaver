@@ -7,24 +7,7 @@
 
 {% block content %}
 
-<h2 class="mt-6">Your JSON Stores</h2>
-
-{% if jsonstores %}
-<ul>
-  {% for jsonstore in jsonstores %}
-  <li>
-    <a href="{% url 'jsonsaver:jsonstore_detail' jsonstore_pk=jsonstore.pk %}">
-      ID#: {{ jsonstore }}
-    </a>
-  </li>
-  {% endfor %}
-</ul>
-</ul>
-{% else %}
-<p>There's nothing here yet.</p>
-{% endif %}
-
-<p><a href="{% url 'jsonsaver:jsonstore_create' %}">Create new store</a></p>
+{% include 'jsonsaver/jsonstore_list_template.html' %}
 
 <h2 class="mt-6">Account Settings</h2>
 

@@ -60,9 +60,11 @@
 				<div class="container">
 					<div class="body-title-container">
 						<h2 class="body-title">{% block body_title %}{% endblock body_title %}</h2>
-						<h3 class="body-subheading">{% block body_subheading %}{% endblock body_subheading %}</h3>
+						<h4 class="body-subheading">{% block body_subheading %}{% endblock body_subheading %}</h4>
 					</div>
-  {% block content %}{% endblock content %}
+            <div class="mt-4">
+              {% block content %}{% endblock content %}
+            </div>
 				</div>
       </div>
     </div>

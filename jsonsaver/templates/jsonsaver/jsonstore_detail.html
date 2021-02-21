@@ -1,21 +1,79 @@
 {% extends 'base.html' %}
 
 {% block title %}
-  JSON Store
+  JSON Store - 
+  {% if jsonstore.name %}
+    '{{ jsonstore.name }}'
+  {% else %}
+    ID #{{ jsonstore.pk }}
+  {% endif %}
 {% endblock %}
 
 {% block body_title %}JSON Store{% endblock %}
 {% block body_subheading %}
-  {% if jsonstore.name %}
-  {% else %}
-    Store ID -  #{{ jsonstore.pk }}
-  {% endif %}
+  Store Info
 {% endblock %}
 
 {% block content %}
 
-<h2>{{ jsonstore.pk }}</h2>
+<div class="mx-4 my-5 store-detail-info">
+
+  <p>Store ID#: 
+    <strong>{{ jsonstore.pk }}</strong>
+  </p>
+
+  <p>Store Name:
+    <span class="font-weight-bold">
+      {% if jsonstore.name %}
+        {{ jsonstore.name }}
+      {% else %}
+        N/A
+      {% endif %}
+    </span>
+  </p>
+
+  <div class="mt-4">Store Data:
+    <pre id="store-data-output" class="m-4 p-3 store-data-output">
+    </pre>
+  </div>
 
 
+</div>
+
+<div class="bottom-links">
+  <p>
+    <a href="{% url 'jsonsaver:jsonstore_update' jsonstore_pk=jsonstore.pk %}">
+      Modify this store
+    </a>
+  </p>
+  <p>
+    <a href="{% url 'jsonsaver:jsonstore_delete' jsonstore_pk=jsonstore.pk %}">
+      Delete this store
+    </a>
+  </p>
+  <p class="mt-4">
+    <a href="{% url 'users:user_detail' %}">
+      Return to your stores
+    </a>
+  </p>
+</div>
+
+{{ jsonstore.data|json_script:"store-data-input" }}
+<script>
+  const storeDataInput = document.querySelector('#store-data-input').textContent;
+  let storeDataEl = document.querySelector('#store-data-output');
+  storeDataEl.textContent = JSON.stringify(JSON.parse(storeDataInput), null, 2);
+</script>
 
 {% endblock content %}
+
+{% block style %}
+<style>
+
+.store-data-output {
+  background-color: #eee;
+  border-radius: 0.5rem;
+}
+
+</style>
+{% endblock style %}

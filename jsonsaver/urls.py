@@ -8,9 +8,13 @@ urlpatterns = [
     path('',
          views.jsonsaver_root,
          name='jsonsaver_root'),
+
+    # create
     path('new/',
          views.JsonStoreCreateView.as_view(),
          name='jsonstore_create'),
+
+    # detail
     path('<int:jsonstore_pk>/',
          views.JsonStoreDetailView.as_view(),
          name='jsonstore_detail'),
@@ -20,4 +24,15 @@ urlpatterns = [
     path('public/<str:jsonstore_name>/',
          views.JsonStorePublicNameDetailView.as_view(),
          name='jsonstore_detail'),
+
+    # update
+    path('<int:jsonstore_pk>/update/',
+         views.JsonStoreUpdateView.as_view(),
+         name='jsonstore_update'),
+
+    # delete
+    path('<int:jsonstore_pk>/delete/',
+         views.JsonStoreDeleteView.as_view(),
+         name='jsonstore_delete'),
+
 ]

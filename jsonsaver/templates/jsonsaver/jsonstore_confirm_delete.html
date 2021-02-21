@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Delete JSON Store - 
+  {% if jsonstore.name %}
+    '{{ jsonstore.name }}'
+  {% else %}
+    ID #{{ jsonstore.pk }}
+  {% endif %}
+{% endblock %}
+
+
+{% block body_title %}
+  Delete JSON Store - 
+  {% if jsonstore.name %}
+    '{{ jsonstore.name }}'
+  {% else %}
+    ID #{{ jsonstore.pk }}
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  Are you sure you want to delete this JSON Store?
+  {% if jsonstore.name %}
+    '{{ jsonstore.name }}'
+  {% else %}
+    ID #{{ jsonstore.pk }}
+  {% endif %}
+
+{% include 'base_form.html' %}
+
+{% endblock content %}

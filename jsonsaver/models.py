@@ -25,7 +25,8 @@ class JsonStore(models.Model):
             f"is_public: {self.is_public}"
 
     def get_absolute_url(self):
-        return reverse('users:user_detail')
+        return reverse('jsonsaver:jsonstore_detail', kwargs={
+            'jsonstore_pk': self.pk})
 
     def save(self, *args, **kwargs):
         if self.name and self.name != slugify(self.name):
@@ -37,20 +38,20 @@ class JsonStore(models.Model):
 store = {
   "user": 1,
   "name": "dog-food",
-  "data": {
-    "users": [
+"data": {
+  "users": [
+    {
+      "id": 1,
+      "token": "8479437015867",
+      "data":
       {
-        "id": 1,
-        "token": "8479437015867",
-        "data":
-        {
-          "username": "billmurray",
-          "password": "3F8V%24NtX*9S.9Vi)Kjwid",
-          "email": "billmurray@email.com",
-          "favorites": ["dogs", "cats", "bears"]
-        }
+        "username": "billmurray",
+        "password": "3F8V%24NtX*9S.9Vi)Kjwid",
+        "email": "billmurray@email.com",
+        "favorites": ["dogs", "cats", "bears"]
       }
-    ]
-  }
+    }
+  ]
+}
 }
 """

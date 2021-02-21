@@ -21,7 +21,8 @@ class JsonStore(models.Model):
     def __str__(self):
         return f"id: {self.id}, "\
             f"user: {self.user.username}, "\
-            f"name: {self.name if self.name else 'N/A'}"
+            f"name: {self.name if self.name else 'N/A'}, "\
+            f"is_public: {self.is_public}"
 
     def get_absolute_url(self):
         return reverse('users:user_detail')
@@ -35,15 +36,7 @@ class JsonStore(models.Model):
 """
 store = {
   "user": 1,
-  "token": "75948753497637690",
-  "ref": "dog-food",
-  "access_tokens": {
-    "1": {
-      "token": "473898275986589",
-      "perms": ["read", "write"],
-      "expiry_date": null
-    }
-  },
+  "name": "dog-food",
   "data": {
     "users": [
       {

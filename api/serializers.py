@@ -15,29 +15,28 @@ class JsonStoreSerializer(serializers.ModelSerializer):
     def validate(self, data):
         name = data.get('name', None)
         is_public = data.get('is_public', False)
-        current_user = self.context['request'].user
+
+        user = self.context['request'].user
+        obj = self.instance
 
         if is_public and not name:
             raise serializers.ValidationError(
                 "Publicly accessible stores must be given a name.")
 
-        stores_with_same_name = JsonStore.objects.filter(
-            name=slugify(name)).order_by('-updated_at')
-        non_user_public_stores_with_same_name = \
-            stores_with_same_name.exclude(user=current_user, is_public=True)
-        user_stores_with_same_name = \
-            stores_with_same_name.filter(user=current_user)
+        stores_with_same_name = JsonStore.objects.filter(name=slugify(name))
 
-        
-        if is_public and non_user_public_stores_with_same_name.exists():
-            raise serializers.ValidationError(
-                "There is already a publicly accessible store with this name.")
-        elif user_stores_with_same_name.count() \
-                and not hasattr(self.instance, 'pk') \
-                or user_stores_with_same_name.count() \
-                and user_stores_with_same_name.last().pk != self.instance.pk:
-            raise serializers.ValidationError(
-                "You cannot have multiple stores with the same name.")
+        if is_public:
+            different_user_public_stores_with_same_name = \
+                stores_with_same_name.exclude(user=user).filter(is_public=True)
+            if different_user_public_stores_with_same_name.exists():
+                raise serializers.ValidationError(
+                    "This publicly accessible store name is already in use.")
+        if obj:
+            other_user_stores_with_same_name = \
+                stores_with_same_name.filter(user=user).exclude(pk=obj.pk)
+            if other_user_stores_with_same_name.exists():
+                raise serializers.ValidationError(
+                    "You cannot have multiple stores with the same name.")
         return data
 
     def create(self, validated_data):

@@ -25,5 +25,6 @@ class NewUserCreationForm(UserCreationForm):
     def clean_username(self):
         return self.cleaned_data['username'].lower()
 
+
 class UserAuthenticationForm(AuthenticationForm):
     captcha = CaptchaField(help_text=c.FORMS_CAPTCHA_FIELD_HELP_TEXT)

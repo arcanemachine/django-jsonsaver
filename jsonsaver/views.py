@@ -51,3 +51,11 @@ class JsonStoreDetailView(LoginRequiredMixin, DetailView):
             return obj
         else:
             raise PermissionDenied
+
+
+class JsonStoreNameDetailView(LoginRequiredMixin, DetailView):
+    pass
+
+
+class JsonStorePublicNameDetailView(LoginRequiredMixin, DetailView):
+    pass

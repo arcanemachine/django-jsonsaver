@@ -13,28 +13,33 @@ class JsonStoreForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)
+        self.obj = kwargs.pop('obj', None)
         super().__init__(*args, **kwargs)
 
     def clean(self):
         name = self.cleaned_data.get('name')
         is_public = self.data.get('is_public')
-        if name:
-            stores_with_same_name = \
-                JsonStore.objects.filter(name=slugify(name))
-            public_stores_with_same_name = \
-                stores_with_same_name.filter(is_public=True)
-            breakpoint()
-            if is_public and public_stores_with_same_name.count() \
-                    and public_stores_with_same_name.first().user != self.user:
+
+        user = self.user
+        obj = self.obj
+
+        if is_public and not name:
+            raise ValidationError(
+                    "Publicly accessible stores must be given a name.")
+
+        stores_with_same_name = JsonStore.objects.filter(name=slugify(name))
+
+        if is_public:
+            different_user_public_stores_with_same_name = \
+                stores_with_same_name.exclude(user=user).filter(is_public=True)
+            if different_user_public_stores_with_same_name.exists():
                 raise ValidationError(
-                    "There is already a publicly accessible store with this "
-                    "name. Please choose another name if you want this store "
-                    "to be publicly accessible.")
-            elif stores_with_same_name.filter(user=self.user).exists() \
-                    and stores_with_same_name.first().pk == self.cleaned:
+                    "This publicly accessible store name is already in use.")
+        if obj:
+            other_user_stores_with_same_name = \
+                stores_with_same_name.filter(user=user).exclude(pk=obj.pk)
+            if other_user_stores_with_same_name.exists():
                 raise ValidationError(
                     "You cannot have multiple stores with the same name.")
-        elif not name and is_public:
-            raise ValidationError(
-                "Publicly accessible stores must be given a name.")
+
         return self.cleaned_data

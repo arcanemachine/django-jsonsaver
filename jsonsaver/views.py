@@ -30,6 +30,11 @@ class JsonStoreCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         self.object.save()
         return super().form_valid(form)
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
 
 class JsonStoreDetailView(LoginRequiredMixin, DetailView):
     model = JsonStore
@@ -37,10 +42,11 @@ class JsonStoreDetailView(LoginRequiredMixin, DetailView):
 
     def get_object(self):
         user = self.request.user
-        if self.kwargs.get('store_pk'):
-            obj = get_object_or_404(JsonStore, pk=self.kwargs['store_pk'])
-        elif self.kwargs.get('store_name'):
-            obj = get_object_or_404(JsonStore, name=self.kwargs['store_name'])
+        if self.kwargs.get('jsonstore_pk'):
+            obj = get_object_or_404(JsonStore, pk=self.kwargs['jsonstore_pk'])
+        elif self.kwargs.get('jsonstore_name'):
+            obj = get_object_or_404(
+                JsonStore, name=self.kwargs['jsonstore_name'], user=user)
         if user.is_staff or obj.is_public or obj.user == user:
             return obj
         else:

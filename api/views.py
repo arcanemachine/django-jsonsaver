@@ -3,9 +3,10 @@ from django.http import JsonResponse, HttpResponseRedirect
 from django.urls import reverse
 from rest_framework import generics, viewsets
 from rest_framework.exceptions import NotFound
-from rest_framework.permissions import AllowAny, IsAdminUser
+from rest_framework.permissions import IsAdminUser
 
 from . import serializers
+from .permissions import HasJsonStorePermissionsOrPublicReadOnly
 from jsonsaver.models import JsonStore
 
 
@@ -24,6 +25,10 @@ class JsonStoreViewSet(viewsets.ModelViewSet):
     queryset = JsonStore.objects.all()
     serializer_class = serializers.JsonStoreSerializer
 
+    def list(self, request):
+        self.queryset = JsonStore.objects.filter(user=request.user)
+        return super().list(request)
+
     def get_object(self):
         obj = super().get_object()
         user = self.request.user
@@ -41,18 +46,15 @@ class JsonStoreListAll(generics.ListAPIView):
 class JsonStoreNameDetail(generics.RetrieveAPIView):
     queryset = JsonStore.objects.all()
     serializer_class = serializers.JsonStoreNameSerializer
-    permission_classes = [IsAdminUser]
-
-    def dispatch(self, request, *args, **kwargs):
-        obj = self.get_object()
-        if not obj:
-            raise NotFound
-        elif not obj.is_public and request.user != obj.user:
-            raise PermissionDenied
-        return super().dispatch(request, *args, **kwargs)
+    permission_classes = [HasJsonStorePermissionsOrPublicReadOnly]
 
     def get_object(self):
-        return JsonStore.objects.filter(
-            name=self.kwargs['name'],
-            is_public=True
-        ).first()
+        qs = JsonStore.objects.filter(name=self.kwargs['name'])
+        public_qs = qs.filter(is_public=True)
+        if public_qs:
+            return public_qs.first()
+        elif self.request.user:
+            user_qs = qs.filter(user=self.request.user)
+            if user_qs.exists():
+                return user_qs.first()
+        raise NotFound

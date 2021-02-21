@@ -11,7 +11,7 @@ urlpatterns = [
     path('new/',
          views.JsonStoreCreateView.as_view(),
          name='jsonstore_create'),
-    path('<int:pk>/',
+    path('<int:store_pk>/',
          views.JsonStoreDetailView.as_view(),
          name='jsonstore_detail'),
     path('<str:store_name>/',

@@ -5,10 +5,17 @@
 {% endblock %}
 
 {% block body_title %}JSON Store{% endblock %}
-{% block body_subheading %}{% endblock %}
+{% block body_subheading %}
+  {% if jsonstore.name %}
+  {% else %}
+    Store ID -  #{{ jsonstore.pk }}
+  {% endif %}
+{% endblock %}
 
 {% block content %}
 
-Hello
+<h2>{{ jsonstore.pk }}</h2>
+
+
 
 {% endblock content %}

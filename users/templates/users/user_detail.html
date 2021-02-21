@@ -14,7 +14,7 @@
   {% for jsonstore in jsonstores %}
   <li>
     <a href="{% url 'jsonsaver:jsonstore_detail' pk=jsonstore.pk %}">
-      {{ store.name }}
+      ID#: {{ jsonstore }}
     </a>
   </li>
   {% endfor %}

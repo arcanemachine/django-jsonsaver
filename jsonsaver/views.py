@@ -34,4 +34,10 @@ class JsonStoreDetailView(LoginRequiredMixin, DetailView):
     model = JsonStore
 
     def get_object(self):
-        return get_object_or_404(JsonStore, name=self.kwargs['store_name'])
+        if self.kwargs.get('store_name'):
+            return get_object_or_404(JsonStore, name=self.kwargs['store_name'])
+        elif self.kwargs.get('store_pk'):
+            return get_object_or_404(
+                JsonStore,
+                pk=self.kwargs['pk'],
+                is_public=True)

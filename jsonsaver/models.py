@@ -9,14 +9,14 @@ class JsonStore(models.Model):
         models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     name = models.CharField(
-        max_length=128,
-        help_text="Note: Name will be converted to lowercase and hyphenated")
+        max_length=128, blank=True, null=True,
+        help_text="Name will be converted to lowercase and hyphenated.")
     is_public = models.BooleanField(
-        "Make this store publicly accessible using the name as a lookup value",
+        help_text="Make this store publicly accessible by name.",
         default=False)
 
-    data = models.JSONField(default=dict, blank=False, null=True)
-    updated_at = models.DateTimeField(auto_now=True, null=True)
+    data = models.JSONField(default=dict, blank=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"id: {self.id}, "\
@@ -27,8 +27,6 @@ class JsonStore(models.Model):
         return reverse('users:user_detail')
 
     def save(self, *args, **kwargs):
-        if not self.name:
-            self.name = str(self.pk)
         if self.name and self.name != slugify(self.name):
             self.name = slugify(self.name)
         super().save(*args, **kwargs)

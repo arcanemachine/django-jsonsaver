@@ -9,10 +9,14 @@
 
 <h2 class="mt-6">Your JSON Stores</h2>
 
-{% if stores %}
+{% if jsonstores %}
 <ul>
-  {% for store in stores %}
-  <li>{{ store.name }}</li>
+  {% for jsonstore in jsonstores %}
+  <li>
+    <a href="{% url 'jsonsaver:jsonstore_detail' pk=jsonstore.pk %}">
+      {{ store.name }}
+    </a>
+  </li>
   {% endfor %}
 </ul>
 </ul>

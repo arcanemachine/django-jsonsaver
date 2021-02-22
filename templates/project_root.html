@@ -7,6 +7,44 @@
 
 {% block content %}
 
-<p>Hello {{ PROJECT_NAME }}!</p>
+<form method="POST" class="mt-4">
+  {% csrf_token %}
+
+  <div class="form-group">
+    <label for="search-public-store">
+      Find a public JSON store
+    </label>
+    <input
+      type="search"
+      id="search-public-store"
+      name="search-public-store"
+      class="form-control"
+      placeholder="your-store-name"
+    />
+    <small class="form-text text-muted">
+      Your query will be converted to a URL-friendly format.
+    </small>
+    <small class="form-text text-muted">
+      e.g. 'My Public STORE! &rarr; 'my-public-store'
+    </small>
+  </div>
+
+  <input 
+    type="submit"
+    class="btn btn-primary"
+    value="Search"
+  />
+
+</form>
 
 {% endblock content %}
+
+{% block style %}
+<style>
+
+.form-control::placeholder {
+  color: #bbb;
+}
+
+</style>
+{% endblock style %}

@@ -15,7 +15,6 @@ def api_root(request):
 
 
 def name_root(request):
-    # return HttpResponseRedirect(reverse('project_root'))
     return JsonResponse(
         {"message": "Stores can be requested by name via GET: " +
             reverse('api:name_root') + '[store_name]/'})

@@ -32,6 +32,10 @@
     </span>
   </p>
 
+  <p>Publicly accessible: 
+    <strong>{{ jsonstore.is_public|yesno|capfirst }}</strong>
+  </p>
+
   <div class="mt-4">Store Data:
     <pre id="store-data-output" class="m-4 p-3 store-data-output">
     </pre>
@@ -40,6 +44,7 @@
 
 </div>
 
+{% if request.user == jsonstore.user %}
 <div class="bottom-links">
   <p>
     <a href="{% url 'jsonsaver:jsonstore_update' jsonstore_pk=jsonstore.pk %}">
@@ -57,6 +62,7 @@
     </a>
   </p>
 </div>
+{% endif %}
 
 {{ jsonstore.data|json_script:"store-data-input" }}
 <script>

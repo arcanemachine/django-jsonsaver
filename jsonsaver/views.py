@@ -55,36 +55,34 @@ class JsonStoreCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 
 
 # detail
-class JsonStoreDetailView(LoginRequiredMixin, DetailView):
+class JsonStoreDetailView(UserPassesTestMixin, DetailView):
     model = JsonStore
-    # url_lookup_kwarg = 'store_pk'
-    # pk_url_kwarg = 'jsonstore_pk'
-
-    def get_object(self):
-        user = self.request.user
-        if self.kwargs.get('jsonstore_pk'):
-            obj = get_object_or_404(JsonStore, pk=self.kwargs['jsonstore_pk'])
-        elif self.kwargs.get('jsonstore_name'):
-            obj = get_object_or_404(
-                JsonStore, name=self.kwargs['jsonstore_name'], user=user)
-        if user.is_staff or obj.is_public or obj.user == user:
-            return obj
-        else:
-            raise PermissionDenied
+    pk_url_kwarg = 'jsonstore_pk'
 
     def test_func(self):
         return self.get_object().user == self.request.user
 
 
 class JsonStoreNameDetailView(LoginRequiredMixin, DetailView):
-    pass
+    model = JsonStore
+
+    def get_object(self):
+        return JsonStore.objects.get(
+            name=self.kwargs['jsonstore_name'],
+            user=self.request.user)
 
     def test_func(self):
         return self.get_object().user == self.request.user
 
 
 class JsonStorePublicNameDetailView(DetailView):
-    pass
+    model = JsonStore
+
+    def get_object(self):
+        return JsonStore.objects.get(name=self.kwargs['jsonstore_name'])
+
+    def test_func(self):
+        return self.get_object().user == self.request.user
 
 
 # update

@@ -10,7 +10,7 @@ class JsonStore(models.Model):
 
     name = models.CharField(
         max_length=128, blank=True, null=True,
-        help_text="Name will be converted to lowercase and hyphenated.")
+        help_text="Name will be lowercased and hyphenated for use in URLs.")
     is_public = models.BooleanField(
         help_text="Make this store publicly accessible by name.",
         default=False)

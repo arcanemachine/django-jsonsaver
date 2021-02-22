@@ -12,6 +12,7 @@ from django.views.generic.edit import UpdateView
 
 from . import forms
 from .models import JsonStore
+from django_jsonsaver import constants as c
 
 
 @login_required
@@ -23,6 +24,11 @@ def jsonsaver_root(request):
 class JsonStoreListView(LoginRequiredMixin, ListView):
     model = JsonStore
     context_object_name = 'jsonstores'
+    paginate_by = c.JSONSTORE_PAGINATE_BY
+
+    def get_queryset(self):
+        return JsonStore.objects.filter(user=self.request.user) \
+            .order_by('-updated_at')
 
 
 # create

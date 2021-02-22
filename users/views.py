@@ -10,8 +10,8 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse, reverse_lazy
 
 from . import forms
-from django_jsonsaver import constants as c
 from django_jsonsaver import helpers
+from jsonsaver.models import JsonStore
 
 UserModel = get_user_model()
 
@@ -74,8 +74,9 @@ class UserDetailView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['jsonstores'] = self.get_object().jsonstore_set \
-            .order_by('-updated_at')[:c.JSONSTORE_PAGINATE_BY]
+        user_jsonstores = JsonStore.objects.filter(user=self.request.user)
+        context['user_jsonstores_count'] = user_jsonstores.count()
+        context['jsonstores'] = user_jsonstores.order_by('-updated_at')[:5]
         return context
 
     def get_object(self):

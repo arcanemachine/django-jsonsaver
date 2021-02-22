@@ -7,10 +7,18 @@
 
 {% block content %}
 
+<hr class="m-5">
+
 {% include 'jsonsaver/jsonstore_list_template.html' %}
+<p>
+  <a href="{% url 'jsonsaver:jsonstore_list' %}">View all your JSON stores</a>
+</p>
+
+<hr class="m-5">
 
 <h2 class="mt-6">Account Settings</h2>
 
 <p>There's nothing here yet.</p>
 
+<hr class="m-5">
 {% endblock content %}

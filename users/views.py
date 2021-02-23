@@ -10,6 +10,7 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse, reverse_lazy
 
 from . import forms
+from .tasks import send_welcome_email_task
 from django_jsonsaver import helpers
 from jsonsaver.models import JsonStore
 
@@ -37,7 +38,8 @@ class UserRegisterView(CreateView):
         messages.success(
             self.request, "Success! Please check your email inbox for "
             "your confirmation message.")
-        helpers.send_welcome_email(user=self.object)
+        send_welcome_email_task.delay(
+            self.object.email, self.object.profile.confirmation_code)
         return HttpResponseRedirect(self.get_success_url())
 
 

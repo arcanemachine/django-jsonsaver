@@ -2,6 +2,12 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.shortcuts import render
 
+from django.http import HttpResponse
+# from django.contrib.auth import get_user_model
+# from django_jsonsaver import helpers
+# from django.core.mail import send_mail
+from users.tasks import send_welcome_email_task
+
 from . import forms
 
 
@@ -17,3 +23,8 @@ def project_root(request):
         'form': form,
         'cancel_button': False}
     return render(request, 'project_root.html', context)
+
+
+def test_email(request):
+    send_welcome_email_task.delay('bob@email.com', '69')
+    return HttpResponse('sent?')

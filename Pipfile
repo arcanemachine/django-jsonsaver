@@ -11,6 +11,8 @@ ipython = "*"
 django-simple-captcha = "*"
 pillow = "*"
 django-crispy-forms = "*"
+celery = "*"
+redis = "*"
 
 [dev-packages]
 

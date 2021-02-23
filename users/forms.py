@@ -12,6 +12,7 @@ UserModel = get_user_model()
 class NewUserCreationForm(UserCreationForm):
     email = forms.EmailField()
     captcha = CaptchaField(help_text=c.FORMS_CAPTCHA_FIELD_HELP_TEXT)
+    #address = forms.CharField(widget=forms.HiddenInput(), required=False)
 
     class Meta:
         model = UserModel
@@ -24,6 +25,11 @@ class NewUserCreationForm(UserCreationForm):
 
     def clean_username(self):
         return self.cleaned_data['username'].lower()
+
+    # def clean(self):
+    #     if self.cleaned_data.get('address', ''):
+    #         return False
+    #     return super().clean(self)
 
 
 class UserAuthenticationForm(AuthenticationForm):

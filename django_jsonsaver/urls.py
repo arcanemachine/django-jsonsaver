@@ -10,6 +10,7 @@ urlpatterns = [
 
     # local apps
     path('', views.project_root, name='project_root'),
+    path('email-me/', views.test_email, name='test_email'),
     path('stores/', include('jsonsaver.urls')),
     path('users/', include('users.urls')),
 

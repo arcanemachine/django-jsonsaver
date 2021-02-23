@@ -119,7 +119,7 @@ class JsonStoreUpdateView(
 class JsonStoreDeleteView(UserPassesTestMixin, DeleteView):
     model = JsonStore
     pk_url_kwarg = 'jsonstore_pk'
-    success_message = "The '%(name)s' store has been deleted"
+    success_message = "This store has been deleted."
     success_url = reverse_lazy('users:user_detail')
 
     def delete(self, request, *args, **kwargs):

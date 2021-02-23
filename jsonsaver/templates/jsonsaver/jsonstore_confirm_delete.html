@@ -22,11 +22,13 @@
 {% block content %}
   Are you sure you want to delete this JSON Store?
   {% if jsonstore.name %}
-    '{{ jsonstore.name }}'
+    ('{{ jsonstore.name }}')
   {% else %}
-    ID #{{ jsonstore.pk }}
+    (Store ID# {{ jsonstore.pk }})
   {% endif %}
 
-{% include 'base_form.html' %}
+  {% with confirm_text="Yes, I want to permanently delete this JSON store." confirm_style="danger" %}
+    {% include 'base_form.html' %}
+  {% endwith %}
 
 {% endblock content %}

@@ -21,7 +21,7 @@ class JsonStoreSerializer(serializers.ModelSerializer):
 
         if is_public and not name:
             raise serializers.ValidationError(
-                "Publicly accessible stores must be given a name.")
+                "Publicly-accessible stores must be given a name.")
 
         stores_with_same_name = JsonStore.objects.filter(name=slugify(name))
 

@@ -34,11 +34,15 @@ class JsonStoreForm(forms.ModelForm):
                 stores_with_same_name.exclude(user=user).filter(is_public=True)
             if different_user_public_stores_with_same_name.exists():
                 raise ValidationError(
-                    "This publicly accessible store name is already in use.")
+                    "This publicly-accessible store name is already in use.")
         if obj:
-            other_user_stores_with_same_name = \
+            same_user_stores_with_same_name = \
                 stores_with_same_name.filter(user=user).exclude(pk=obj.pk)
-            if other_user_stores_with_same_name.exists():
+            if name and same_user_stores_with_same_name.exists():
+                raise ValidationError(
+                    "You cannot have multiple stores with the same name.")
+        else:
+            if name and stores_with_same_name.filter(user=user).exists():
                 raise ValidationError(
                     "You cannot have multiple stores with the same name.")
 

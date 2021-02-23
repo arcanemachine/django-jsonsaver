@@ -10,9 +10,11 @@
     <span>
       <button type="submit" class="form-button form-button-submit">Submit</button>
     </span>
+    {% if not cancel_button == False %}
     <span>
       <button type="button" class="form-button form-button-cancel" onclick="history.go(-1)">Cancel</button>
     </span>
+    {% endif %}
   </div>
 
 </form>

@@ -67,7 +67,8 @@ class JsonStoreNameDetailView(LoginRequiredMixin, DetailView):
     model = JsonStore
 
     def get_object(self):
-        return JsonStore.objects.get(
+        return get_object_or_404(
+            JsonStore,
             name=self.kwargs['jsonstore_name'],
             user=self.request.user)
 
@@ -79,7 +80,7 @@ class JsonStorePublicNameDetailView(DetailView):
     model = JsonStore
 
     def get_object(self):
-        return JsonStore.objects.get(name=self.kwargs['jsonstore_name'])
+        return get_object_or_404(JsonStore, name=self.kwargs['jsonstore_name'])
 
     def test_func(self):
         return self.get_object().user == self.request.user

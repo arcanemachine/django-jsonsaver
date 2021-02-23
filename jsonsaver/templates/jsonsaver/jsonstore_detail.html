@@ -52,13 +52,14 @@
     </a>
   </p>
   <p>
-    <a href="{% url 'jsonsaver:jsonstore_delete' jsonstore_pk=jsonstore.pk %}">
+    <a class="text-danger"
+       href="{% url 'jsonsaver:jsonstore_delete' jsonstore_pk=jsonstore.pk %}">
       Delete this store
     </a>
   </p>
   <p class="mt-4">
     <a href="{% url 'jsonsaver:jsonstore_list' %}">
-      View your stores
+      View all your stores
     </a>
   </p>
 </div>

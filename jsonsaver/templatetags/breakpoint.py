@@ -1,6 +1,6 @@
 from django import template
 
-from django_jsonsaver.server_config import SERVER_NAME
+from django_jsonsaver.server_config import BACKEND_SERVER_TYPE
 
 register = template.Library()
 
@@ -15,5 +15,5 @@ def set_breakpoint(context):
         {% set_breakpoint %}
     """
 
-    if SERVER_NAME == 'dev':
+    if BACKEND_SERVER_TYPE == 'dev':
         breakpoint()

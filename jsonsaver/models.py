@@ -12,7 +12,7 @@ class JsonStore(models.Model):
         max_length=128, blank=True, null=True,
         help_text="Name will be lowercased and hyphenated for use in URLs.")
     is_public = models.BooleanField(
-        help_text="Allow this store to be publicly accessed by name.",
+        help_text="Allow this store to be publicly accessible by name.",
         default=False)
 
     data = models.JSONField(default=dict, blank=True)

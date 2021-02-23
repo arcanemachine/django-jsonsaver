@@ -6,7 +6,7 @@ from jsonsaver.models import JsonStore
 
 
 class JsonStoreSerializer(serializers.ModelSerializer):
-    data = serializers.JSONField()
+    data = serializers.JSONField(initial={})
 
     class Meta:
         model = JsonStore

@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponseRedirect
-from django.views.generic import CreateView, DetailView
+from django.views.generic import CreateView, DeleteView, DetailView
 from django.shortcuts import get_object_or_404
 from django.urls import reverse, reverse_lazy
 
@@ -38,8 +38,12 @@ class UserRegisterView(CreateView):
         messages.success(
             self.request, "Success! Please check your email inbox for "
             "your confirmation message.")
+
         send_welcome_email_task.delay(
             self.object.email, self.object.profile.confirmation_code)
+        if settings.DEBUG:
+            helpers.send_welcome_email(
+                self.object.email, self.object.profile.confirmation_code)
         return HttpResponseRedirect(self.get_success_url())
 
 
@@ -80,6 +84,18 @@ class UserDetailView(LoginRequiredMixin, DetailView):
         context['user_jsonstores_count'] = user_jsonstores.count()
         context['jsonstores'] = user_jsonstores.order_by('-updated_at')[:5]
         return context
+
+    def get_object(self):
+        return self.request.user
+
+
+class UserDeleteView(LoginRequiredMixin, DeleteView):
+    template_name = 'users/user_delete.html'
+    success_url = reverse_lazy('project_root')
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, "Your account has been deleted.")
+        return super().delete(request, *args, **kwargs)
 
     def get_object(self):
         return self.request.user

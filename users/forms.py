@@ -10,8 +10,9 @@ UserModel = get_user_model()
 
 
 class NewUserCreationForm(UserCreationForm):
-    email = forms.EmailField(label="CAPTCHA")
-    captcha = CaptchaField(help_text=c.FORM_FIELD_CAPTCHA_HELP_TEXT)
+    email = forms.EmailField()
+    captcha = CaptchaField(
+        label="CAPTCHA", help_text=c.FORM_FIELD_CAPTCHA_HELP_TEXT)
     # address = forms.CharField(widget=forms.HiddenInput(), required=False)
 
     class Meta:

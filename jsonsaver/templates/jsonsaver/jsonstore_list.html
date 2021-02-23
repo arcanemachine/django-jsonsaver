@@ -5,4 +5,9 @@
 
 {% block content %}
   {% include 'jsonsaver/jsonstore_list_template.html' %}
+
+<div class="bottom-links">
+  <p>
+    <a href="{% url 'users:user_detail' %}">View your account profile</a>
+  </p>
 {% endblock content %}

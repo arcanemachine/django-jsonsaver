@@ -1,6 +1,7 @@
 from django.utils.text import slugify
 from rest_framework import serializers
 
+from django_jsonsaver import constants as c
 from jsonsaver.models import JsonStore
 
 
@@ -21,7 +22,7 @@ class JsonStoreSerializer(serializers.ModelSerializer):
 
         if is_public and not name:
             raise serializers.ValidationError(
-                "Publicly-accessible stores must be given a name.")
+                c.FORM_ERROR_STORE_PUBLIC_NAME_BLANK)
 
         stores_with_same_name = JsonStore.objects.filter(name=slugify(name))
 
@@ -30,17 +31,17 @@ class JsonStoreSerializer(serializers.ModelSerializer):
                 stores_with_same_name.exclude(user=user).filter(is_public=True)
             if different_user_public_stores_with_same_name.exists():
                 raise serializers.ValidationError(
-                    "This publicly-accessible store name is already in use.")
+                    c.FORM_ERROR_STORE_PUBLIC_NAME_DUPLICATE)
         if obj:
             same_user_stores_with_same_name = \
                 stores_with_same_name.filter(user=user).exclude(pk=obj.pk)
             if name and same_user_stores_with_same_name.exists():
                 raise serializers.ValidationError(
-                    "You cannot have multiple stores with the same name.")
+                    c.FORM_ERROR_STORE_NAME_DUPLICATE)
         else:
             if name and stores_with_same_name.filter(user=user).exists():
                 raise serializers.ValidationError(
-                    "You cannot have multiple stores with the same name.")
+                    c.FORM_ERROR_STORE_NAME_DUPLICATE)
 
         return data
 

@@ -10,9 +10,9 @@ UserModel = get_user_model()
 
 
 class NewUserCreationForm(UserCreationForm):
-    email = forms.EmailField()
-    captcha = CaptchaField(help_text=c.FORMS_CAPTCHA_FIELD_HELP_TEXT)
-    #address = forms.CharField(widget=forms.HiddenInput(), required=False)
+    email = forms.EmailField(label="CAPTCHA")
+    captcha = CaptchaField(help_text=c.FORM_FIELD_CAPTCHA_HELP_TEXT)
+    # address = forms.CharField(widget=forms.HiddenInput(), required=False)
 
     class Meta:
         model = UserModel
@@ -20,7 +20,7 @@ class NewUserCreationForm(UserCreationForm):
 
     def clean_email(self):
         if UserModel.objects.filter(email=self.cleaned_data['email']).exists():
-            raise ValidationError("This email address is taken.")
+            raise ValidationError("This email address is already in use.")
         return self.cleaned_data['email'].lower()
 
     def clean_username(self):
@@ -33,4 +33,4 @@ class NewUserCreationForm(UserCreationForm):
 
 
 class UserAuthenticationForm(AuthenticationForm):
-    captcha = CaptchaField(help_text=c.FORMS_CAPTCHA_FIELD_HELP_TEXT)
+    captcha = CaptchaField(help_text=c.FORM_FIELD_CAPTCHA_HELP_TEXT)

@@ -18,7 +18,7 @@ UserModel = get_user_model()
 
 
 def users_root(request):
-    return HttpResponseRedirect(reverse('users:user_detail'))
+    return HttpResponseRedirect(reverse('users:user_detail_me'))
 
 
 class UserRegisterView(CreateView):

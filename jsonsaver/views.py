@@ -120,7 +120,7 @@ class JsonStoreDeleteView(UserPassesTestMixin, DeleteView):
     model = JsonStore
     pk_url_kwarg = 'jsonstore_pk'
     success_message = "This store has been deleted."
-    success_url = reverse_lazy('users:user_detail')
+    success_url = reverse_lazy('jsonsaver:jsonstore_list')
 
     def delete(self, request, *args, **kwargs):
         obj = self.get_object()

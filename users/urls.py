@@ -19,7 +19,7 @@ urlpatterns = [
          name='login'),
     path('me/',
          views.UserDetailView.as_view(),
-         name='user_detail'),
+         name='user_detail_me'),
     path('me/delete-account/',
          views.UserDeleteView.as_view(),
          name='user_delete'),

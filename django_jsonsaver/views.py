@@ -26,5 +26,7 @@ def project_root(request):
 
 
 def test_email(request):
-    send_welcome_email_task.delay('bob@email.com', '69')
+    if not request.user.is_staff:
+        return HttpResponse('not sent')
+    send_welcome_email_task.delay('bob@email.com', '123')
     return HttpResponse('sent?')

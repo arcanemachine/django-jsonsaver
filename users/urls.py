@@ -26,4 +26,7 @@ urlpatterns = [
     path('logout/',
          views.UserLogoutView.as_view(),
          name='logout'),
+    path('public/<str:username>/',
+         views.UserDetailPublicView.as_view(),
+         name='user_detail_public'),
 ]

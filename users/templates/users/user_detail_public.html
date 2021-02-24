@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ public_user.username }}'s Public JSON Stores{% endblock %}
+{% block body_title %}{{ public_user.username }}'s Public JSON Stores{% endblock %}
+
+{% block body_start_script %}
+function showApiKey() {
+  let apiKeyPlaceholder = document.querySelector('#api-key-placeholder');
+  let userToken = '{{ user_token }}'
+  if (userToken) {
+    apiKeyPlaceholder.textContent = `Your API key is '${userToken}'`;
+  }
+}
+{% endblock body_start_script %}
+{% block content %}
+
+<hr class="m-5" />
+
+{% with is_public=True %}
+  {% include 'jsonsaver/jsonstore_list_template.html' %}
+{% endwith %}
+<div class="bottom-links-continued">
+  {% if request.user.username == public_user.username %}
+  <p><a href="{% url 'jsonsaver:jsonstore_list' %}">Return to your profile</a></p>
+  {% endif %}
+</div>
+
+<hr class="m-5" />
+
+{% endblock content %}
+{% block style %}
+
+.api-key-placeholder {
+  font-size: 1rem;
+  font-weight: unset;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+{% endblock style %}

@@ -8,6 +8,7 @@ UserModel = get_user_model()
 class Profile(models.Model):
     user = models.OneToOneField(UserModel, on_delete=models.CASCADE)
     confirmation_code = models.CharField(max_length=128, null=True)
+    is_public = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         if not self.confirmation_code:

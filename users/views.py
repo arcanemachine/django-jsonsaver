@@ -4,7 +4,7 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.http import HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect
 from django.views.generic import CreateView, DeleteView, DetailView
 from django.shortcuts import get_object_or_404
 from django.urls import reverse, reverse_lazy
@@ -92,6 +92,27 @@ class UserDetailView(LoginRequiredMixin, DetailView):
 
     def get_object(self):
         return self.request.user
+
+
+class UserDetailPublicView(LoginRequiredMixin, DetailView):
+    template_name = 'users/user_detail_public.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_jsonstores = JsonStore.objects.filter(
+            user=self.get_object(),
+            is_public=True)
+        context.update({
+            'public_user': self.get_object(),
+            'jsonstores': user_jsonstores.order_by('-updated_at')[:5]})
+        return context
+
+    def get_object(self):
+        user = get_object_or_404(UserModel, username=self.kwargs['username'])
+        if user.profile.is_public:
+            return user
+        else:
+            raise Http404
 
 
 class UserDeleteView(LoginRequiredMixin, DeleteView):

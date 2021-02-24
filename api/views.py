@@ -14,7 +14,7 @@ def api_root(request):
     return HttpResponseRedirect(reverse('project_root'))
 
 
-def name_root(request):
+def jsonstore_detail_name_root(request):
     return JsonResponse(
         {"message": "Stores can be requested by name via GET: " +
             reverse('api:name_root') + '[store_name]/'})
@@ -42,7 +42,7 @@ class JsonStoreListAll(generics.ListAPIView):
     permission_classes = [IsAdminUser]
 
 
-class JsonStoreNameDetail(generics.RetrieveAPIView):
+class JsonStoreDetailName(generics.RetrieveAPIView):
     queryset = JsonStore.objects.all()
     serializer_class = serializers.JsonStoreNameSerializer
     permission_classes = [HasJsonStorePermissionsOrPublicReadOnly]

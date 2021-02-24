@@ -6,7 +6,7 @@ from . import views
 app_name = 'api'
 
 router = SimpleRouter()
-router.register('stores', views.JsonStoreViewSet)
+router.register('stores', views.JsonStoreViewSet, basename='jsonstore')
 
 urlpatterns = [
     path('',
@@ -16,9 +16,9 @@ urlpatterns = [
          views.JsonStoreListAll.as_view(),
          name='jsonstore_list_all'),
     path('stores/name/',
-         views.name_root,
-         name='name_root'),
+         views.jsonstore_detail_name_root,
+         name='jsonstore_detail_name_root'),
     path('stores/name/<str:name>/',
-         views.JsonStoreNameDetail.as_view(),
-         name='name_detail'),
+         views.JsonStoreDetailName.as_view(),
+         name='jsonstore_detail_name'),
 ] + router.urls

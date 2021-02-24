@@ -15,6 +15,6 @@ class Profile(models.Model):
         default=False)
 
     def save(self, *args, **kwargs):
-        if not self.confirmation_code:
-            self.confirmation_code = Token.generate_key()
+        if not self.activation_code:
+            self.activation_code = Token.generate_key()
         super().save(*args, **kwargs)

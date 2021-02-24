@@ -36,6 +36,9 @@ class NewUserCreationForm(UserCreationForm):
 class UserAuthenticationForm(AuthenticationForm):
     captcha = CaptchaField(help_text=c.FORM_FIELD_CAPTCHA_HELP_TEXT)
 
+    def clean_username(self):
+        return self.cleaned_data['username'].lower()
+
 
 class UserActivationEmailResendForm(forms.Form):
     email = forms.EmailField(label="Your email address")

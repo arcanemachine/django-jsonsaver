@@ -1,24 +1,36 @@
 {% extends 'base.html' %}
 
 {% block title %}User Info - {{ user.username }}{% endblock %}
-
 {% block body_title %}{{ user.username }}{% endblock %}
 {% block body_subheading %}Your Account Profile{% endblock %}
 
+{% block body_start_script %}
+async function showApiKey() {
+  let apiKeyPlaceholder = document.querySelector('#api-key-placeholder');
+  let userToken = '{{ user_token }}'
+  if (userToken) {
+    apiKeyPlaceholder.textContent = `Your API key is '${userToken}'`;
+  }
+}
+{% endblock body_start_script %}
 {% block content %}
 
-<hr class="m-5">
+<hr class="m-5" />
 
 {% include 'jsonsaver/jsonstore_list_template.html' %}
-<p>
-  <a href="{% url 'jsonsaver:jsonstore_list' %}">View all your JSON stores</a>
-</p>
+<div class="bottom-links-continued">
+  <p><a href="{% url 'jsonsaver:jsonstore_list' %}">View all your JSON stores</a></p>
+</div>
 
-<hr class="m-5">
+<hr class="m-5" />
 
 <h2 class="mt-6">Account Settings</h2>
 
 <div class="bottom-links">
+  <p>
+    <div class="unstyled-link no-select" onclick="showApiKey()">Click here to see your API key</div>
+    <div id="api-key-placeholder" class="api-key-placeholder">&nbsp;</div>
+  </p>
   <p>
     <a class="text-danger"
        href="{% url 'users:user_delete' %}">
@@ -27,5 +39,14 @@
   </p>
 </div>
 
-<hr class="m-5">
 {% endblock content %}
+{% block style %}
+
+.api-key-placeholder {
+  font-size: 1rem;
+  font-weight: unset;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+{% endblock style %}

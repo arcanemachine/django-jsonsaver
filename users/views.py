@@ -8,6 +8,7 @@ from django.http import HttpResponseRedirect
 from django.views.generic import CreateView, DeleteView, DetailView
 from django.shortcuts import get_object_or_404
 from django.urls import reverse, reverse_lazy
+from rest_framework.authtoken.models import Token
 
 from . import forms
 from .tasks import send_welcome_email_task
@@ -52,8 +53,10 @@ def user_confirm(request, confirmation_code):
         UserModel, profile__confirmation_code=confirmation_code)
     if user.is_active:
         messages.info(request, "Your account has already been confirmed.")
+        return HttpResponseRedirect(reverse(settings.LOGIN_URL))
     user.is_active = True
     user.save()
+    Token.objects.get_or_create(user=user)
     messages.success(request, "Account confirmed! You may now login.")
     return HttpResponseRedirect(reverse(settings.LOGIN_URL))
 
@@ -81,8 +84,10 @@ class UserDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user_jsonstores = JsonStore.objects.filter(user=self.request.user)
-        context['user_jsonstores_count'] = user_jsonstores.count()
-        context['jsonstores'] = user_jsonstores.order_by('-updated_at')[:5]
+        context.update({
+            'jsonstores': user_jsonstores.order_by('-updated_at')[:5],
+            'user_jsonstores_count': user_jsonstores.count(),
+            'user_token': Token.objects.get(user=self.request.user)})
         return context
 
     def get_object(self):

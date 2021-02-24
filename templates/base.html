@@ -14,12 +14,17 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script-->
    
     {% block head_script %}{% endblock head_script %}
+  <style>
     {% block style %}{% endblock style %}
+  </style>
 
 
   </head>
   <body>
-    <script>0</script>
+    <script>
+      0;
+    {% block body_start_script %}{% endblock body_start_script %}
+    </script>
 
     <noscript>
       <h3>This page requires JavaScript. Please enable JavaScript to continue.</h3>

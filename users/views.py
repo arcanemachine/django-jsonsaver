@@ -5,7 +5,8 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.http import Http404, HttpResponseRedirect
-from django.views.generic import CreateView, DeleteView, DetailView
+from django.views.generic import CreateView, DeleteView, DetailView, \
+    TemplateView
 from django.views.generic.edit import UpdateView
 from django.shortcuts import get_object_or_404
 from django.urls import reverse, reverse_lazy
@@ -96,15 +97,6 @@ class UserDetailView(LoginRequiredMixin, DetailView):
         return self.request.user
 
 
-class UserProfileUpdateView(LoginRequiredMixin, UpdateView):
-    model = Profile
-    fields = ('is_public',)
-    template_name = 'users/user_profile_update.html'
-
-    def get_object(self):
-        return self.request.user.profile
-
-
 class UserDetailPublicView(LoginRequiredMixin, DetailView):
     template_name = 'users/user_detail_public.html'
 
@@ -124,6 +116,26 @@ class UserDetailPublicView(LoginRequiredMixin, DetailView):
             return user
         else:
             raise Http404
+
+
+class UserProfileUpdateView(LoginRequiredMixin, UpdateView):
+    model = Profile
+    fields = ('is_public',)
+    template_name = 'users/user_profile_update.html'
+
+    def get_object(self):
+        return self.request.user.profile
+
+
+class UserApiKeyResetView(LoginRequiredMixin, TemplateView):
+    template_name = 'users/user_api_key_reset.html'
+
+    def post(self, request, *args, **kwargs):
+        old_token = Token.objects.get(user=request.user)
+        old_token.delete()
+        new_token = Token.objects.create(user=request.user)
+        messages.success(request, f"Your new API key is '{new_token.key}'")
+        return HttpResponseRedirect(reverse('users:user_detail_me'))
 
 
 class UserDeleteView(LoginRequiredMixin, DeleteView):

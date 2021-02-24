@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}Get a New API Key{% endblock %}
+
+{% block body_title %}Get a New API Key{% endblock %}
+{% block body_subheading %}{% endblock %}
+
+{% block content %}
+
+<p>Are you sure you want to create a new API key? <strong>This will destroy your current API key!</strong></p>
+
+<p>You will need to update any existing references to your current API key.</p>
+
+{% with confirm_text="Yes, I wish to obtain a new API key and destroy the old one. I have read the above text and understand the consequences of this action, and that it cannot be undone." confirm_style="warning" %}
+  {% include 'base_form.html' %}
+{% endwith %}
+
+
+{% endblock content %}

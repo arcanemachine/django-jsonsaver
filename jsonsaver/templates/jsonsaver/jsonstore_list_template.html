@@ -2,7 +2,7 @@
 <ul class="my-4">
   {% for jsonstore in jsonstores %}
   <li>
-    <a href="{% url 'jsonsaver:jsonstore_detail' jsonstore_pk=jsonstore.pk %}">
+    <a href="{% url 'jsonsaver:jsonstore_detail' jsonstore_pk=jsonstore.pk %}" title="{{ jsonstore.data }}">
       {% if jsonstore.name %}
         Store Name: '{{ jsonstore.name }}'
         {% if jsonstore.is_public %}(public){% endif %}

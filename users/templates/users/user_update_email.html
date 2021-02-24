@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Change Your Email Address{% endblock %}
+
+{% block body_title %}Change Your Email Address{% endblock %}
+
+{% block content %}
+
+<p>Your email address is currently set to <strong>{{ request.user.email }}</strong>.
+<p>You will need to confirm your new email address before we can update your address in our system.</p>
+
+{% include 'base_form.html' %}
+
+<div class="bottom-links">
+  <p class="mt-4">
+    <a href="{% url 'users:user_detail_me' %}">
+      Return to your profile
+    </a>
+  </p>
+</div>
+
+{% endblock content %}

@@ -2,9 +2,10 @@ from django.contrib import messages
 from django.conf import settings
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.views.generic import CreateView, FormView, DeleteView, DetailView,\
     TemplateView
 from django.views.generic.edit import UpdateView
@@ -13,8 +14,8 @@ from django.urls import reverse, reverse_lazy
 from rest_framework.authtoken.models import Token
 
 from . import forms
+from . import tasks
 from .models import Profile
-from .tasks import send_welcome_email_task
 from django_jsonsaver import helpers
 from jsonsaver.models import JsonStore
 
@@ -41,7 +42,7 @@ class UserRegisterView(CreateView):
         self.object.save()
 
         user = self.object
-        send_welcome_email_task.delay(
+        tasks.send_welcome_email_task.delay(
             user.email, user.username, user.profile.activation_code)
         if settings.DEBUG:
             helpers.send_welcome_email(
@@ -65,7 +66,7 @@ class UserActivationEmailResend(FormView):
             return HttpResponseRedirect(reverse(settings.LOGIN_URL))
         if user and not user.is_active:
             # resend the welcome email
-            send_welcome_email_task.delay(
+            tasks.send_welcome_email_task.delay(
                 user.email, user.username, user.profile.activation_code)
             if settings.DEBUG:
                 helpers.send_welcome_email(
@@ -85,6 +86,7 @@ def user_activate(request, activation_code):
         return HttpResponseRedirect(reverse(settings.LOGIN_URL))
     user.is_active = True
     user.save()
+    user.profile.activation_code = None
     Token.objects.get_or_create(user=user)
     messages.success(request, "Account confirmed! You may now login.")
     return HttpResponseRedirect(reverse(settings.LOGIN_URL))
@@ -146,17 +148,65 @@ class UserDetailPublicView(LoginRequiredMixin, DetailView):
             raise Http404
 
 
-class UserProfileUpdateView(LoginRequiredMixin, UpdateView):
+class UserUpdateProfileView(LoginRequiredMixin, UpdateView):
     model = Profile
     fields = ('is_public',)
-    template_name = 'users/user_profile_update.html'
+    template_name = 'users/user_update_profile.html'
 
     def get_object(self):
         return self.request.user.profile
 
 
-class UserApiKeyResetView(LoginRequiredMixin, TemplateView):
-    template_name = 'users/user_api_key_reset.html'
+class UserUpdateEmailView(LoginRequiredMixin, FormView):
+    model = Profile
+    form_class = forms.UserUpdateEmailForm
+    template_name = 'users/user_update_email.html'
+
+    def get_object(self):
+        return self.request.user.profile
+
+    def form_valid(self, form):
+        user = self.request.user
+        profile = self.get_object()
+        email = form.cleaned_data['wants_email']
+
+        # update profile
+        profile.wants_email = email
+        profile.activation_code = Token().generate_key()
+        profile.save()
+
+        # send confirmation email
+        tasks.send_email_update_email_task.delay(
+            email, user.username, user.profile.activation_code)
+        if settings.DEBUG:
+            helpers.send_email_update_email(
+                email, user.username, user.profile.activation_code)
+        messages.success(
+            self.request, "Success! Please check your email inbox for "
+            "your confirmation message.")
+
+        return HttpResponseRedirect(reverse('users:user_detail_me'))
+
+
+@login_required
+def user_update_email_confirm(request, activation_code):
+    user = get_object_or_404(
+        UserModel, profile__activation_code=activation_code)
+
+    user.email = user.profile.wants_email
+    user.save()
+
+    user.profile.wants_email = None
+    user.profile.activation_code = None
+    user.profile.save()
+
+    messages.success(
+        request, f"Your email address has been updated to '{user.email}'.")
+    return HttpResponseRedirect(reverse('users:user_detail_me'))
+
+
+class UserUpdateApiKeyView(LoginRequiredMixin, TemplateView):
+    template_name = 'users/user_update_api_key.html'
 
     def post(self, request, *args, **kwargs):
         old_token = Token.objects.get(user=request.user)

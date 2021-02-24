@@ -6,10 +6,9 @@
 
 {% block body_start_script %}
 function showApiKey() {
-  let apiKeyPlaceholder = document.querySelector('#api-key-placeholder');
   let userToken = '{{ user_token }}'
   if (userToken) {
-    apiKeyPlaceholder.textContent = `Your API key is '${userToken}'`;
+    alert(`Your API key is '${userToken}'`);
   }
 }
 {% endblock body_start_script %}
@@ -29,8 +28,7 @@ function showApiKey() {
 
 <div class="bottom-links">
   <p>
-    <div class="unstyled-link no-select" onclick="showApiKey()">Click here to see your API key</div>
-    <div id="api-key-placeholder" class="api-key-placeholder">&nbsp;</div>
+    <div class="unstyled-link" onclick="showApiKey()">Click here to see your API key</div>
   </p>
   <p><a href="{% url 'users:user_profile_update' %}">Modify your account settings</a></p>
   </p>
@@ -47,13 +45,3 @@ function showApiKey() {
 </div>
 
 {% endblock content %}
-{% block style %}
-
-.api-key-placeholder {
-  font-size: 1rem;
-  font-weight: unset;
-  margin-bottom: 0;
-  padding-bottom: 0;
-}
-
-{% endblock style %}

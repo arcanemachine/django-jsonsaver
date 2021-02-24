@@ -131,6 +131,10 @@ ul {
   font-weight: bold;
 }
 
+.unstyled-link:hover {
+  text-decoration: underline;
+}
+
 /* misc */
 
 .list-style-type-dashed {

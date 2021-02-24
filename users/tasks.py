@@ -6,6 +6,6 @@ logger = get_task_logger(__name__)
 
 
 @task(name="send_welcome_email_task")
-def send_welcome_email_task(email, confirmation_code):
+def send_welcome_email_task(email, username, activation_code):
     logger.info(f'Sent welcome email to {email}')
-    return send_welcome_email(email, confirmation_code)
+    return send_welcome_email(email, username, activation_code)

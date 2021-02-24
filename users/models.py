@@ -7,11 +7,11 @@ UserModel = get_user_model()
 
 class Profile(models.Model):
     user = models.OneToOneField(UserModel, on_delete=models.CASCADE)
-    confirmation_code = models.CharField(max_length=128, null=True)
+    activation_code = models.CharField(max_length=128, null=True)
     is_public = models.BooleanField(
         "Make this profile public",
-        help_text="If this setting is active, users can look up this profile "\
-            "based on your username and view all your public stores.",
+        help_text="If this setting is active, users can look up this profile "
+        "based on your username and view all your public stores.",
         default=False)
 
     def save(self, *args, **kwargs):

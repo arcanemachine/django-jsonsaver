@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.http import Http404, HttpResponseRedirect
-from django.views.generic import CreateView, DeleteView, DetailView, \
+from django.views.generic import CreateView, FormView, DeleteView, DetailView,\
     TemplateView
 from django.views.generic.edit import UpdateView
 from django.shortcuts import get_object_or_404
@@ -39,23 +39,49 @@ class UserRegisterView(CreateView):
         self.object = form.save(commit=False)
         self.object.is_active = False
         self.object.save()
+
+        user = self.object
+        send_welcome_email_task.delay(
+            user.email, user.username, user.profile.activation_code)
+        if settings.DEBUG:
+            helpers.send_welcome_email(
+                user.email, user.username, user.profile.activation_code)
         messages.success(
             self.request, "Success! Please check your email inbox for "
             "your confirmation message.")
-
-        send_welcome_email_task.delay(
-            self.object.email, self.object.profile.confirmation_code)
-        if settings.DEBUG:
-            helpers.send_welcome_email(
-                self.object.email, self.object.profile.confirmation_code)
         return HttpResponseRedirect(self.get_success_url())
 
 
-def user_confirm(request, confirmation_code):
+class UserActivationEmailResend(FormView):
+    template_name = 'users/user_activation_email_resend.html'
+    form_class = forms.UserActivationEmailResendForm
+
+    def form_valid(self, form):
+        user = \
+            UserModel.objects.filter(email=form.cleaned_data['email']).first()
+        if user and user.is_active:
+            messages.info(
+                self.request, "This account has already been activated.")
+            return HttpResponseRedirect(reverse(settings.LOGIN_URL))
+        if user and not user.is_active:
+            # resend the welcome email
+            send_welcome_email_task.delay(
+                user.email, user.username, user.profile.activation_code)
+            if settings.DEBUG:
+                helpers.send_welcome_email(
+                    user.email, user.username, user.profile.activation_code)
+        messages.success(
+            self.request, "If the email address you entered "
+            "matches an account that has not yet been activated, "
+            "then we have resent an activation email to that address.")
+        return HttpResponseRedirect(reverse('users:login'))
+
+
+def user_activate(request, activation_code):
     user = get_object_or_404(
-        UserModel, profile__confirmation_code=confirmation_code)
+        UserModel, profile__activation_code=activation_code)
     if user.is_active:
-        messages.info(request, "Your account has already been confirmed.")
+        messages.info(request, "Your account has already been activated.")
         return HttpResponseRedirect(reverse(settings.LOGIN_URL))
     user.is_active = True
     user.save()
@@ -78,6 +104,8 @@ class UserLoginView(SuccessMessageMixin, LoginView):
                 request,
                 "Your account has not been activated. "
                 "Please check your email inbox for your activation email.")
+            return HttpResponseRedirect(
+                reverse('users:user_activation_email_resend'))
         return super().post(request, *args, **kwargs)
 
 

@@ -4,13 +4,13 @@ from django.core.mail import send_mail
 from . import server_config
 
 
-def send_welcome_email(email, confirmation_code):
+def send_welcome_email(email, username, activation_code):
     subject = "jsonSaver: Activate your account"
-    message = "Welcome to jsonSaver!\n\n" \
+    message = f"Welcome to jsonSaver! Your username is {username}.\n\n" \
         "Please visit the following link to activate your account:\n\n" + \
         server_config.BACKEND_SERVER_URL + \
-        reverse('users:user_confirm', kwargs={
-                'confirmation_code': confirmation_code})
+        reverse('users:user_activate', kwargs={
+                'activation_code': activation_code})
     sender = server_config.BACKEND_SERVER_EMAIL
     recipient = [email]
 

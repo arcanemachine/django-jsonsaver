@@ -67,6 +67,7 @@ ul {
 
 .info-message-item {
   text-align: center;
+  margin: auto 2rem;
 }
 
 .info-message-item:not(:first-child) {

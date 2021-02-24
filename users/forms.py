@@ -35,3 +35,9 @@ class NewUserCreationForm(UserCreationForm):
 
 class UserAuthenticationForm(AuthenticationForm):
     captcha = CaptchaField(help_text=c.FORM_FIELD_CAPTCHA_HELP_TEXT)
+
+
+class UserActivationEmailResendForm(forms.Form):
+    email = forms.EmailField(label="Your email address")
+    captcha = CaptchaField(
+        label="CAPTCHA", help_text=c.FORM_FIELD_CAPTCHA_HELP_TEXT)

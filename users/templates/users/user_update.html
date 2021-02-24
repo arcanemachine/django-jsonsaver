@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}Update Account Settings{% endblock %}
+
+{% block body_title %}Update Account Settings{% endblock %}
+
+{% block content %}
+
+{% include 'base_form.html' %}
+
+<div class="bottom-links">
+  <p class="mt-4">
+    <a href="{% url 'users:user_detail_me' %}">
+      Return to your profile
+    </a>
+  </p>
+</div>
+
+{% endblock content %}

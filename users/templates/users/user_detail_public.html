@@ -19,9 +19,10 @@ function showApiKey() {
 {% with is_public=True %}
   {% include 'jsonsaver/jsonstore_list_template.html' %}
 {% endwith %}
-<div class="bottom-links-continued">
+<div class="bottom-links">
   {% if request.user.username == public_user.username %}
-  <p><a href="{% url 'jsonsaver:jsonstore_list' %}">Return to your profile</a></p>
+  <p><a href="{% url 'jsonsaver:jsonstore_list' %}">View all your JSON stores</a></p>
+  <p><a href="{% url 'users:user_detail_me' %}">View your account profile</a></p>
   {% endif %}
 </div>
 

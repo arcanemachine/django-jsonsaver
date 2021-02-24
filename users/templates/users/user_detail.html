@@ -32,11 +32,13 @@ function showApiKey() {
     <div class="unstyled-link no-select" onclick="showApiKey()">Click here to see your API key</div>
     <div id="api-key-placeholder" class="api-key-placeholder">&nbsp;</div>
   </p>
+  <p><a href="{% url 'users:user_update' %}">Modify your account settings</a></p>
+  </p>
   <p>
   {% if user.profile.is_public %}
     <a href="{% url 'users:user_detail_public' username=user.username %}">View your public profile</a>
   {% endif %}
-  <p>
+  <p class="mt-5">
     <a class="text-danger"
        href="{% url 'users:user_delete' %}">
       Delete your account

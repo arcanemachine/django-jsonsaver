@@ -6,11 +6,13 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.http import Http404, HttpResponseRedirect
 from django.views.generic import CreateView, DeleteView, DetailView
+from django.views.generic.edit import UpdateView
 from django.shortcuts import get_object_or_404
 from django.urls import reverse, reverse_lazy
 from rest_framework.authtoken.models import Token
 
 from . import forms
+from .models import Profile
 from .tasks import send_welcome_email_task
 from django_jsonsaver import helpers
 from jsonsaver.models import JsonStore
@@ -92,6 +94,15 @@ class UserDetailView(LoginRequiredMixin, DetailView):
 
     def get_object(self):
         return self.request.user
+
+
+class UserProfileUpdateView(LoginRequiredMixin, UpdateView):
+    model = Profile
+    fields = ('is_public',)
+    template_name = 'users/user_profile_update.html'
+
+    def get_object(self):
+        return self.request.user.profile
 
 
 class UserDetailPublicView(LoginRequiredMixin, DetailView):

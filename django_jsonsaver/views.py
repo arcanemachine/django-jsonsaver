@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 # from django.http import HttpResponseRedirect
 # from django.urls import reverse
 from django.shortcuts import render
@@ -8,6 +9,10 @@ from django.shortcuts import render
 
 def project_root(request):
     return render(request, 'project_root.html')
+
+
+def project_root_api(request):
+    return HttpResponse('Insert schema here.')
 
 
 # def test_email(request):

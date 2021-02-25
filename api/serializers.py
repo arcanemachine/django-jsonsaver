@@ -55,4 +55,10 @@ class JsonStoreNameSerializer(serializers.ModelSerializer):
     class Meta:
         model = JsonStore
         fields = ['data', 'is_public']
-        read_only_fields = ['data', 'is_public']
+
+
+class JsonStorePublicSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = JsonStore
+        fields = ['data']
+        read_only_fields = ['data']

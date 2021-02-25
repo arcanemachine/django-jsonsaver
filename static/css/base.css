@@ -49,6 +49,10 @@ ul {
   font-size: 2.5rem;
 }
 
+.main-container {
+  flex-grow: 1;
+}
+
 .content-container {
   margin: 0 2rem;
 }

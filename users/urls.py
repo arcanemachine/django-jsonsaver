@@ -41,7 +41,7 @@ urlpatterns = [
     path('me/update/settings/',
          views.UserUpdateProfileView.as_view(),
          name='user_update_profile'),
-    path('me/update/api-key-reset/',
+    path('me/renew-api-key/',
          views.UserUpdateApiKeyView.as_view(),
          name='user_update_api_key'),
     path('me/delete-account/',

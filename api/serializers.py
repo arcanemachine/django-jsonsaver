@@ -55,7 +55,7 @@ class JsonStoreSerializer(serializers.ModelSerializer):
         return data
 
     def create(self, validated_data):
-        # if user has too many stores, stop and notify them
+        # if user has too many stores, do not continue
         user = self.context['request'].user
         if user.jsonstore_set.count() >= user.profile.jsonstore_count_max:
             raise serializers.ValidationError(

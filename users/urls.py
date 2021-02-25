@@ -27,7 +27,7 @@ urlpatterns = [
          views.UserUsernameRecoverView.as_view(),
          name='user_username_recover'),
     path('me/',
-         views.UserDetailView.as_view(),
+         views.UserDetailMeView.as_view(),
          name='user_detail_me'),
     # path('me/update/',
     #      views.UserUpdateView.as_view(),

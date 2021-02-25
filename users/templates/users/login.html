@@ -9,9 +9,9 @@
 {% include 'base_form.html' %}
 
 <div class="bottom-links">
-  <p><a href="{% url 'users:user_activation_email_resend' %}">Didn't receive your activation email?</a></p>
+  <p><a href="{% url 'users:register' %}">Create a new account</a></p>
+  <p class="mt-4"><a href="{% url 'users:user_activation_email_resend' %}">Didn't receive your activation email?</a></p>
   <p><a href="{% url 'users:user_username_recover' %}">Forgot your username?</a></p>
-  <p class="mt-4"><a href="{% url 'users:register' %}">Create a new account</a></p>
 </div>
 
 {% endblock content %}

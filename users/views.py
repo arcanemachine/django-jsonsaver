@@ -111,8 +111,8 @@ class UserLoginView(SuccessMessageMixin, LoginView):
         return super().post(request, *args, **kwargs)
 
 
-class UserDetailView(LoginRequiredMixin, DetailView):
-    template_name = 'users/user_detail.html'
+class UserDetailMeView(LoginRequiredMixin, DetailView):
+    template_name = 'users/user_detail_me.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -130,6 +130,17 @@ class UserDetailView(LoginRequiredMixin, DetailView):
 class UserDetailPublicView(LoginRequiredMixin, DetailView):
     template_name = 'users/user_detail_public.html'
 
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.profile.is_public:
+            if request.user == self.get_object():
+                messages.info(
+                    request, "Your account is currently set to private.")
+                return HttpResponseRedirect(
+                    reverse('users:user_update_profile'))
+            else:
+                raise Http404
+        return super().dispatch(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user_jsonstores = JsonStore.objects.filter(
@@ -141,11 +152,7 @@ class UserDetailPublicView(LoginRequiredMixin, DetailView):
         return context
 
     def get_object(self):
-        user = get_object_or_404(UserModel, username=self.kwargs['username'])
-        if user.profile.is_public:
-            return user
-        else:
-            raise Http404
+        return get_object_or_404(UserModel, username=self.kwargs['username'])
 
 
 class UserUpdateProfileView(

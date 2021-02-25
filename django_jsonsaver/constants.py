@@ -1,4 +1,6 @@
 
+FORBIDDEN_STORE_NAMES = ['find']
+
 FORM_ERROR_STORE_NAME_DUPLICATE = \
     "You cannot have multiple stores with the same name."
 FORM_ERROR_STORE_PUBLIC_NAME_BLANK = \

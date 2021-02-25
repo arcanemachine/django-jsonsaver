@@ -6,6 +6,13 @@ from .models import JsonStore
 from django_jsonsaver import constants as c
 
 
+class JsonStoreLookupForm(forms.Form):
+    name = forms.CharField(
+        label="Find a public JSON store", max_length=128,
+        help_text="Your query will be converted to a URL-friendly format. "
+        "e.g. 'My Public STORE!' &rarr; 'my-public-store'")
+
+
 class JsonStoreLookupPublicForm(forms.Form):
     name = forms.CharField(
         label="Find a public JSON store", max_length=128,
@@ -30,6 +37,10 @@ class JsonStoreForm(forms.ModelForm):
 
         user = self.user
         obj = self.obj
+
+        if name and name in c.FORBIDDEN_STORE_NAMES:
+            raise ValidationError(
+                f"The name '{name}' cannot be used as a store name.")
 
         if is_public and not name:
             raise ValidationError(c.FORM_ERROR_STORE_PUBLIC_NAME_BLANK)

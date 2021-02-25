@@ -20,14 +20,13 @@ def jsonsaver_root(request):
     return HttpResponseRedirect(reverse(settings.LOGIN_URL))
 
 
-class JsonStoreLookupPublicView(FormView):
-    form_class = forms.JsonStoreLookupPublicForm
+class JsonStoreLookupView(FormView):
+    form_class = forms.JsonStoreLookupForm
     template_name = 'jsonsaver/jsonstore_lookup.html'
 
     def form_valid(self, form):
-        
         return HttpResponseRedirect(
-            reverse('jsonsaver:jsonstore_detail_public', kwargs={
+            reverse('jsonsaver:jsonstore_detail_name', kwargs={
                 'jsonstore_name': form.cleaned_data['name']}))
 
 
@@ -39,6 +38,7 @@ class JsonStoreListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return JsonStore.objects.filter(user=self.request.user) \
             .order_by('-updated_at')
+
 
 class JsonStoreCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = JsonStore
@@ -73,6 +73,13 @@ class JsonStoreDetailView(UserPassesTestMixin, DetailView):
 class JsonStoreNameDetailView(LoginRequiredMixin, DetailView):
     model = JsonStore
 
+    def dispatch(self, request, *args, **kwargs):
+        if not self.get_object():
+            messages.error(request, "We could not find a store by that name.")
+            return HttpResponseRedirect(
+                reverse('jsonsaver:jsonstore_lookup'))
+        return super().dispatch(request, *args, **kwargs)
+
     def get_object(self):
         return get_object_or_404(
             JsonStore,
@@ -91,7 +98,7 @@ class JsonStorePublicNameDetailView(DetailView):
             messages.error(request, "We could not find a store by that name.")
             return HttpResponseRedirect(
                 reverse('jsonsaver:jsonstore_lookup_public'))
-        return super.dispatch(request, *args, **kwargs)
+        return super().dispatch(request, *args, **kwargs)
 
     def get_object(self):
         return JsonStore.objects.filter(
@@ -99,6 +106,16 @@ class JsonStorePublicNameDetailView(DetailView):
 
     def test_func(self):
         return self.get_object().user == self.request.user
+
+
+class JsonStoreLookupPublicView(FormView):
+    form_class = forms.JsonStoreLookupPublicForm
+    template_name = 'jsonsaver/jsonstore_lookup.html'
+
+    def form_valid(self, form):
+        return HttpResponseRedirect(
+            reverse('jsonsaver:jsonstore_detail_public', kwargs={
+                'jsonstore_name': form.cleaned_data['name']}))
 
 
 class JsonStoreUpdateView(

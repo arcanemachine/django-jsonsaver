@@ -55,6 +55,13 @@ class JsonStoreSerializer(serializers.ModelSerializer):
         return data
 
     def create(self, validated_data):
+        # if user has too many stores, stop and notify them
+        user = self.context['request'].user
+        if user.jsonstore_set.count() >= user.profile.jsonstore_count_max:
+            raise serializers.ValidationError(
+                "You have reached the maximum of "
+                f"{user.profile.jsonstore_count_max} JSON stores. You cannot "
+                "create any more stores.")
         user = self.context['request'].user
         jsonstore = JsonStore.objects.create(user=user, **validated_data)
         return jsonstore

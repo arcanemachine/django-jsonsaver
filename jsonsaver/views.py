@@ -57,7 +57,7 @@ class JsonStoreCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         return kwargs
 
     def form_valid(self, form):
-        # if user has too many stores, stop and notify them
+        # if user has too many stores, do not continue
         user = self.request.user
         if user.jsonstore_set.count() >= user.profile.jsonstore_count_max:
             messages.error(

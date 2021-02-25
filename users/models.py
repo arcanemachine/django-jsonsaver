@@ -9,7 +9,6 @@ UserModel = get_user_model()
 
 
 class Profile(models.Model):
-
     def get_activation_code():
         return {Token.generate_key(): None}
 

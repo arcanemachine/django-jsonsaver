@@ -51,7 +51,6 @@ class JsonStoreSerializer(serializers.ModelSerializer):
             if name and stores_with_same_name.filter(user=user).exists():
                 raise serializers.ValidationError(
                     c.FORM_ERROR_STORE_NAME_DUPLICATE)
-
         return data
 
     def create(self, validated_data):

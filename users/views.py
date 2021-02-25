@@ -158,7 +158,6 @@ class UserUpdateProfileView(LoginRequiredMixin, UpdateView):
 
 
 class UserUpdateEmailView(LoginRequiredMixin, FormView):
-    model = Profile
     form_class = forms.UserUpdateEmailForm
     template_name = 'users/user_update_email.html'
 
@@ -186,6 +185,25 @@ class UserUpdateEmailView(LoginRequiredMixin, FormView):
             "your confirmation message.")
 
         return HttpResponseRedirect(reverse('users:user_detail_me'))
+
+
+class UserUsernameRecoverView(FormView):
+    form_class = forms.UserUsernameRecoverForm
+    template_name = 'users/user_username_recover.html'
+
+    def form_valid(self, form):
+        email = form.cleaned_data['email']
+        user = UserModel.objects.filter(email=email).first()
+
+        if user:
+            tasks.send_user_username_recover_email_task.delay(
+                email, user.username)
+            if settings.DEBUG:
+                helpers.send_user_username_recover_email(email, user.username)
+        messages.success(
+            self.request, "If a user account exists with that email address, "
+            "then we have sent them an email containing their username.")
+        return HttpResponseRedirect(reverse('users:login'))
 
 
 @login_required

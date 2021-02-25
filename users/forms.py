@@ -62,3 +62,9 @@ class UserUpdateEmailForm(forms.ModelForm):
             raise ValidationError(
                 "This email address is already registered to another account.")
         return self.cleaned_data
+
+
+class UserUsernameRecoverForm(forms.Form):
+    email = forms.EmailField(label="Enter your email address")
+    captcha = CaptchaField(
+        label="CAPTCHA", help_text=c.FORM_FIELD_CAPTCHA_HELP_TEXT)

@@ -5,16 +5,16 @@ from . import views
 app_name = 'jsonsaver'
 
 urlpatterns = [
+    path('find/',
+         views.JsonStoreLookupPublicView.as_view(),
+         name='jsonstore_lookup_public'),
     path('',
          views.JsonStoreListView.as_view(),
          name='jsonstore_list'),
-
-    # create
     path('new/',
          views.JsonStoreCreateView.as_view(),
          name='jsonstore_create'),
 
-    # detail
     path('<int:jsonstore_pk>/',
          views.JsonStoreDetailView.as_view(),
          name='jsonstore_detail'),
@@ -25,14 +25,10 @@ urlpatterns = [
          views.JsonStorePublicNameDetailView.as_view(),
          name='jsonstore_detail_public'),
 
-    # update
     path('<int:jsonstore_pk>/update/',
          views.JsonStoreUpdateView.as_view(),
          name='jsonstore_update'),
-
-    # delete
     path('<int:jsonstore_pk>/delete/',
          views.JsonStoreDeleteView.as_view(),
          name='jsonstore_delete'),
-
 ]

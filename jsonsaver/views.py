@@ -3,11 +3,11 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse, reverse_lazy
-from django.views.generic import CreateView, DetailView, DeleteView, ListView
+from django.views.generic import CreateView, DetailView, DeleteView, FormView,\
+    ListView
 from django.views.generic.edit import UpdateView
 
 from . import forms
@@ -20,7 +20,17 @@ def jsonsaver_root(request):
     return HttpResponseRedirect(reverse(settings.LOGIN_URL))
 
 
-# list
+class JsonStoreLookupPublicView(FormView):
+    form_class = forms.JsonStoreLookupPublicForm
+    template_name = 'jsonsaver/jsonstore_lookup.html'
+
+    def form_valid(self, form):
+        
+        return HttpResponseRedirect(
+            reverse('jsonsaver:jsonstore_detail_public', kwargs={
+                'jsonstore_name': form.cleaned_data['name']}))
+
+
 class JsonStoreListView(LoginRequiredMixin, ListView):
     model = JsonStore
     context_object_name = 'jsonstores'
@@ -30,8 +40,6 @@ class JsonStoreListView(LoginRequiredMixin, ListView):
         return JsonStore.objects.filter(user=self.request.user) \
             .order_by('-updated_at')
 
-
-# create
 class JsonStoreCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = JsonStore
     form_class = forms.JsonStoreForm
@@ -54,7 +62,6 @@ class JsonStoreCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         return HttpResponseRedirect(self.get_success_url())
 
 
-# detail
 class JsonStoreDetailView(UserPassesTestMixin, DetailView):
     model = JsonStore
     pk_url_kwarg = 'jsonstore_pk'
@@ -79,14 +86,21 @@ class JsonStoreNameDetailView(LoginRequiredMixin, DetailView):
 class JsonStorePublicNameDetailView(DetailView):
     model = JsonStore
 
+    def dispatch(self, request, *args, **kwargs):
+        if not self.get_object():
+            messages.error(request, "We could not find a store by that name.")
+            return HttpResponseRedirect(
+                reverse('jsonsaver:jsonstore_lookup_public'))
+        return super.dispatch(request, *args, **kwargs)
+
     def get_object(self):
-        return get_object_or_404(JsonStore, name=self.kwargs['jsonstore_name'])
+        return JsonStore.objects.filter(
+            name=self.kwargs['jsonstore_name']).first()
 
     def test_func(self):
         return self.get_object().user == self.request.user
 
 
-# update
 class JsonStoreUpdateView(
         UserPassesTestMixin, SuccessMessageMixin, UpdateView):
     model = JsonStore

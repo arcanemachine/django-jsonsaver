@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ action_verb }} JSON Store{% endblock %}
+
+{% block body_title %}{{ action_verb }} JSON Store{% endblock %}
+{% block body_subheading %}{% endblock %}
+
+{% block content %}
+
+{% include 'base_form.html' %}
+
+<div class="bottom-links">
+  <p class="mt-4">
+    <a href="{% url 'project_root' %}">
+      Go to homepage
+    </a>
+  </p>
+</div>
+
+{% endblock content %}

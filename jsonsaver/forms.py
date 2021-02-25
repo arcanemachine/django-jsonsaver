@@ -6,6 +6,13 @@ from .models import JsonStore
 from django_jsonsaver import constants as c
 
 
+class JsonStoreLookupPublicForm(forms.Form):
+    name = forms.CharField(
+        label="Find a public JSON store", max_length=128,
+        help_text="Your query will be converted to a URL-friendly format. "
+        "e.g. 'My Public STORE!' &rarr; 'my-public-store'")
+
+
 class JsonStoreForm(forms.ModelForm):
     class Meta:
         model = JsonStore

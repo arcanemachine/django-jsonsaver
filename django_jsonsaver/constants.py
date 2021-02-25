@@ -1,14 +1,15 @@
 from .server_config import MAX_STORE_SIZE_IN_KB
 
 # constants
-JSONSTORE_DATA_MAX_SIZE = 1024 * MAX_STORE_SIZE_IN_KB
+JSONSTORE_COUNT_MAX_FREE = 1
+JSONSTORE_DATA_SIZE_MAX = 1024 * MAX_STORE_SIZE_IN_KB
 JSONSTORE_PAGINATE_BY = 25
 
 # strings
 FORBIDDEN_STORE_NAMES = ['find']
 
-FORM_ERROR_STORE_DATA_OVER_MAX_SIZE = \
-    f"Maximum store data size is {int(JSONSTORE_DATA_MAX_SIZE / 1024)} KB."
+FORM_ERROR_STORE_DATA_SIZE_OVER_MAX = \
+    f"Maximum store data size is {int(JSONSTORE_DATA_SIZE_MAX / 1024)} KB."
 FORM_ERROR_STORE_NAME_DUPLICATE = \
     "You cannot have multiple stores with the same name."
 FORM_ERROR_STORE_PUBLIC_NAME_BLANK = \

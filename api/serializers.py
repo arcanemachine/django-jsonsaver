@@ -23,9 +23,9 @@ class JsonStoreSerializer(serializers.ModelSerializer):
         obj = self.instance
 
         if len(store_data) and helpers.get_obj_size(store_data) > \
-                c.JSONSTORE_DATA_MAX_SIZE:
+                c.JSONSTORE_DATA_SIZE_MAX:
             raise serializers.ValidationError(
-                c.FORM_ERROR_STORE_DATA_OVER_MAX_SIZE +
+                c.FORM_ERROR_STORE_DATA_SIZE_OVER_MAX +
                 " The size of your store's JSON data "
                 f"{round(helpers.get_obj_size(store_data) / 1024, 2)} KB.")
 

@@ -13,6 +13,7 @@ from django.views.generic.edit import UpdateView
 from . import forms
 from .models import JsonStore
 from django_jsonsaver import constants as c
+from django_jsonsaver import helpers as h
 
 
 @login_required
@@ -56,6 +57,14 @@ class JsonStoreCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         return kwargs
 
     def form_valid(self, form):
+        # if user has too many stores, stop and notify them
+        user = self.request.user
+        if user.jsonstore_set.count() >= user.profile.jsonstore_count_max:
+            messages.error(
+                self.request, "You have reached the maximum of "
+                f"{user.profile.jsonstore_count_max} JSON stores. You cannot "
+                "create any more stores.")
+            return HttpResponseRedirect(self.request.path)
         self.object = form.save(commit=False)
         self.object.user = self.request.user
         self.object.save()

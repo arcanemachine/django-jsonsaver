@@ -7,6 +7,12 @@
 
 {% block content %}
 
+{% if action_verb == 'Create' and request.user.jsonstore_set.count >= request.user.profile.jsonstore_count_max %}
+<div class="alert alert-warning">
+  You have reached the limit of {{ request.user.profile.jsonstore_count_max }} JSON stores. You will not be able to create any more stores.
+</div>
+{% endif %}
+
 {% include 'base_form.html' %}
 
 <div class="bottom-links">

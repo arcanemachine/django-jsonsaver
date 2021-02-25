@@ -22,7 +22,8 @@ class JsonStoreViewSet(viewsets.ModelViewSet):
     permission_classes = [HasJsonStorePermissions]
 
     def list(self, request):
-        self.queryset = JsonStore.objects.filter(user=request.user)
+        self.queryset = \
+            JsonStore.objects.filter(user__id=request.user.id)
         return super().list(request)
 
 

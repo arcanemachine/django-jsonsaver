@@ -148,10 +148,12 @@ class UserDetailPublicView(LoginRequiredMixin, DetailView):
             raise Http404
 
 
-class UserUpdateProfileView(LoginRequiredMixin, UpdateView):
+class UserUpdateProfileView(
+        LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Profile
     fields = ('is_public',)
     template_name = 'users/user_update_profile.html'
+    success_message = "Your profile settings have been updated."
 
     def get_object(self):
         return self.request.user.profile

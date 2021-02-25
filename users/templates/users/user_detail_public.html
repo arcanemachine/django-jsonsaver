@@ -22,6 +22,7 @@ function showApiKey() {
 <div class="bottom-links">
   {% if request.user.username == public_user.username %}
   <p><a href="{% url 'jsonsaver:jsonstore_list' %}">View all your JSON stores</a></p>
+  <p><a href="{% url 'users:user_update_profile' %}">Configure public profile visibility</a></p>
   <p><a href="{% url 'users:user_detail_me' %}">View your account profile</a></p>
   {% endif %}
 </div>

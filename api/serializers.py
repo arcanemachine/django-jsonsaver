@@ -2,6 +2,7 @@ from django.utils.text import slugify
 from rest_framework import serializers
 
 from django_jsonsaver import constants as c
+from django_jsonsaver import helpers
 from jsonsaver.models import JsonStore
 
 
@@ -15,10 +16,18 @@ class JsonStoreSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         name = data.get('name', None)
+        store_data = data.get('data', {})
         is_public = data.get('is_public', False)
 
         user = self.context['request'].user
         obj = self.instance
+
+        if len(store_data) and helpers.get_obj_size(store_data) > \
+                c.JSONSTORE_DATA_MAX_SIZE:
+            raise serializers.ValidationError(
+                c.FORM_ERROR_STORE_DATA_OVER_MAX_SIZE +
+                " The size of your store's JSON data "
+                f"{round(helpers.get_obj_size(store_data) / 1024, 2)} KB.")
 
         if is_public and not name:
             raise serializers.ValidationError(

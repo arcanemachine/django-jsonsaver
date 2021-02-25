@@ -4,6 +4,7 @@ from django.utils.text import slugify
 
 from .models import JsonStore
 from django_jsonsaver import constants as c
+from django_jsonsaver import helpers
 
 
 class JsonStoreLookupForm(forms.Form):
@@ -33,6 +34,7 @@ class JsonStoreForm(forms.ModelForm):
 
     def clean(self):
         name = self.cleaned_data.get('name')
+        store_data = self.cleaned_data.get('data')
         is_public = self.data.get('is_public')
 
         user = self.user
@@ -41,6 +43,13 @@ class JsonStoreForm(forms.ModelForm):
         if name and name in c.FORBIDDEN_STORE_NAMES:
             raise ValidationError(
                 f"The name '{name}' cannot be used as a store name.")
+
+        if len(store_data):
+            if helpers.get_obj_size(store_data) > c.JSONSTORE_DATA_MAX_SIZE:
+                raise ValidationError(
+                    c.FORM_ERROR_STORE_DATA_OVER_MAX_SIZE +
+                    " The size of your store's JSON data "
+                    f"{round(helpers.get_obj_size(store_data) / 1024, 2)} KB.")
 
         if is_public and not name:
             raise ValidationError(c.FORM_ERROR_STORE_PUBLIC_NAME_BLANK)

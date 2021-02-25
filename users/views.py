@@ -176,7 +176,7 @@ class UserUpdateEmailView(LoginRequiredMixin, FormView):
     def form_valid(self, form):
         user = self.request.user
         profile = self.get_object()
-        email = form.cleaned_data['wants_email']
+        email = form.cleaned_data['email']
 
         # update profile
         profile.wants_email = email

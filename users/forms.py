@@ -49,15 +49,14 @@ class UserActivationEmailResendForm(forms.Form):
         label="CAPTCHA", help_text=c.FORM_FIELD_CAPTCHA_HELP_TEXT)
 
 
-class UserUpdateEmailForm(forms.ModelForm):
-    class Meta:
-        model = Profile
-        fields = ('wants_email',)
-        labels = {'wants_email': 'Your new email address'}
+class UserUpdateEmailForm(forms.Form):
+    email = forms.EmailField(label="Enter your email address")
+    captcha = CaptchaField(
+        label="CAPTCHA", help_text=c.FORM_FIELD_CAPTCHA_HELP_TEXT)
 
     def clean(self):
         # do not allow duplicate email addresses
-        email = self.cleaned_data['wants_email']
+        email = self.cleaned_data['email']
         if UserModel.objects.filter(email=email).exists():
             raise ValidationError(
                 "This email address is already registered to another account.")
@@ -65,6 +64,6 @@ class UserUpdateEmailForm(forms.ModelForm):
 
 
 class UserUsernameRecoverForm(forms.Form):
-    email = forms.EmailField(label="Enter your email address")
+    email = forms.EmailField(label="Your email address")
     captcha = CaptchaField(
         label="CAPTCHA", help_text=c.FORM_FIELD_CAPTCHA_HELP_TEXT)

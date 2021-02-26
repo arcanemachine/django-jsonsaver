@@ -189,10 +189,10 @@ class UserUpdateEmailView(LoginRequiredMixin, FormView):
 
         # send confirmation email
         tasks.send_email_update_email_task.delay(
-            email, user.username, user.profile.activation_code)
-#        if settings.DEBUG:
-#            helpers.send_email_update_email(
-#                email, user.username, user.profile.activation_code)
+            email, user.profile.activation_code)
+        if settings.DEBUG:
+            helpers.send_email_update_email(
+                email, user.profile.activation_code)
         messages.success(
             self.request, "Success! Please check your email inbox for "
             "your confirmation message.")

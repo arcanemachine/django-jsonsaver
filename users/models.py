@@ -15,7 +15,7 @@ class Profile(models.Model):
 
     user = models.OneToOneField(UserModel, on_delete=models.CASCADE)
     activation_code = models.CharField(
-        max_length=128, default=get_activation_code)
+        max_length=128, default=get_activation_code, null=True)
     wants_email = models.EmailField(null=True)
     is_public = models.BooleanField(
         "Make this profile public",

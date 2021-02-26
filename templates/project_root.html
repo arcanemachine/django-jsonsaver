@@ -69,8 +69,8 @@
 <h4 class="faq-header">Where is the API schema?</h4>
 <p>I haven't made one yet. The URLS used for managing your store in the browser are the same as the ones running the API.</p>
 <p>
-  On the web: <code>{{ BACKEND_SERVER_URL }}{% url 'api:jsonstore_detail_name' name='hello-world' %}</code><br>
-  Using the API: <code>{{ BACKEND_SERVER_URL }}{% url 'api:jsonstore_detail_name' name='hello-world' %}</code>
+  On the web: <code>{{ BACKEND_SERVER_URL }}{% url 'api:jsonstore_detail_public' jsonstore_name='hello-world' %}</code><br>
+  Using the API: <code>{{ BACKEND_SERVER_URL }}{% url 'api:jsonstore_detail_public' jsonstore_name='hello-world' %}</code>
 </p>
 
 <h4 class="faq-header">How much does this cost?</h4>

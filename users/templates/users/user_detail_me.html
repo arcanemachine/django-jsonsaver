@@ -14,9 +14,9 @@ function showApiKey() {
 {% endblock body_start_script %}
 {% block content %}
 
-<hr class="m-5" />
+<hr class="m-4" />
 
-<h2 class="mt-6">Your JSON Stores</h2>
+<h2 class="mt-4">Your JSON Stores</h2>
 {% include 'jsonsaver/jsonstore_list_template.html' %}
 <div class="bottom-links-continued">
   <p><a href="{% url 'jsonsaver:jsonstore_list' %}">View all your JSON stores</a></p>
@@ -24,23 +24,21 @@ function showApiKey() {
 
 <hr class="m-5" />
 
-<h2 class="mt-6">Account Status: {{ request.user.profile.account_tier|capfirst }} Tier</h2>
+<h2 class="mt-4">Account Status: {{ request.user.profile.account_tier|capfirst }} Tier</h2>
 
 <p class="mt-4">
-  Store Count:
-  {{ request.user.jsonstore_set.count }}
-  ({{ request.user.profile.account_tier|capfirst }} Tier Limit: {{ request.user.profile.get_max_store_count }})
+  <strong>Your JSON Store Count:</strong> {{ request.user.jsonstore_set.count }}
+  (Total allowed for this tier: {{ request.user.profile.get_max_store_count }})
 </p>
 <p>
-  Max Size Per Store:
-  {{ request.user.profile.get_max_store_data_size_in_kb }} KB ({{ request.user.profile.account_tier|capfirst }} Tier)
+  <strong>Max Size Per Store on {{ request.user.profile.account_tier|capfirst }} Tier:</strong>
+  {{ request.user.profile.get_max_store_data_size_in_kb }} KB
 </p>
-<p>Storage Used:
-  {{ request.user.profile.get_all_stores_data_size_in_kb }} KB
-  ({{ request.user.profile.account_tier|capfirst }} Tier Limit:
-    {{ request.user.profile.get_max_all_stores_data_size_in_kb }} KB)
+<p><strong>Data Storage Usage:</strong>
+  {{ request.user.profile.get_all_stores_data_size_in_kb }} KB /
+  {{ request.user.profile.get_max_all_stores_data_size_in_kb }} KB
 </p>
-<p>API Call Limit: {{ SERVER_CONFIG.THROTTLE_RATE_USER }} ({{ request.user.profile.account_tier|capfirst }} Tier)</p>
+<p><strong>Your Current API Call Limit:</strong> {{ SERVER_CONFIG.THROTTLE_RATE_USER }}</p>
 
 <div class="bottom-links">
   <p><a href="{% url 'users:user_update_account_tier' %}">Manage your account limits</a></p>
@@ -49,7 +47,7 @@ function showApiKey() {
 
 <hr class="m-5" />
 
-<h2 class="mt-6">Account Settings</h2>
+<h2 class="mt-4">Account Settings</h2>
 
 <div class="bottom-links">
   <p><a href="{% url 'users:user_update_profile' %}">Update your account settings</a></p>

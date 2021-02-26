@@ -12,10 +12,10 @@
     </a>
   </li>
   {% endfor %}
-</ul>
   {% if user_jsonstores_count and jsonstores.count < user_jsonstores_count %}
     <div class="mt-2"><a href="{% url 'jsonsaver:jsonstore_list' %}">View the rest of your stores...</a></div>
   {% endif %}
+</ul>
 
   {% if is_paginated %}
 <ul class="mt-4 pagination">

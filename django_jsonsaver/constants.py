@@ -5,16 +5,34 @@ STORES_PAGINATE_BY = 25
 FORBIDDEN_STORE_NAMES = ['find']
 
 
-FORM_ERROR_STORE_NAME_DUPLICATE = \
+FORM_ERROR_STORE_NAME_DUPLICATE =\
     "You cannot have multiple stores with the same name."
-FORM_ERROR_STORE_PUBLIC_NAME_BLANK = \
+FORM_ERROR_STORE_PUBLIC_NAME_BLANK =\
     "Publicly-accessible stores must be given a name."
-FORM_ERROR_STORE_PUBLIC_NAME_DUPLICATE = \
+FORM_ERROR_STORE_PUBLIC_NAME_DUPLICATE =\
     "This publicly-accessible store name is already in use."
 
 FORM_FIELD_CAPTCHA_HELP_TEXT = "Please confirm that you are a human "\
     "by entering the letters seen in the picture."
 
 
-def FORM_ERROR_STORE_DATA_SIZE_OVER_MAX(size):
-    return f"Your maximum store data size is {int(size / 1024)} KB."
+def FORM_ERROR_STORE_DATA_SIZE_OVER_MAX(user, store_data_size):
+    max_store_data_size_in_kb = \
+        user.profile.get_max_store_data_size_in_kb()
+    rounded_store_data_size = round(store_data_size / 1024, 2)
+    return f"The maximum data size per store for your account is "\
+        f"{max_store_data_size_in_kb} KB. The disk size of your entered data "\
+        f"is {rounded_store_data_size} KB. Please consider upgrading "\
+        "your account if you need to use larger stores."
+
+
+def FORM_ERROR_ALL_STORES_DATA_SIZE_OVER_MAX(user, store_data_size):
+    max_all_stores_data_size_in_kb = \
+        user.profile.get_max_all_stores_data_size_in_kb()
+    rounded_store_data_size = round(store_data_size / 1024, 2)
+    store_data_size_excess = \
+        abs(rounded_store_data_size - max_all_stores_data_size_in_kb)
+    return f"The maximum storage capacity for all your JSON stores is "\
+        f"{max_all_stores_data_size_in_kb} KB. The disk size of your "\
+        f"entered data is {rounded_store_data_size} KB which is "\
+        f"{store_data_size_excess} KB too large."

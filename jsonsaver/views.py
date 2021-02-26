@@ -56,14 +56,6 @@ class JsonStoreCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         return kwargs
 
     def form_valid(self, form):
-        # if user has too many stores, do not continue
-        user = self.request.user
-        if user.jsonstore_set.count() >= user.profile.max_user_store_count:
-            messages.error(
-                self.request, "You have reached the maximum of "
-                f"{user.profile.max_user_store_count} JSON stores. You "
-                "cannot create any more stores.")
-            return HttpResponseRedirect(self.request.path)
         self.object = form.save(commit=False)
         self.object.user = self.request.user
         self.object.save()

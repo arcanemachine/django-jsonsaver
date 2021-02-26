@@ -43,10 +43,10 @@ class UserRegisterView(CreateView):
 
         user = self.object
         tasks.send_welcome_email_task.delay(
-            user.email, user.username, user.profile.activation_code)
+            user.email, user.profile.activation_code)
         if settings.DEBUG:
             helpers.send_welcome_email(
-                user.email, user.username, user.profile.activation_code)
+                user.email, user.profile.activation_code)
         messages.success(
             self.request, "Success! Please check your email inbox for "
             "your confirmation message.")
@@ -67,10 +67,10 @@ class UserActivationEmailResend(FormView):
         if user and not user.is_active:
             # resend the welcome email
             tasks.send_welcome_email_task.delay(
-                user.email, user.username, user.profile.activation_code)
+                user.email, user.profile.activation_code)
             if settings.DEBUG:
                 helpers.send_welcome_email(
-                    user.email, user.username, user.profile.activation_code)
+                    user.email, user.profile.activation_code)
         messages.success(
             self.request, "If the email address you entered "
             "matches an account that has not yet been activated, "

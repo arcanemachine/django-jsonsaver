@@ -11,10 +11,11 @@ UserModel = get_user_model()
 
 class Profile(models.Model):
     def get_activation_code():
-        return {Token.generate_key(): None}
+        return Token.generate_key()
 
     user = models.OneToOneField(UserModel, on_delete=models.CASCADE)
-    activation_code = models.JSONField(default=get_activation_code, null=True)
+    activation_code = models.CharField(
+        max_length=128, default=get_activation_code)
     wants_email = models.EmailField(null=True)
     is_public = models.BooleanField(
         "Make this profile public",

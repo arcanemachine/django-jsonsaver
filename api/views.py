@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, viewsets
-from rest_framework.permissions import AllowAny, IsAdminUser
+from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 
 from . import serializers
 from .permissions import HasJsonStorePermissions
@@ -16,11 +16,10 @@ def api_root(request):
 class JsonStoreViewSet(viewsets.ModelViewSet):
     queryset = JsonStore.objects.all()
     serializer_class = serializers.JsonStoreSerializer
-    permission_classes = [HasJsonStorePermissions]
+    permission_classes = [IsAuthenticated, HasJsonStorePermissions]
 
     def list(self, request):
-        self.queryset = \
-            JsonStore.objects.filter(user__id=request.user.id)
+        self.queryset = JsonStore.objects.filter(user__id=request.user.id)
         return super().list(request)
 
 

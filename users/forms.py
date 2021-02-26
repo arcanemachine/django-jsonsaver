@@ -33,7 +33,7 @@ class NewUserCreationForm(UserCreationForm):
         # honeypot
         if self.cleaned_data.get('address', ''):
             return False
-        return super().clean(self)
+        return self.cleaned_data
 
 
 class UserAuthenticationForm(AuthenticationForm):

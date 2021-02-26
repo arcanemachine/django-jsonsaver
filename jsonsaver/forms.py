@@ -40,6 +40,15 @@ class JsonStoreForm(forms.ModelForm):
         user = self.user
         obj = self.obj
 
+        # public store name cannot be blank
+        if is_public and not name:
+            raise ValidationError(c.FORM_ERROR_STORE_PUBLIC_NAME_BLANK)
+
+        # store name not allowed
+        if name and name in c.FORBIDDEN_STORE_NAMES:
+            raise ValidationError(
+                f"The name '{name}' cannot be used as a store name.")
+
         # user has too many stores
         max_store_count = user.profile.get_max_store_count()
         if user.jsonstore_set.count() >= max_store_count:
@@ -47,18 +56,8 @@ class JsonStoreForm(forms.ModelForm):
                 f"You have reached the maximum of {max_store_count} "
                 "JSON stores. You cannot create any more stores.")
 
-        # store name not allowed
-        if name and name in c.FORBIDDEN_STORE_NAMES:
-            raise ValidationError(
-                f"The name '{name}' cannot be used as a store name.")
-
-        # public store name cannot be blank
-        if is_public and not name:
-            raise ValidationError(c.FORM_ERROR_STORE_PUBLIC_NAME_BLANK)
-
-        stores_with_same_name = JsonStore.objects.filter(name=slugify(name))
-
         # duplicate store name
+        stores_with_same_name = JsonStore.objects.filter(name=slugify(name))
         if is_public:
             different_user_public_stores_with_same_name = \
                 stores_with_same_name.exclude(user=user).filter(is_public=True)
@@ -73,13 +72,13 @@ class JsonStoreForm(forms.ModelForm):
             if name and stores_with_same_name.filter(user=user).exists():
                 raise ValidationError(c.FORM_ERROR_STORE_NAME_DUPLICATE)
 
-        # store is too large
+        # store size is too large
         store_data_size = helpers.get_obj_size(store_data)
         if store_data_size > user.profile.get_max_store_data_size():
             raise ValidationError(
                 c.FORM_ERROR_STORE_DATA_SIZE_OVER_MAX(user, store_data_size))
 
-        # store will exceed user's total storage allowance
+        # store size will exceed user's total storage allowance
         if store_data_size + user.profile.get_all_stores_data_size() > \
                 user.profile.get_max_all_stores_data_size():
             raise ValidationError(

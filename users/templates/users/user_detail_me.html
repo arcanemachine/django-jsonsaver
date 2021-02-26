@@ -26,9 +26,17 @@ function showApiKey() {
 
 <h2 class="mt-6">Account Settings</h2>
 
+<p class="mt-4">Store Count: {{ request.user.jsonstore_set.count }} ({{ request.user.profile.account_tier|capfirst }} Tier Limit: {{ request.user.profile.max_user_store_count }})</p>
+<p>Storage Used:
+  {{ request.user.profile.get_all_stores_data_size_in_kb }} KB
+  ({{ request.user.profile.account_tier|capfirst }} Tier Limit:
+    {{ request.user.profile.get_max_user_all_stores_data_size_in_kb }} KB)
+</p>
+<p class="mt-4">Monthly API Calls Remaining: {{ request.user.jsonstore_set.count }} ({{ request.user.profile.account_tier|capfirst }} Tier Limit: {{ request.user.profile.max_user_store_count }})</p>
+
 <div class="bottom-links">
+  <p><a href="{% url 'users:user_update_account_tier' %}">Manage your account limits</a></p>
   <p><a href="{% url 'users:user_update_profile' %}">Update your account settings</a></p>
-  <p><a href="{% url 'users:user_update_email' %}">Change your email address</a></p>
   <p class="mt-4">
     <span class="unstyled-link" onclick="showApiKey()">View your API key</span>
   </p>

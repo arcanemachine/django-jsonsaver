@@ -45,11 +45,12 @@ class JsonStoreForm(forms.ModelForm):
                 f"The name '{name}' cannot be used as a store name.")
 
         if len(store_data):
-            if helpers.get_obj_size(store_data) > c.JSONSTORE_DATA_SIZE_MAX:
+            store_data_size = helpers.get_obj_size(store_data)
+            if store_data_size > user.profile.max_user_store_data_size:
                 raise ValidationError(
-                    c.FORM_ERROR_STORE_DATA_SIZE_OVER_MAX +
-                    " The size of your store's JSON data "
-                    f"{round(helpers.get_obj_size(store_data) / 1024, 2)} KB.")
+                    c.FORM_ERROR_STORE_DATA_SIZE_OVER_MAX(store_data_size) +
+                    " The disk size of your entered data is "
+                    f"{round(store_data_size / 1024, 2)} KB.")
 
         if is_public and not name:
             raise ValidationError(c.FORM_ERROR_STORE_PUBLIC_NAME_BLANK)

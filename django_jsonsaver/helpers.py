@@ -28,6 +28,14 @@ def get_obj_size(obj):
     return sz
 
 
+def kb_to_bytes(kb):
+    return kb * 1024
+
+
+def bytes_to_kb(kb):
+    return int(kb / 1024)
+
+
 def send_welcome_email(email, username, activation_code):
     subject = "jsonSaver: Activate your account"
     message = "Welcome to jsonSaver!\n\n" +\

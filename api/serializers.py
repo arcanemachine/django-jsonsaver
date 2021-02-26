@@ -22,12 +22,13 @@ class JsonStoreSerializer(serializers.ModelSerializer):
         user = self.context['request'].user
         obj = self.instance
 
-        if len(store_data) and helpers.get_obj_size(store_data) > \
-                c.JSONSTORE_DATA_SIZE_MAX:
-            raise serializers.ValidationError(
-                c.FORM_ERROR_STORE_DATA_SIZE_OVER_MAX +
-                " The size of your store's JSON data "
-                f"{round(helpers.get_obj_size(store_data) / 1024, 2)} KB.")
+        if len(store_data):
+            store_data_size = helpers.get_obj_size(store_data)
+            if store_data_size > user.profile.max_user_store_data.size:
+                raise serializers.ValidationError(
+                    c.FORM_ERROR_STORE_DATA_SIZE_OVER_MAX(store_data_size) +
+                    " The disk size of your entered data is "
+                    f"{round(store_data_size / 1024, 2)} KB.")
 
         if is_public and not name:
             raise serializers.ValidationError(
@@ -59,9 +60,8 @@ class JsonStoreSerializer(serializers.ModelSerializer):
         if user.jsonstore_set.count() >= user.profile.jsonstore_count_max:
             raise serializers.ValidationError(
                 "You have reached the maximum of "
-                f"{user.profile.jsonstore_count_max} JSON stores. You cannot "
+                f"{user.profile.max_user_store_count} JSON stores. You cannot "
                 "create any more stores.")
-        user = self.context['request'].user
         jsonstore = JsonStore.objects.create(user=user, **validated_data)
         return jsonstore
 

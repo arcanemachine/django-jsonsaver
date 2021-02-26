@@ -1,9 +1,6 @@
-from django.core.exceptions import PermissionDenied
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
-from django.urls import reverse
 from rest_framework import generics, viewsets
-from rest_framework.exceptions import NotFound
 from rest_framework.permissions import AllowAny, IsAdminUser
 
 from . import serializers

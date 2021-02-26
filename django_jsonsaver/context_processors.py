@@ -1,6 +1,7 @@
-from django_jsonsaver import server_config as sc
+from django_jsonsaver import server_config
 
 
 def constants(request):
-    return {'PROJECT_NAME': sc.PROJECT_NAME,
-            'BACKEND_SERVER_URL': sc.BACKEND_SERVER_URL}
+    return {'SERVER_CONFIG': server_config,
+            'PROJECT_NAME': server_config.PROJECT_NAME,
+            'BACKEND_SERVER_URL': server_config.BACKEND_SERVER_URL}

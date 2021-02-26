@@ -1,0 +1,1 @@
+celery -A django_jsonsaver worker -l info

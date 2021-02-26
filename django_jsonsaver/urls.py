@@ -8,11 +8,14 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
 
+    # experimental/debug
+    path('send-test-email/', views.test_email, name='test_email'),
+
     # local apps
     path('', views.project_root, name='project_root'),
-    # path('email-me/', views.test_email, name='test_email'),
     path('stores/', include('jsonsaver.urls')),
     path('users/', include('users.urls')),
+    path('users/', include('django.contrib.auth.urls')),
 
     # third-party apps
     path('api/', views.project_root_api, name='project_root_api'),

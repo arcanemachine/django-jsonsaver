@@ -1,10 +1,10 @@
 from captcha.fields import CaptchaField
 from django import forms
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import \
+    UserCreationForm, AuthenticationForm, PasswordResetForm
 from django.core.exceptions import ValidationError
 
-from .models import Profile
 from django_jsonsaver import constants as c
 
 UserModel = get_user_model()
@@ -67,3 +67,7 @@ class UserUsernameRecoverForm(forms.Form):
     email = forms.EmailField(label="Your email address")
     captcha = CaptchaField(
         label="CAPTCHA", help_text=c.FORM_FIELD_CAPTCHA_HELP_TEXT)
+
+
+class UserPasswordResetForm(PasswordResetForm):
+    captcha = CaptchaField(help_text=c.FORM_FIELD_CAPTCHA_HELP_TEXT)

@@ -7,7 +7,6 @@ from django.core.mail import send_mail
 from . import server_config
 
 
-# utils
 # https://stackoverflow.com/a/53705610/
 def get_obj_size(obj):
     marked = {id(obj)}
@@ -37,7 +36,14 @@ def bytes_to_kb(kb):
     return int(kb / 1024)
 
 
-# email
+def send_test_email(email):
+    subject = "Test Message"
+    message = "Test message sent successfully!"
+    sender = server_config.BACKEND_SERVER_EMAIL
+    recipient = [email]
+    return send_mail(subject, message, sender, recipient)
+
+
 def send_welcome_email(email, activation_code):
     subject = "jsonSaver: Activate your account"
     message = "Welcome to jsonSaver!\n\n" +\

@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 
-{% block title %}User Info - {{ user.username }}{% endblock %}
-{% block body_title %}{{ user.username }}{% endblock %}
-{% block body_subheading %}Your Account Profile{% endblock %}
+{% block title %}Your Account - {{ user.username }}{% endblock %}
+{% block body_title %}Your Account{% endblock %}
+{% block body_subheading %}{{ user.username }}{% endblock %}
 
 {% block body_start_script %}
 function showApiKey() {
@@ -49,7 +49,7 @@ function showApiKey() {
 
 <h2 class="mt-4">Account Settings</h2>
 
-<div class="bottom-links">
+<div class="mt-4 bottom-links">
   <p><a href="{% url 'users:user_update_profile' %}">Update your account settings</a></p>
   <p class="mt-4">
     <span class="unstyled-link" onclick="showApiKey()">View your API key</span>

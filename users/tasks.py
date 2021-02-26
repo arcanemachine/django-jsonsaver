@@ -6,6 +6,12 @@ from django_jsonsaver import helpers as h
 logger = get_task_logger(__name__)
 
 
+@task(name="send_test_email_task")
+def send_test_email_task(email):
+    logger.info(f'Sent test email to {email}')
+    return h.send_test_email(email)
+
+
 @task(name="send_welcome_email_task")
 def send_welcome_email_task(email, activation_code):
     logger.info(f'Sent welcome email to {email}')

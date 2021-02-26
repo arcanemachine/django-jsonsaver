@@ -1,0 +1,1 @@
+celery -A django_jsonsaver beat -l info

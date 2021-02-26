@@ -13,6 +13,7 @@ pillow = "*"
 django-crispy-forms = "*"
 celery = "*"
 redis = "*"
+django-ses = "*"
 
 [dev-packages]
 

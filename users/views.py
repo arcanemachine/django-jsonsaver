@@ -44,9 +44,9 @@ class UserRegisterView(CreateView):
         user = self.object
         tasks.send_welcome_email_task.delay(
             user.email, user.profile.activation_code)
-        if settings.DEBUG:
-            helpers.send_welcome_email(
-                user.email, user.profile.activation_code)
+#        if settings.DEBUG:
+#            helpers.send_welcome_email(
+#                user.email, user.profile.activation_code)
         messages.success(
             self.request, "Success! Please check your email inbox for "
             "your confirmation message.")
@@ -68,9 +68,9 @@ class UserActivationEmailResend(FormView):
             # resend the welcome email
             tasks.send_welcome_email_task.delay(
                 user.email, user.profile.activation_code)
-            if settings.DEBUG:
-                helpers.send_welcome_email(
-                    user.email, user.profile.activation_code)
+#            if settings.DEBUG:
+#                helpers.send_welcome_email(
+#                    user.email, user.profile.activation_code)
         messages.success(
             self.request, "If the email address you entered "
             "matches an account that has not yet been activated, "
@@ -190,9 +190,9 @@ class UserUpdateEmailView(LoginRequiredMixin, FormView):
         # send confirmation email
         tasks.send_email_update_email_task.delay(
             email, user.username, user.profile.activation_code)
-        if settings.DEBUG:
-            helpers.send_email_update_email(
-                email, user.username, user.profile.activation_code)
+#        if settings.DEBUG:
+#            helpers.send_email_update_email(
+#                email, user.username, user.profile.activation_code)
         messages.success(
             self.request, "Success! Please check your email inbox for "
             "your confirmation message.")
@@ -211,8 +211,8 @@ class UserUsernameRecoverView(FormView):
         if user:
             tasks.send_user_username_recover_email_task.delay(
                 email, user.username)
-            if settings.DEBUG:
-                helpers.send_user_username_recover_email(email, user.username)
+#            if settings.DEBUG:
+#                helpers.send_user_username_recover_email(email, user.username)
         messages.success(
             self.request, "If a user account exists with that email address, "
             "then we have sent them an email containing their username.")

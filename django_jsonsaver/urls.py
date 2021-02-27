@@ -15,7 +15,7 @@ urlpatterns = [
     path('api/', views.project_root_api, name='project_root_api'),
 
     # local apps
-    path('stores/', include('stores.urls')),
+    path('store/', include('stores.urls')),
     path('users/', include('users.urls')),
     path('users/', include('django.contrib.auth.urls')),
 

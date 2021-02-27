@@ -23,10 +23,10 @@ class JsonStoreViewSet(viewsets.ModelViewSet):
         return super().list(request)
 
 
-class JsonStoreListAll(generics.ListAPIView):
-    queryset = JsonStore.objects.all()
-    serializer_class = serializers.JsonStoreSerializer
-    permission_classes = [IsAdminUser]
+# class JsonStoreListAll(generics.ListAPIView):
+#     queryset = JsonStore.objects.all()
+#     serializer_class = serializers.JsonStoreSerializer
+#     permission_classes = [IsAdminUser]
 
 
 class JsonStoreDetailName(generics.RetrieveUpdateDestroyAPIView):

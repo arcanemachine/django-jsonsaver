@@ -174,9 +174,9 @@ paths:
                 type: object
                 additionalProperties: {}
           description: ''
-  /api/v1/stores/:
+  /api/v1/store/:
     get:
-      operationId: api_v1_stores_list
+      operationId: api_v1_store_list
       description: ''
       tags:
       - api
@@ -193,7 +193,7 @@ paths:
                   $ref: '#/components/schemas/JsonStore'
           description: ''
     post:
-      operationId: api_v1_stores_create
+      operationId: api_v1_store_create
       description: ''
       tags:
       - api
@@ -219,9 +219,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/JsonStore'
           description: ''
-  /api/v1/stores/{id}/:
+  /api/v1/store/{id}/:
     get:
-      operationId: api_v1_stores_retrieve
+      operationId: api_v1_store_retrieve
       description: ''
       parameters:
       - in: path
@@ -243,7 +243,7 @@ paths:
                 $ref: '#/components/schemas/JsonStore'
           description: ''
     put:
-      operationId: api_v1_stores_update
+      operationId: api_v1_store_update
       description: ''
       parameters:
       - in: path
@@ -277,7 +277,7 @@ paths:
                 $ref: '#/components/schemas/JsonStore'
           description: ''
     patch:
-      operationId: api_v1_stores_partial_update
+      operationId: api_v1_store_partial_update
       description: ''
       parameters:
       - in: path
@@ -310,7 +310,7 @@ paths:
                 $ref: '#/components/schemas/JsonStore'
           description: ''
     delete:
-      operationId: api_v1_stores_destroy
+      operationId: api_v1_store_destroy
       description: ''
       parameters:
       - in: path
@@ -327,27 +327,9 @@ paths:
       responses:
         '204':
           description: No response body
-  /api/v1/stores/all/:
+  /api/v1/store/name/{jsonstore_name}/:
     get:
-      operationId: api_v1_stores_all_list
-      description: ''
-      tags:
-      - api
-      security:
-      - cookieAuth: []
-      - tokenAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/JsonStore'
-          description: ''
-  /api/v1/stores/name/{jsonstore_name}/:
-    get:
-      operationId: api_v1_stores_name_retrieve
+      operationId: api_v1_store_name_retrieve
       description: ''
       parameters:
       - in: path
@@ -368,7 +350,7 @@ paths:
                 $ref: '#/components/schemas/JsonStoreName'
           description: ''
     put:
-      operationId: api_v1_stores_name_update
+      operationId: api_v1_store_name_update
       description: ''
       parameters:
       - in: path
@@ -400,7 +382,7 @@ paths:
                 $ref: '#/components/schemas/JsonStoreName'
           description: ''
     patch:
-      operationId: api_v1_stores_name_partial_update
+      operationId: api_v1_store_name_partial_update
       description: ''
       parameters:
       - in: path
@@ -432,7 +414,7 @@ paths:
                 $ref: '#/components/schemas/JsonStoreName'
           description: ''
     delete:
-      operationId: api_v1_stores_name_destroy
+      operationId: api_v1_store_name_destroy
       description: ''
       parameters:
       - in: path
@@ -448,9 +430,9 @@ paths:
       responses:
         '204':
           description: No response body
-  /api/v1/stores/public/{jsonstore_name}/:
+  /api/v1/store/public/{jsonstore_name}/:
     get:
-      operationId: api_v1_stores_public_retrieve
+      operationId: api_v1_store_public_retrieve
       description: ''
       parameters:
       - in: path

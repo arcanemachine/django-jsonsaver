@@ -1,0 +1,572 @@
+openapi: 3.0.3
+info:
+  title: jsonSaver
+  version: 0.0.l
+paths:
+  /api/api-token-auth/:
+    post:
+      operationId: api_api_token_auth_create
+      description: ''
+      tags:
+      - api
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AuthToken'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AuthToken'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthToken'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthToken'
+          description: ''
+  /api/schema/:
+    get:
+      operationId: api_schema_retrieve
+      description: |-
+        OpenApi3 schema for this API. Format can be selected via content negotiation.
+
+        - YAML: application/vnd.oai.openapi
+        - JSON: application/vnd.oai.openapi+json
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - json
+          - yaml
+      - in: query
+        name: lang
+        schema:
+          type: string
+          enum:
+          - af
+          - ar
+          - ar-dz
+          - ast
+          - az
+          - be
+          - bg
+          - bn
+          - br
+          - bs
+          - ca
+          - cs
+          - cy
+          - da
+          - de
+          - dsb
+          - el
+          - en
+          - en-au
+          - en-gb
+          - eo
+          - es
+          - es-ar
+          - es-co
+          - es-mx
+          - es-ni
+          - es-ve
+          - et
+          - eu
+          - fa
+          - fi
+          - fr
+          - fy
+          - ga
+          - gd
+          - gl
+          - he
+          - hi
+          - hr
+          - hsb
+          - hu
+          - hy
+          - ia
+          - id
+          - ig
+          - io
+          - is
+          - it
+          - ja
+          - ka
+          - kab
+          - kk
+          - km
+          - kn
+          - ko
+          - ky
+          - lb
+          - lt
+          - lv
+          - mk
+          - ml
+          - mn
+          - mr
+          - my
+          - nb
+          - ne
+          - nl
+          - nn
+          - os
+          - pa
+          - pl
+          - pt
+          - pt-br
+          - ro
+          - ru
+          - sk
+          - sl
+          - sq
+          - sr
+          - sr-latn
+          - sv
+          - sw
+          - ta
+          - te
+          - tg
+          - th
+          - tk
+          - tr
+          - tt
+          - udm
+          - uk
+          - ur
+          - uz
+          - vi
+          - zh-hans
+          - zh-hant
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/vnd.oai.openapi:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/yaml:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/vnd.oai.openapi+json:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/v1/stores/:
+    get:
+      operationId: api_v1_stores_list
+      description: ''
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/JsonStore'
+          description: ''
+    post:
+      operationId: api_v1_stores_create
+      description: ''
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JsonStore'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/JsonStore'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/JsonStore'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonStore'
+          description: ''
+  /api/v1/stores/{id}/:
+    get:
+      operationId: api_v1_stores_retrieve
+      description: ''
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this json store.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonStore'
+          description: ''
+    put:
+      operationId: api_v1_stores_update
+      description: ''
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this json store.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JsonStore'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/JsonStore'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/JsonStore'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonStore'
+          description: ''
+    patch:
+      operationId: api_v1_stores_partial_update
+      description: ''
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this json store.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedJsonStore'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedJsonStore'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedJsonStore'
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonStore'
+          description: ''
+    delete:
+      operationId: api_v1_stores_destroy
+      description: ''
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this json store.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/stores/all/:
+    get:
+      operationId: api_v1_stores_all_list
+      description: ''
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/JsonStore'
+          description: ''
+  /api/v1/stores/name/{jsonstore_name}/:
+    get:
+      operationId: api_v1_stores_name_retrieve
+      description: ''
+      parameters:
+      - in: path
+        name: jsonstore_name
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonStoreName'
+          description: ''
+    put:
+      operationId: api_v1_stores_name_update
+      description: ''
+      parameters:
+      - in: path
+        name: jsonstore_name
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JsonStoreName'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/JsonStoreName'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/JsonStoreName'
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonStoreName'
+          description: ''
+    patch:
+      operationId: api_v1_stores_name_partial_update
+      description: ''
+      parameters:
+      - in: path
+        name: jsonstore_name
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedJsonStoreName'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedJsonStoreName'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedJsonStoreName'
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonStoreName'
+          description: ''
+    delete:
+      operationId: api_v1_stores_name_destroy
+      description: ''
+      parameters:
+      - in: path
+        name: jsonstore_name
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/stores/public/{jsonstore_name}/:
+    get:
+      operationId: api_v1_stores_public_retrieve
+      description: ''
+      parameters:
+      - in: path
+        name: jsonstore_name
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonStorePublic'
+          description: ''
+components:
+  schemas:
+    AuthToken:
+      type: object
+      properties:
+        username:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+        token:
+          type: string
+          readOnly: true
+      required:
+      - password
+      - token
+      - username
+    JsonStore:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          type: integer
+          readOnly: true
+        is_public:
+          type: boolean
+          description: Allow this store to be publicly accessible by name.
+        name:
+          type: string
+          nullable: true
+          description: Name will be lowercased and hyphenated for use in URLs.
+          maxLength: 128
+        data:
+          type: object
+          additionalProperties: {}
+      required:
+      - data
+      - id
+      - user
+    JsonStoreName:
+      type: object
+      properties:
+        data:
+          type: object
+          additionalProperties: {}
+        is_public:
+          type: boolean
+          description: Allow this store to be publicly accessible by name.
+    JsonStorePublic:
+      type: object
+      properties:
+        data:
+          type: object
+          additionalProperties: {}
+          readOnly: true
+      required:
+      - data
+    PatchedJsonStore:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          type: integer
+          readOnly: true
+        is_public:
+          type: boolean
+          description: Allow this store to be publicly accessible by name.
+        name:
+          type: string
+          nullable: true
+          description: Name will be lowercased and hyphenated for use in URLs.
+          maxLength: 128
+        data:
+          type: object
+          additionalProperties: {}
+    PatchedJsonStoreName:
+      type: object
+      properties:
+        data:
+          type: object
+          additionalProperties: {}
+        is_public:
+          type: boolean
+          description: Allow this store to be publicly accessible by name.
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: Session
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Token"

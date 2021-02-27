@@ -5,16 +5,10 @@ from . import constants as c
 
 
 class ContactUsForm(forms.Form):
-    name = forms.CharField(max_length=128)
-    email = forms.EmailField()
+    first_name = forms.CharField(label="Name", max_length=128)
     # honeypot field
-    address = forms.CharField(widget=forms.HiddenInput(), required=False)
+    last_name = forms.CharField(widget=forms.HiddenInput(), required=False)
+    email = forms.EmailField()
     message = forms.CharField(widget=forms.widgets.Textarea)
     captcha = CaptchaField(
         label="CAPTCHA", help_text=c.FORM_FIELD_CAPTCHA_HELP_TEXT)
-
-    def clean(self):
-        # honeypot
-        if self.cleaned_data.get('address', ''):
-            return False
-        return self.cleaned_data

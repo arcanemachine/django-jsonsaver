@@ -1,13 +1,22 @@
-<footer class="mt-5 py-4 footer-container"
-        class:is-dark="{$darkModeActive}">
-  <div class="text-center">
-    <div>Copyright {% now 'Y' %}. All rights reserved.</div>
+<footer class="mt-4 pt-4 pb-2 text-center footer-container">
+  <div class="row">
+    <div class="col">
+      <h5>Quick Links</h5>
+      <ul class="mb-4 list-unstyled text-small">
+        <li><a class="text-muted" href="{% url 'project_root' %}">Home</a></li>
+        <li><a class="text-muted" href="{% url 'contact_us' %}?next={{ request.path }}">Contact Us</a></li>
+        <li><a class="text-muted" href="{% url 'terms_of_use' %}">Terms of Use</a></li>
+        <li><a class="text-muted" href="{% url 'privacy_policy' %}">Privacy Policy</a></li>
+      </ul>
+    </div>
   </div>
-</footer>
-
+  <div class="footer-bottom">
+  <p>Use of this website or its services constitutes an agreement to our <a class="text-muted" href="{% url 'terms_of_use' %}">Terms of Use</a>.</p>
+  <p>&copy; Copyright {% now "Y" %}.  All rights reserved.</p>
+  </div>
+</footer>                                                                                                                           
 <style>
 .footer-container {
   background: #ddd;
-  width: 100%;
 }
 </style>

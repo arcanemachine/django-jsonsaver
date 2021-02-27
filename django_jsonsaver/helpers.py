@@ -8,6 +8,11 @@ from . import server_config
 
 
 # utils
+def get_next_url(request, url):
+    if request.GET.get('next', None):
+        return request.GET['next']
+    return url
+
 def get_obj_size(obj):  # https://stackoverflow.com/a/53705610/
     marked = {id(obj)}
     obj_q = [obj]

@@ -3,7 +3,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import render
 from django.views.generic import FormView, TemplateView
 
-from . import forms, tasks
+from . import forms, helpers as h, tasks
 
 
 def project_root(request):
@@ -13,7 +13,6 @@ def project_root(request):
 class ContactUsFormView(SuccessMessageMixin, FormView):
     template_name = 'contact_us.html'
     form_class = forms.ContactUsForm
-    success_url = '/'
     success_message = \
         "Your message has been received. Thank you for your feedback."
 
@@ -25,6 +24,9 @@ class ContactUsFormView(SuccessMessageMixin, FormView):
         if not last_name:
             tasks.send_contact_us_email_task(name, email, message)
         return super().form_valid(form)
+
+    def get_success_url(self):
+        return h.get_next_url(self.request, '/')
 
 
 class TermsOfUseView(TemplateView):

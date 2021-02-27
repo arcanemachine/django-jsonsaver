@@ -153,11 +153,16 @@ class UserDetailPublicView(LoginRequiredMixin, DetailView):
         return get_object_or_404(UserModel, username=self.kwargs['username'])
 
 
-class UserUpdateProfileView(
+class UserUpdateView(LoginRequiredMixin, SuccessMessageMixin, TemplateView):
+    model = Profile
+    template_name = 'users/user_update.html'
+
+
+class UserUpdateIsPublicView(
         LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Profile
     fields = ('is_public',)
-    template_name = 'users/user_update_profile.html'
+    template_name = 'users/user_update_is_public.html'
     success_message = "Your profile settings have been updated."
 
     def get_object(self):

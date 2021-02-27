@@ -20,7 +20,7 @@ function showApiKey() {
 {% include 'stores/jsonstore_list_template.html' %}
 <div class="bottom-links-continued">
   <p><a href="{% url 'stores:jsonstore_list' %}">View all your JSON stores</a></p>
-  <p><a href="{% url 'api_schema' %}">View jPI Schema</a></p>
+  <p><a href="{% url 'api_schema' %}">View API Schema</a></p>
 </div>
 
 <hr class="m-5" />
@@ -76,7 +76,7 @@ function showApiKey() {
     <a href="{% url 'users:user_update_api_key' %}">Get a new API key</a>
   </p>
   <p class="mt-4">
-    <a href="{% url 'users:user_update_profile' %}">Update your account settings</a>
+    <a href="{% url 'users:user_update' %}">Update your account settings</a>
   </p>
   <p>
     <a href="{% url 'users:user_detail_public' username=user.username %}">

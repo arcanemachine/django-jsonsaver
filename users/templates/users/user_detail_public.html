@@ -3,15 +3,6 @@
 {% block title %}{{ public_user.username }}'s Public JSON Stores{% endblock %}
 {% block body_title %}{{ public_user.username }}'s Public JSON Stores{% endblock %}
 
-{% block body_start_script %}
-function showApiKey() {
-  let apiKeyPlaceholder = document.querySelector('#api-key-placeholder');
-  let userToken = '{{ user_token }}'
-  if (userToken) {
-    apiKeyPlaceholder.textContent = `Your API key is '${userToken}'`;
-  }
-}
-{% endblock body_start_script %}
 {% block content %}
 
 <hr class="m-5" />
@@ -19,24 +10,13 @@ function showApiKey() {
 {% with is_public=True %}
   {% include 'stores/jsonstore_list_template.html' %}
 {% endwith %}
+
 <div class="bottom-links">
   {% if request.user.username == public_user.username %}
-  <p><a href="{% url 'stores:jsonstore_list' %}">View all your JSON stores</a></p>
-  <p><a href="{% url 'users:user_update_profile' %}">Configure your profile's public visibility</a></p>
-  <p><a href="{% url 'users:user_detail_me' %}">View your account profile</a></p>
+    <p><a href="{% url 'users:user_detail_me' %}">View your personal profile</a></p>
   {% endif %}
 </div>
 
 <hr class="m-5" />
 
 {% endblock content %}
-{% block style %}
-
-.api-key-placeholder {
-  font-size: 1rem;
-  font-weight: unset;
-  margin-bottom: 0;
-  padding-bottom: 0;
-}
-
-{% endblock style %}

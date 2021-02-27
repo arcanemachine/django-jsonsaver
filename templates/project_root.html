@@ -77,15 +77,15 @@ let jsonStoreData = fetch('{{ BACKEND_SERVER_URL }}{% url 'api:jsonstore-list' %
 <h4 class="faq-item-title">How much does this cost?</h4>
 <p>This service is currently free.</p>
 
-<h4 class="faq-item-title">Is my data private?</h4>
-<p>Any stores you create are private by default. We recommend encrypting any sensitive data before uploading it.</p>
-
 <h4 class="faq-item-title">Can I create a public store?</h4>
 <p>Yes, you can choose to create a publicly-accessible store that can be looked up via a unique user-chosen name.</p>
 
+<h4 class="faq-item-title">Is my data private?</h4>
+<p>Any stores you create are private by default. However, we recommend encrypting any sensitive data before uploading it to protect yourself against the (unlikely) event of a breach.</p>
+
 <h4 class="faq-item-title">Do you sell my data?</h4>
-<p>No, that's gross.</p>
-<p>This service currently uses no analytics whatsoever.</p>
+<p>No. This is not a data-mining operation and never will be.</p>
+<p>This service does not use any method of gathering analytical data on its users.</p>
 <p>In the future, we may use analytical data regarding users' usage patterns to improve our service, but we will never give or sell your data or personal information to anybody.</p>
 
 {% endblock content %}

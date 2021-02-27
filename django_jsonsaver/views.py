@@ -31,10 +31,6 @@ class ContactUsFormView(SuccessMessageMixin, FormView):
         return super().form_valid(form)
 
 
-def project_root_api(request):
-    return HttpResponse('Insert schema here.')
-
-
 # def test_func_user_is_staff(user):
 #     return user.is_staff
 #

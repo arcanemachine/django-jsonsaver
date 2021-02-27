@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.http import Http404, HttpResponseRedirect, HttpResponse
+from django.http import Http404, HttpResponseRedirect  # , HttpResponse
 from django.views.generic import CreateView, FormView, DeleteView, DetailView,\
     TemplateView
 from django.views.generic.edit import UpdateView
@@ -16,7 +16,7 @@ from rest_framework.authtoken.models import Token
 from . import forms
 from . import tasks
 from .models import Profile
-from django_jsonsaver import helpers
+# from django_jsonsaver import helpers as h
 from stores.models import JsonStore
 
 UserModel = get_user_model()
@@ -45,7 +45,7 @@ class UserRegisterView(CreateView):
         tasks.send_welcome_email_task.delay(
             user.email, user.profile.activation_code)
 #        if settings.DEBUG:
-#            helpers.send_welcome_email(
+#            h.send_welcome_email(
 #                user.email, user.profile.activation_code)
         messages.success(
             self.request, "Success! Please check your email inbox for "
@@ -68,7 +68,7 @@ class UserActivationEmailResend(FormView):
             tasks.send_welcome_email_task.delay(
                 user.email, user.profile.activation_code)
 #            if settings.DEBUG:
-#                helpers.send_welcome_email(
+#                h.send_welcome_email(
 #                    user.email, user.profile.activation_code)
         messages.success(
             self.request, "If the email address you entered "
@@ -189,7 +189,7 @@ class UserUpdateEmailView(LoginRequiredMixin, FormView):
         tasks.send_email_update_email_task.delay(
             email, user.profile.activation_code)
 #        if settings.DEBUG:
-#            helpers.send_email_update_email(
+#            h.send_email_update_email(
 #                email, user.profile.activation_code)
         messages.success(
             self.request, "Success! Please check your email inbox for "
@@ -210,7 +210,7 @@ class UserUsernameRecoverView(FormView):
             tasks.send_user_username_recover_email_task.delay(
                 email, user.username)
 #            if settings.DEBUG:
-#                helpers.send_user_username_recover_email(email, user.username)
+#                h.send_user_username_recover_email(email, user.username)
         messages.success(
             self.request, "If a user account exists with that email address, "
             "then we have sent them an email containing their username.")

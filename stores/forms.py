@@ -4,7 +4,7 @@ from django.utils.text import slugify
 
 from .models import JsonStore
 from django_jsonsaver import constants as c
-from django_jsonsaver import helpers
+from django_jsonsaver import helpers as h
 
 
 class JsonStoreLookupForm(forms.Form):
@@ -73,7 +73,7 @@ class JsonStoreForm(forms.ModelForm):
                 raise ValidationError(c.FORM_ERROR_STORE_NAME_DUPLICATE)
 
         # store size is too large
-        store_data_size = helpers.get_obj_size(store_data)
+        store_data_size = h.get_obj_size(store_data)
         if store_data_size > user.profile.get_max_store_data_size():
             raise ValidationError(
                 c.FORM_ERROR_STORE_DATA_SIZE_OVER_MAX(user, store_data_size))

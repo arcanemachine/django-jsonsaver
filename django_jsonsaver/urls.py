@@ -9,7 +9,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     # experimental/debug
-    path('send-test-email/', views.test_email, name='test_email'),
+    # path('send-test-email/', views.test_email, name='test_email'),
 
     # local apps
     path('', views.project_root, name='project_root'),

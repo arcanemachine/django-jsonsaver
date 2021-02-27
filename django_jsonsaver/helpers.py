@@ -7,8 +7,8 @@ from django.core.mail import send_mail
 from . import server_config
 
 
-# https://stackoverflow.com/a/53705610/
-def get_obj_size(obj):
+# utils
+def get_obj_size(obj):  # https://stackoverflow.com/a/53705610/
     marked = {id(obj)}
     obj_q = [obj]
     sz = 0
@@ -36,43 +36,53 @@ def bytes_to_kb(kb):
     return int(kb / 1024)
 
 
+# email
 def send_test_email(email):
     subject = "Test Message"
-    message = "Test message sent successfully!"
+    body = "Test message sent successfully!"
     sender = server_config.BACKEND_SERVER_EMAIL
     recipient = [email]
-    return send_mail(subject, message, sender, recipient)
+    return send_mail(subject, body, sender, recipient)
+
+
+def send_contact_us_email(name, email, message):
+    subject = f"jsonSaver Contact Form: Submitted by {name}"
+    body = f"Name: {name}\nEmail: {email}\n\nMessage: {message}"
+    sender = server_config.BACKEND_SERVER_EMAIL
+    recipient = [server_config.CONTACT_FORM_EMAIL_RECIPIENT]
+
+    return send_mail(subject, body, sender, recipient)
 
 
 def send_welcome_email(email, activation_code):
     subject = "jsonSaver: Activate your account"
-    message = "Welcome to jsonSaver!\n\n" +\
+    body = "Welcome to jsonSaver!\n\n" +\
         "Please visit the following link to activate your account:\n\n" +\
         server_config.BACKEND_SERVER_URL + \
         reverse('users:user_activate', kwargs={
                 'activation_code': activation_code})
     sender = server_config.BACKEND_SERVER_EMAIL
     recipient = [email]
-    return send_mail(subject, message, sender, recipient)
+    return send_mail(subject, body, sender, recipient)
 
 
 def send_email_update_email(email, activation_code):
     subject = "jsonSaver: Confirm your new email address"
-    message = "Please visit the following link to confirm your " +\
+    body = "Please visit the following link to confirm your " +\
         "new email address:\n\n" +\
         server_config.BACKEND_SERVER_URL + \
         reverse('users:user_update_email_confirm', kwargs={
                 'activation_code': activation_code})
     sender = server_config.BACKEND_SERVER_EMAIL
     recipient = [email]
-    return send_mail(subject, message, sender, recipient)
+    return send_mail(subject, body, sender, recipient)
 
 
 def send_user_username_recover_email(email, username):
-    subject = "jsonSaver: Your forgotten username"
-    message = f"Your username is '{username}'.\n\n" +\
+    subject = "jsonSaver: Forgot your username?"
+    body = f"Your username is '{username}'.\n\n" +\
         "You may login to your account here: " +\
         server_config.BACKEND_SERVER_URL + reverse('users:login')
     sender = server_config.BACKEND_SERVER_EMAIL
     recipient = [email]
-    return send_mail(subject, message, sender, recipient)
+    return send_mail(subject, body, sender, recipient)

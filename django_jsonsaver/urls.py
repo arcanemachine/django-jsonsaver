@@ -8,11 +8,11 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    # experimental/debug
-    # path('send-test-email/', views.test_email, name='test_email'),
+    # django_jsonsaver
+    path('', views.project_root, name='project_root'),
+    path('contact_us', views.ContactUsFormView.as_view(), name='contact_us'),
 
     # local apps
-    path('', views.project_root, name='project_root'),
     path('stores/', include('stores.urls')),
     path('users/', include('users.urls')),
     path('users/', include('django.contrib.auth.urls')),
@@ -23,4 +23,7 @@ urlpatterns = [
     path('api/api-token-auth/', obtain_auth_token, name='obtain_auth_token'),
     path('api-auth/', include('rest_framework.urls')),
     path('captcha/', include('captcha.urls')),
+
+    # experimental/debug
+    # path('send-test-email/', views.test_email, name='test_email'),
 ]

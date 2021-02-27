@@ -31,9 +31,7 @@
     </noscript>
 
     <div id="page-container" class="page-container">
-
       <div class="header-container">
-
         <div class="header-title-container">
           <h3><a class="header-title unstyled-link" href="{% url 'project_root' %}">{{ PROJECT_NAME }}</a></h3>
         </div>
@@ -53,28 +51,49 @@
 
       <div class="main-container">
 
-  {% if messages %}
-			<div id="info-message-container" class="info-message-container">
-    {% for message in messages %}
-				<div class="info-message-item">
-					<strong>{{ message }}</strong>
-				</div>
+
+  {% if form.errors %}
+    {% for field in form %}
+      {% for error in field.errors %}
+        <div class="alert alert-danger text-center">
+          <strong>Form error: {{ error|escape }}</strong>
+        </div>
+      {% endfor %}
     {% endfor %}
-			</div>
   {% endif %}
 
-				<div class="container">
-					<div class="body-title-container">
-						<h2 class="mt-4 body-title">{% block body_title %}{% endblock body_title %}</h2>
-						<h4 class="body-subheading">{% block body_subheading %}{% endblock body_subheading %}</h4>
-					</div>
-            <div class="mt-4">
-              {% block content %}{% endblock content %}
-            </div>
-				</div>
+  {% comment %}
+  {% if messages %}
+    {% for message in messages %}
+      <div{% if message.tags %} class="{{ message.tags }}"{% endif %} style="margin-bottom: 1.5em;">
+        <strong>{{ message }}</strong>
       </div>
-    {% include 'footer.html' %}
+    {% endfor %}
+  {% endif %}
+  {% endcomment %}
+
+  {% if messages %}
+      <div id="info-message-container" class="info-message-container">
+    {% for message in messages %}
+        <div class="info-message-item">
+          <strong>{{ message }}</strong>
+        </div>
+    {% endfor %}
+      </div>
+  {% endif %}
+
+      <div class="container">
+        <div class="body-title-container">
+          <h2 class="mt-4 body-title">{% block body_title %}{% endblock body_title %}</h2>
+          <h4 class="body-subheading">{% block body_subheading %}{% endblock body_subheading %}</h4>
+        </div>
+          <div class="mt-4">
+            {% block content %}{% endblock content %}
+          </div>
+      </div>
     </div>
+    {% include 'footer.html' %}
+  </div>
   
 
   {% block body_end_script %}{% endblock body_end_script %}

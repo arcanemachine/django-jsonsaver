@@ -14,9 +14,9 @@ from django.urls import reverse, reverse_lazy
 from rest_framework.authtoken.models import Token
 
 from . import forms
-from . import tasks
 from .models import Profile
 # from django_jsonsaver import helpers as h
+from django_jsonsaver import tasks
 from stores.models import JsonStore
 
 UserModel = get_user_model()

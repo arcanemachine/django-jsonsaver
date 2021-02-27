@@ -14,41 +14,46 @@
 
 <h2 class="content-title">What is jsonSaver?</h2>
 
-<p>jsonSaver is a service that provides an easy-to-use location for storing arbitrary JSON data.</p>
+<p>jsonSaver is a free service that provides an easy way for users to store and retrieving arbitrary JSON data.</p>
 
 <h2 class="content-title">Use Cases</h2>
-<p>- jsonSaver gives you a place to store configuration and settings for your software, without having to go to the trouble of setting up a backend database.</p>
-<p>- This service can also be used to mock API data when testing a frontend service.</p>
+<p>jsonSaver can be used to:</p>
+<ul>
+  <li>Save user settings and config info for frontend apps without having to setup a backend database,</li>
+  <li>Mock API data during testing,</li>
+  <li>Save random JSON snippets,</li>
+  <li>Do anything else you can think of!</li>
+</ul>
+<p>If jsonSaver has helped make your life easier, we'd like to <a href="{% url 'contact_us' %}">hear from you</a>!</p>
 
 <h2 class="content-title">FAQ</h2>
 
-<h4 class="faq-title">How does jsonSaver work?</h4>
+<h4 class="faq-item-title">How does jsonSaver work?</h4>
 <p>Simply register an account and confirm your email, and you can create and manage your JSON stores using either the web client or the API.</p>
 
-<h4 class="faq-title">Does the data expire?</h4>
+<h4 class="faq-item-title">Does the data expire?</h4>
 <p>As of now, the data will not expire or be removed from the database. However, it is always a good idea to keep another backup of any important data.</p>
 
-<h4 class="faq-title">How can I access the data created using this service?</h4>
+<h4 class="faq-item-title">How can I access the data created using this service?</h4>
 <ul class="list-style-type-dashed">
   <li>You can lookup a public store using the form at the top of this page.</li>
   <li>You can create, manage, and share JSON stores using our web-based interface.</li>
   <li>You can access our API using your API key.</li>
 </ul>
 
-<h4 class="faq-title">What is an API key?</h4>
-<p>An API key is a random string that allows you to create/read/update/destroy JSON stores using our lightweight API.</p>
+<h4 class="faq-item-title">Where is my API key?</h4>
+<p>Your API key can be found in your <a href="{% url 'users:user_detail_me' %}">user profile page.</a></p>
 
-<h4 class="faq-title">Where is my API key?</h4>
-<p>Your API key can be found in your user profile page.</p>
-
-<h4 class="faq-title">How do I use my API key?</h4>
+<h4 class="faq-item-title">How do I use my API key?</h4>
 <p>
   Simply include the following key-value pair in your HTTP header when making an API request to one of our endpoints:<br>
   <code>Authorization: Token [your_api_key]</code>
 </p>
 
-<p>Example Using Fetch:</p>
-<pre>let jsonStoreData = fetch('{{ BACKEND_SERVER_URL }}{% url 'api:jsonstore-list' %}', {
+<p>Example Using Javascript Fetch:</p>
+<pre class="code-example">Create a new publicly-accessible JSON store:
+
+let jsonStoreData = fetch('{{ BACKEND_SERVER_URL }}{% url 'api:jsonstore-list' %}', {
   headers: {
     'Content-Type': 'application/json',
     'Authorization': 'Token e57af3bd58a56f21e9f888273546b82e7aed34cd'
@@ -63,27 +68,27 @@
   .then(res => res.json())
 </pre>
 
-<h4 class="faq-header">How can I get a new API key?</h4>
+<h4 class="faq-item-title">How can I get a new API key?</h4>
 <p>You can renew your API key <a href="{% url 'users:user_update_api_key' %}">here</a>.</p>
 
-<h4 class="faq-header">Where is the API schema?</h4>
+<h4 class="faq-item-title">Where is the API schema?</h4>
 <p>I haven't made one yet. The URLS used for managing your store in the browser are the same as the ones running the API.</p>
-<p>
-  On the web: <code>{{ BACKEND_SERVER_URL }}{% url 'api:jsonstore_detail_public' jsonstore_name='hello-world' %}</code><br>
-  Using the API: <code>{{ BACKEND_SERVER_URL }}{% url 'api:jsonstore_detail_public' jsonstore_name='hello-world' %}</code>
-</p>
+<p>On the web: <code>{{ BACKEND_SERVER_URL }}{% url 'stores:jsonstore_detail_public' jsonstore_name='hello-world' %}</code></p>
+<p>Using the API: <code>{{ BACKEND_SERVER_URL }}{% url 'api:jsonstore_detail_public' jsonstore_name='hello-world' %}</code></p>
 
-<h4 class="faq-header">How much does this cost?</h4>
+<h4 class="faq-item-title">How much does this cost?</h4>
 <p>This service is currently free.</p>
 
-<h4 class="faq-header">Is my data private?</h4>
+<h4 class="faq-item-title">Is my data private?</h4>
 <p>Any stores you create are private by default. We recommend encrypting any sensitive data before uploading it.</p>
 
-<h4 class="faq-header">Can I create a public store?</h4>
+<h4 class="faq-item-title">Can I create a public store?</h4>
 <p>Yes, you can choose to create a publicly-accessible store that can be looked up via a unique user-chosen name.</p>
 
-<h4 class="faq-header">Do you sell my data?</h4>
+<h4 class="faq-item-title">Do you sell my data?</h4>
 <p>No, that's gross.</p>
+<p>This service currently uses no analytics whatsoever.</p>
+<p>In the future, we may use analytical data regarding users' usage patterns to improve our service, but we will never give or sell your data or personal information to anybody.</p>
 
 {% endblock content %}
 
@@ -100,12 +105,14 @@
   text-align: center;
 }
 
-.faq-title {
+.faq-item-title {
   margin-top: 2rem;
 }
 
-.form-control::placeholder {
-  color: #bbb;
+.code-example {
+  background-color: #eee;
+  padding: 1rem;
+  border-radius: 0.5rem;
 }
 
 {% endblock style %}

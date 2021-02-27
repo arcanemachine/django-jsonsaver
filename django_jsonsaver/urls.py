@@ -11,7 +11,7 @@ urlpatterns = [
 
     # project_folder
     path('', views.project_root, name='project_root'),
-    path('contact_us', views.ContactUsFormView.as_view(), name='contact_us'),
+    path('contact_us/', views.ContactUsFormView.as_view(), name='contact_us'),
 
     # local apps
     path('store/', include('stores.urls')),

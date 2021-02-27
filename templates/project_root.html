@@ -72,9 +72,7 @@ let jsonStoreData = fetch('{{ BACKEND_SERVER_URL }}{% url 'api:jsonstore-list' %
 <p>You can renew your API key <a href="{% url 'users:user_update_api_key' %}">here</a>.</p>
 
 <h4 class="faq-item-title">Where is the API schema?</h4>
-<p>I haven't made one yet. The URLS used for managing your store in the browser are the same as the ones running the API.</p>
-<p>On the web: <code>{{ BACKEND_SERVER_URL }}{% url 'stores:jsonstore_detail_public' jsonstore_name='hello-world' %}</code></p>
-<p>Using the API: <code>{{ BACKEND_SERVER_URL }}{% url 'api:jsonstore_detail_public' jsonstore_name='hello-world' %}</code></p>
+<p>The API schema can be found <a href="{% url 'api_schema' %}">here</a>.</p>
 
 <h4 class="faq-item-title">How much does this cost?</h4>
 <p>This service is currently free.</p>

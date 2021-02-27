@@ -12,7 +12,6 @@ urlpatterns = [
     # project_folder
     path('', views.project_root, name='project_root'),
     path('contact_us', views.ContactUsFormView.as_view(), name='contact_us'),
-    path('api/', views.project_root_api, name='project_root_api'),
 
     # local apps
     path('store/', include('stores.urls')),
@@ -20,10 +19,10 @@ urlpatterns = [
     path('users/', include('django.contrib.auth.urls')),
 
     # third-party apps
-    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
-    path('api/schema/redoc/',
+    path('api/',
          SpectacularRedocView.as_view(url_name='schema'),
-         name='redoc'),
+         name='api_schema'),
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/v1/', include('api.urls')),
     path('api/api-token-auth/', obtain_auth_token, name='obtain_auth_token'),
     path('api-auth/', include('rest_framework.urls')),

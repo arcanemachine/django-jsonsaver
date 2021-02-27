@@ -17,7 +17,7 @@
 {% block content %}
 
 {% if jsonstore.user == request.user and jsonstore.is_public %}
-<div class="my-2 alert alert-info"><strong>This page is publicly accessible by anyone with access to its public URL (<a href="{{ BACKEND_SERVER_URL }}{% url 'jsonsaver:jsonstore_detail_public' jsonstore_name=jsonstore.name %}">{{ BACKEND_SERVER_URL }}{% url 'jsonsaver:jsonstore_detail_public' jsonstore_name=jsonstore.name %}</a>). It may also be crawled by search engines. Please ensure that this store does not contain any sensitive information, or <a href="{% url 'jsonsaver:jsonstore_update' jsonstore_pk=jsonstore.pk %}">change this store's settings</a> so that it is not publicly viewable.</strong></div>
+<div class="my-2 alert alert-info"><strong>This page is publicly accessible by anyone with access to its public URL (<a href="{{ BACKEND_SERVER_URL }}{% url 'stores:jsonstore_detail_public' jsonstore_name=jsonstore.name %}">{{ BACKEND_SERVER_URL }}{% url 'stores:jsonstore_detail_public' jsonstore_name=jsonstore.name %}</a>). It may also be crawled by search engines. Please ensure that this store does not contain any sensitive information, or <a href="{% url 'stores:jsonstore_update' jsonstore_pk=jsonstore.pk %}">change this store's settings</a> so that it is not publicly viewable.</strong></div>
 {% endif %}
 
 <div class="mx-4 my-5 store-detail-info">
@@ -38,7 +38,7 @@
 
   <p>Publicly accessible: 
     {% if jsonstore.is_public %}
-      <strong>Yes</strong> (<a href="{% url 'jsonsaver:jsonstore_detail_public' jsonstore_name=jsonstore.name %}">link</a>)
+      <strong>Yes</strong> (<a href="{% url 'stores:jsonstore_detail_public' jsonstore_name=jsonstore.name %}">link</a>)
     {% else %}
       <strong>No</strong>
     {% endif %}
@@ -55,18 +55,18 @@
 {% if request.user == jsonstore.user %}
   <div class="bottom-links">
     <p>
-      <a href="{% url 'jsonsaver:jsonstore_update' jsonstore_pk=jsonstore.pk %}">
+      <a href="{% url 'stores:jsonstore_update' jsonstore_pk=jsonstore.pk %}">
         Modify this store
       </a>
     </p>
     <p>
       <a class="text-danger"
-         href="{% url 'jsonsaver:jsonstore_delete' jsonstore_pk=jsonstore.pk %}">
+         href="{% url 'stores:jsonstore_delete' jsonstore_pk=jsonstore.pk %}">
         Delete this store
       </a>
     </p>
     <p class="mt-4">
-      <a href="{% url 'jsonsaver:jsonstore_list' %}">
+      <a href="{% url 'stores:jsonstore_list' %}">
         View all your stores
       </a>
     </p>

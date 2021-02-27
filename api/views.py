@@ -5,7 +5,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 
 from . import serializers
 from .permissions import HasJsonStorePermissions
-from jsonsaver.models import JsonStore
+from stores.models import JsonStore
 
 
 def api_root(request):

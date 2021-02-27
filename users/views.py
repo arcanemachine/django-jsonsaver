@@ -17,7 +17,7 @@ from . import forms
 from . import tasks
 from .models import Profile
 from django_jsonsaver import helpers
-from jsonsaver.models import JsonStore
+from stores.models import JsonStore
 
 UserModel = get_user_model()
 
@@ -65,7 +65,6 @@ class UserActivationEmailResend(FormView):
                 self.request, "This account has already been activated.")
             return HttpResponseRedirect(reverse(settings.LOGIN_URL))
         if user and not user.is_active:
-            # resend the welcome email
             tasks.send_welcome_email_task.delay(
                 user.email, user.profile.activation_code)
 #            if settings.DEBUG:
@@ -103,8 +102,7 @@ class UserLoginView(SuccessMessageMixin, LoginView):
         temp_user = UserModel.objects.filter(username=username).first()
         if temp_user and not temp_user.is_active:
             messages.warning(
-                request,
-                "Your account has not been activated. "
+                request, "Your account has not been activated. "
                 "Please check your email inbox for your activation email.")
             return HttpResponseRedirect(
                 reverse('users:user_activation_email_resend'))

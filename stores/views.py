@@ -16,17 +16,17 @@ from django_jsonsaver import constants as c
 
 
 @login_required
-def jsonsaver_root(request):
+def stores_root(request):
     return HttpResponseRedirect(reverse(settings.LOGIN_URL))
 
 
 class JsonStoreLookupView(FormView):
     form_class = forms.JsonStoreLookupForm
-    template_name = 'jsonsaver/jsonstore_lookup.html'
+    template_name = 'stores/jsonstore_lookup.html'
 
     def form_valid(self, form):
         return HttpResponseRedirect(
-            reverse('jsonsaver:jsonstore_detail_name', kwargs={
+            reverse('stores:jsonstore_detail_name', kwargs={
                 'jsonstore_name': form.cleaned_data['name']}))
 
 
@@ -77,7 +77,7 @@ class JsonStoreNameDetailView(LoginRequiredMixin, DetailView):
         if not self.get_object():
             messages.error(request, "We could not find a store by that name.")
             return HttpResponseRedirect(
-                reverse('jsonsaver:jsonstore_lookup'))
+                reverse('stores:jsonstore_lookup'))
         return super().dispatch(request, *args, **kwargs)
 
     def get_object(self):
@@ -97,7 +97,7 @@ class JsonStorePublicNameDetailView(DetailView):
         if not self.get_object():
             messages.error(request, "We could not find a store by that name.")
             return HttpResponseRedirect(
-                reverse('jsonsaver:jsonstore_lookup_public'))
+                reverse('stores:jsonstore_lookup_public'))
         return super().dispatch(request, *args, **kwargs)
 
     def get_object(self):
@@ -110,11 +110,11 @@ class JsonStorePublicNameDetailView(DetailView):
 
 class JsonStoreLookupPublicView(FormView):
     form_class = forms.JsonStoreLookupPublicForm
-    template_name = 'jsonsaver/jsonstore_lookup.html'
+    template_name = 'stores/jsonstore_lookup.html'
 
     def form_valid(self, form):
         return HttpResponseRedirect(
-            reverse('jsonsaver:jsonstore_detail_public', kwargs={
+            reverse('stores:jsonstore_detail_public', kwargs={
                 'jsonstore_name': form.cleaned_data['name']}))
 
 
@@ -151,7 +151,7 @@ class JsonStoreDeleteView(UserPassesTestMixin, DeleteView):
     model = JsonStore
     pk_url_kwarg = 'jsonstore_pk'
     success_message = "This store has been deleted."
-    success_url = reverse_lazy('jsonsaver:jsonstore_list')
+    success_url = reverse_lazy('stores:jsonstore_list')
 
     def delete(self, request, *args, **kwargs):
         obj = self.get_object()

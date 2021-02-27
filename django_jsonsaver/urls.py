@@ -13,7 +13,7 @@ urlpatterns = [
 
     # local apps
     path('', views.project_root, name='project_root'),
-    path('stores/', include('jsonsaver.urls')),
+    path('stores/', include('stores.urls')),
     path('users/', include('users.urls')),
     path('users/', include('django.contrib.auth.urls')),
 
@@ -23,5 +23,4 @@ urlpatterns = [
     path('api/api-token-auth/', obtain_auth_token, name='obtain_auth_token'),
     path('api-auth/', include('rest_framework.urls')),
     path('captcha/', include('captcha.urls')),
-
 ]

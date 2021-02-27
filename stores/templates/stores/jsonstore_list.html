@@ -6,7 +6,7 @@
 {% block content %}
 <h2 class="mt-6">Your JSON Stores</h2>
 <p>You have {{ user.jsonstore_set.count }} JSON store{{ user.jsonstore_set.count|pluralize }} ({{ user.profile.account_tier|capfirst }} Tier Limit: {{ SERVER_CONFIG.MAX_STORE_COUNT_USER_FREE }})</p>
-  {% include 'jsonsaver/jsonstore_list_template.html' %}
+  {% include 'stores/jsonstore_list_template.html' %}
 
 <div class="bottom-links">
   <p>

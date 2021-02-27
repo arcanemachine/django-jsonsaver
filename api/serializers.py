@@ -3,7 +3,7 @@ from rest_framework import serializers
 
 from django_jsonsaver import constants as c
 from django_jsonsaver import helpers
-from jsonsaver.models import JsonStore
+from stores.models import JsonStore
 
 
 class JsonStoreSerializer(serializers.ModelSerializer):

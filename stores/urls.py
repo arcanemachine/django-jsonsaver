@@ -2,7 +2,7 @@ from django.urls import path
 
 from . import views
 
-app_name = 'jsonsaver'
+app_name = 'stores'
 
 urlpatterns = [
     path('',

@@ -17,9 +17,9 @@ function showApiKey() {
 <hr class="m-4" />
 
 <h2 class="mt-4">Your JSON Stores</h2>
-{% include 'jsonsaver/jsonstore_list_template.html' %}
+{% include 'stores/jsonstore_list_template.html' %}
 <div class="bottom-links-continued">
-  <p><a href="{% url 'jsonsaver:jsonstore_list' %}">View all your JSON stores</a></p>
+  <p><a href="{% url 'stores:jsonstore_list' %}">View all your JSON stores</a></p>
 </div>
 
 <hr class="m-5" />
@@ -50,17 +50,22 @@ function showApiKey() {
 <h2 class="mt-4">Account Settings</h2>
 
 <div class="mt-4 bottom-links">
-  <p><a href="{% url 'users:user_update_profile' %}">Update your account settings</a></p>
   <p class="mt-4">
     <span class="unstyled-link" onclick="showApiKey()">View your API key</span>
   </p>
-  <p><a href="{% url 'users:user_update_api_key' %}">Get a new API key</a></p>
-  <p class="mt-4">
-  <a href="{% url 'users:user_detail_public' username=user.username %}">View your public profile{% if not user.profile.is_public %} (currently disabled){% endif %}</a>
+  <p>
+    <a href="{% url 'users:user_update_api_key' %}">Get a new API key</a>
   </p>
   <p class="mt-4">
-    <a class="text-danger"
-       href="{% url 'users:user_delete' %}">
+    <a href="{% url 'users:user_update_profile' %}">Update your account settings</a>
+  </p>
+  <p>
+    <a href="{% url 'users:user_detail_public' username=user.username %}">
+      View your public profile{% if not user.profile.is_public %} (currently disabled){% endif %}
+    </a>
+  </p>
+  <p class="mt-4">
+    <a class="text-danger" href="{% url 'users:user_delete' %}">
       Delete your account
     </a>
   </p>

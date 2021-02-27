@@ -25,7 +25,7 @@ class JsonStore(models.Model):
             f"is_public: {self.is_public}"
 
     def get_absolute_url(self):
-        return reverse('jsonsaver:jsonstore_detail', kwargs={
+        return reverse('stores:jsonstore_detail', kwargs={
             'jsonstore_pk': self.pk})
 
     def save(self, *args, **kwargs):

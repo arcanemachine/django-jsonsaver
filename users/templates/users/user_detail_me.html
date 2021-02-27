@@ -34,7 +34,7 @@ function showApiKey() {
   <strong>Max Size Per Store on {{ request.user.profile.account_tier|capfirst }} Tier:</strong>
   {{ request.user.profile.get_max_store_data_size_in_kb }} KB
 </p>
-<p><strong>Data Storage Usage:</strong>
+<p><strong>Storage Used:</strong>
   {{ request.user.profile.get_all_stores_data_size_in_kb }} KB /
   {{ request.user.profile.get_max_all_stores_data_size_in_kb }} KB
 </p>

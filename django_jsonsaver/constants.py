@@ -4,7 +4,6 @@ STORES_PAGINATE_BY = 25
 # strings
 FORBIDDEN_STORE_NAMES = ['find']
 
-
 FORM_ERROR_STORE_NAME_DUPLICATE =\
     "You cannot have multiple stores with the same name."
 FORM_ERROR_STORE_PUBLIC_NAME_BLANK =\
@@ -36,3 +35,12 @@ def FORM_ERROR_ALL_STORES_DATA_SIZE_OVER_MAX(user, store_data_size):
         f"{max_all_stores_data_size_in_kb} KB. The disk size of your "\
         f"entered data is {rounded_store_data_size} KB which is "\
         f"{store_data_size_excess} KB too large."
+
+# testing
+TEST_USER_USERNAME = 'test_user'
+TEST_USER_FIRST_NAME = 'Test'
+TEST_USER_LAST_NAME = 'User'
+TEST_USER_EMAIL = 'test_user@email.com'
+TEST_USER_PASSWORD = 'my_password321'
+TEST_JSONSTORE_NAME = 'test-jsonstore'
+TEST_JSONSTORE_DATA = {'message': 'test-message'}

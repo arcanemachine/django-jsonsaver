@@ -22,7 +22,6 @@ class Profile(models.Model):
         help_text="If this setting is active, users can look up this profile "
         "based on your username and view all your public stores.",
         default=False)
-
     account_tier = models.CharField(max_length=128, default='free')
 
     def get_absolute_url(self):

@@ -169,8 +169,8 @@ class UserUpdateIsPublicView(
         return self.request.user.profile
 
 
-# class UserUpdateAccountTierView(LoginRequiredMixin, TemplateView):
-#     template_name = 'users/user_update_account_tier.html'
+class UserUpdateAccountTierView(LoginRequiredMixin, TemplateView):
+    template_name = 'users/user_update_account_tier.html'
 
 
 class UserUpdateEmailView(LoginRequiredMixin, FormView):

@@ -26,8 +26,10 @@
     {% block body_start_script %}{% endblock body_start_script %}
     </script>
 
+    {% include 'cookie_notice.html' %}
+
     <noscript>
-      <h3>This page requires JavaScript. Please enable JavaScript to continue.</h3>
+      <h3>This site uses JavaScript. Please enable JavaScript to get the best experience.</h3>
     </noscript>
 
     <div id="page-container" class="page-container">
@@ -94,7 +96,6 @@
     </div>
     {% include 'footer.html' %}
   </div>
-  
 
   {% block body_end_script %}{% endblock body_end_script %}
 

@@ -1,0 +1,61 @@
+<div id="cookie-notice" class="cookie-notice">
+  <p>
+    Use of this website constitutes an agreement to our <a href="{% url 'terms_of_use' %}" target="_blank">Terms of Use</a>.
+    <br>You may learn more by reading our <a href="{% url 'privacy_policy' %}" target="_blank">Privacy Policy</a>.
+  </p>
+  <p>
+    This website uses cookies to keep track of user sessions.
+    <br>All data is stored securely on our servers.
+    <br>We DO NOT sell your data to third parties.
+  </p>
+  <div class="mt-2 btn btn-primary cookie-notice-button" onclick="cookieNoticeAccept()">
+    I understand
+  </div>
+</div>
+
+<script>
+
+  function cookieNoticeAccept() {
+    localStorage.setItem('cookieNoticeAccept', 1);
+    let cookieNotice = document.querySelector('#cookie-notice');
+    cookieNotice.style.opacity = '0';
+    setTimeout(() => {
+      cookieNotice.style.display = 'none';
+    }, 500)
+  }
+
+  if (!localStorage.getItem('cookieNoticeAccept')) {
+    let cookieNotice = document.querySelector('#cookie-notice');
+    cookieNotice.style.display = 'block';
+  }
+</script>
+
+
+<style>
+.cookie-notice {
+  position: fixed;
+  display: none;
+  background-color: #99dd99;
+  text-align: center;
+
+  width: 90vw;
+  max-width: 1400px;
+  bottom: 2rem;
+  left: 50%;
+  transform: translate(-50%, 0);
+
+  padding: 1rem;
+
+  border-radius: 0.5rem;
+  border: 1px solid #92d292;
+  transition: opacity 0.5s;
+
+  box-shadow:
+    0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+    0 6.7px 5.3px rgba(0, 0, 0, 0.048),
+    0 12.5px 10px rgba(0, 0, 0, 0.06),
+    0 22.3px 17.9px rgba(0, 0, 0, 0.072),
+    0 41.8px 33.4px rgba(0, 0, 0, 0.086),
+    0 100px 80px rgba(0, 0, 0, 0.12);
+}
+</style>

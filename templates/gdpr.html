@@ -1,0 +1,52 @@
+<div id="cookie-notice-container" class="cookie-notice-container">
+  <p>
+    Use of this website constitutes an agreement to our <a href="{% url 'terms_of_use' %}" target="_blank">Terms of Use</a>.
+    <br>You may learn more by reading our <a href="{% url 'privacy_policy' %}" target="_blank">Privacy Policy</a>.
+  </p>
+  <p>
+    This website uses cookies to keep track of user sessions.
+    <br>All data is stored securely on our servers.
+    <br>We DO NOT sell your data to third parties.
+  </p>
+  <div class="mt-2 btn btn-primary cookie-notice-button" onclick="cookieNoticeAccept()">
+    I understand
+  </div>
+</div>
+
+<script>
+
+  function cookieNoticeAccept() {
+    localStorage.setItem('cookieNoticeAccept', 1);
+    let cookieNoticeContainer = document.querySelector('#cookie-notice-container');
+    cookieNoticeContainer.style.opacity = '0';
+    setTimeout(() => {
+      cookieNoticeContainer.style.display = 'none';
+    }, 500)
+  }
+
+  if (!localStorage.getItem('cookieNoticeAccept')) {
+    let cookieNoticeContainer = document.querySelector('#cookie-notice-container');
+    cookieNoticeContainer.style.display = 'block';
+  }
+</script>
+
+
+<style>
+.cookie-notice-container {
+  position: fixed;
+  display: none;
+  background-color: #99dd99;
+  text-align: center;
+
+  width: 95vw;
+  max-width: 1400px;
+  left: 1.25vw;
+  bottom: 2rem;
+
+  padding: 1rem;
+
+  border-radius: 0.5rem;
+  border: 1px solid black;
+  transition: opacity 0.5s;
+}
+</style>

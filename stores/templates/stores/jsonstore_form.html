@@ -8,9 +8,10 @@
 {% block content %}
 
 {% if action_verb == 'Create' and request.user.jsonstore_set.count >= request.user.profile.get_max_store_count %}
-<div class="alert alert-warning">
-  You have reached the limit of {{ request.user.profile.get_max_store_count }} JSON store{{ request.user.profile.get_max_store_count|pluralize }}. You will not be able to create any more stores unless your <a href="{% url 'users:user_update_account_tier' %}">upgrade your account</a>.
-</div>
+  <div class="alert alert-warning">
+  You have reached the limit of {{ request.user.profile.get_max_store_count }} JSON stores.
+  You will not be able to create any more stores.
+  </div>
 {% endif %}
 
 {% include 'base_form.html' %}

@@ -3,21 +3,21 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <title>{% block title %}{% endblock title %} - {{ PROJECT_NAME }}</title>
 
     <link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.ico' %}">
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <!--script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script-->
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
    
-    {% block head_script %}{% endblock head_script %}
-  <style>
-    {% block style %}{% endblock style %}
-  </style>
-
+    <style>
+      {% block head_script %}{% endblock head_script %}
+      {% block style %}{% endblock style %}
+    </style>
 
   </head>
   <body>
@@ -35,68 +35,85 @@
     <div id="page-container" class="page-container">
       <div class="header-container">
         <div class="header-title-container">
-          <h3><a class="header-title unstyled-link" href="{% url 'project_root' %}">{{ PROJECT_NAME }}</a></h3>
+          <h3>
+            <a class="header-title unstyled-link" href="{% url 'project_root' %}">
+              {{ PROJECT_NAME }}
+            </a>
+          </h3>
         </div>
-
         <section class="nav-item-container">
           {% if not user.is_authenticated %}
-          <div class="nav-item"><a href="{% url 'users:register' %}" class="unstyled-link">Register</a></div>
-          <div class="nav-item"><a href="{% url 'users:login' %}" class="unstyled-link">Login</a></div>
+            <div class="nav-item">
+              <a href="{% url 'users:register' %}" class="unstyled-link">
+                Register
+              </a>
+            </div>
+            <div class="nav-item">
+              <a href="{% url 'users:login' %}" class="unstyled-link">
+                Login
+              </a>
+            </div>
           {% elif user.is_authenticated %}
-          <div class="nav-item"><a href="{% url 'users:user_detail_me' %}" class="unstyled-link">{{ user.username }}</a></div>
-          <div class="nav-item"><a href="{% url 'users:logout' %}" class="unstyled-link">Logout</a></div>
+            <div class="nav-item">
+              <a href="{% url 'users:user_detail_me' %}"
+                 class="unstyled-link">
+                {{ user.username }}
+              </a>
+            </div>
+            <div class="nav-item">
+              <a href="{% url 'users:logout' %}"
+                 class="unstyled-link">
+                Logout
+              </a>
+            </div>
           {% endif %}
-
         </section>
-
       </div>
 
       <div class="main-container">
 
+        {% if form.errors %}
+          {% for field in form %}
+            {% for error in field.errors %}
+              <div class="alert alert-danger text-center">
+                <strong>Form error: {{ error|escape }}</strong>
+              </div>
+            {% endfor %}
+          {% endfor %}
+        {% endif %}
 
-  {% if form.errors %}
-    {% for field in form %}
-      {% for error in field.errors %}
-        <div class="alert alert-danger text-center">
-          <strong>Form error: {{ error|escape }}</strong>
-        </div>
-      {% endfor %}
-    {% endfor %}
-  {% endif %}
+        {% comment %}
+        {% if messages %}
+          {% for message in messages %}
+            <div{% if message.tags %} class="{{ message.tags }}"{% endif %} style="margin-bottom: 1.5em;">
+              <strong>{{ message }}</strong>
+            </div>
+          {% endfor %}
+        {% endif %}
+        {% endcomment %}
 
-  {% comment %}
-  {% if messages %}
-    {% for message in messages %}
-      <div{% if message.tags %} class="{{ message.tags }}"{% endif %} style="margin-bottom: 1.5em;">
-        <strong>{{ message }}</strong>
-      </div>
-    {% endfor %}
-  {% endif %}
-  {% endcomment %}
-
-  {% if messages %}
-      <div id="info-message-container" class="info-message-container">
-    {% for message in messages %}
-        <div class="info-message-item">
-          <strong>{{ message }}</strong>
-        </div>
-    {% endfor %}
-      </div>
-  {% endif %}
-
-      <div class="container">
-        <div class="body-title-container">
-          <h1 class="mt-4 body-title">{% block body_title %}{% endblock body_title %}</h1>
-          <h4 class="body-subheading">{% block body_subheading %}{% endblock body_subheading %}</h4>
-        </div>
-          <div class="mt-4">
-            {% block content %}{% endblock content %}
+        {% if messages %}
+          <div id="info-message-container" class="info-message-container">
+            {% for message in messages %}
+              <div class="info-message-item">
+                <strong>{{ message }}</strong>
+              </div>
+            {% endfor %}
           </div>
-      </div>
-    </div>
-    {% include 'footer.html' %}
-  </div>
+        {% endif %}
 
+        <div class="container">
+          <div class="body-title-container">
+            <h1 class="mt-4 body-title">{% block body_title %}{% endblock body_title %}</h1>
+            <h4 class="body-subheading">{% block body_subheading %}{% endblock body_subheading %}</h4>
+          </div>
+          <div class="mt-4">{% block content %}{% endblock content %}</div>
+        </div>
+      </div>
+
+    {% include 'footer.html' %}
+
+  </div>
   {% block body_end_script %}{% endblock body_end_script %}
 
 	</body>

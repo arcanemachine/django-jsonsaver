@@ -132,9 +132,9 @@ class UserDetailPublicView(LoginRequiredMixin, DetailView):
         if not request.user.profile.is_public:
             if request.user == self.get_object():
                 messages.info(
-                    request, "Your account is currently set to private.")
+                    request, "Your account's visibility is set to private.")
                 return HttpResponseRedirect(
-                    reverse('users:user_update_profile'))
+                    reverse('users:user_update_is_public'))
             else:
                 raise Http404
         return super().dispatch(request, *args, **kwargs)
@@ -169,8 +169,8 @@ class UserUpdateIsPublicView(
         return self.request.user.profile
 
 
-class UserUpdateAccountTierView(LoginRequiredMixin, TemplateView):
-    template_name = 'users/user_update_account_tier.html'
+# class UserUpdateAccountTierView(LoginRequiredMixin, TemplateView):
+#     template_name = 'users/user_update_account_tier.html'
 
 
 class UserUpdateEmailView(LoginRequiredMixin, FormView):

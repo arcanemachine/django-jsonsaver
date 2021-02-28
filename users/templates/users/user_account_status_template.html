@@ -1,0 +1,37 @@
+{% comment 'Paid tier info' %}
+<h2 class="mt-4">Usage Status: {{ request.user.profile.account_tier|capfirst }} Tier</h2>
+
+<p class="mt-4">
+  <strong>Your JSON Store Count:</strong> {{ request.user.jsonstore_set.count }}
+  (Total allowed for this tier: {{ request.user.profile.get_max_store_count }})
+</p>
+<p>
+  <strong>Max Size Per Store on {{ request.user.profile.account_tier|capfirst }} Tier:</strong>
+  {{ request.user.profile.get_max_store_data_size_in_kb }} KB
+</p>
+<p><strong>Storage Used:</strong>
+  {{ request.user.profile.get_all_stores_data_size_in_kb }} KB /
+  {{ request.user.profile.get_max_all_stores_data_size_in_kb }} KB
+</p>
+<p><strong>Your Current API Call Limit:</strong> {{ SERVER_CONFIG.THROTTLE_RATE_USER }}</p>
+{% endcomment %}
+
+<h2 class="mt-5">Usage Status</h2>
+
+<p class="mt-4">
+  <strong>Your JSON Store Count:</strong> {{ request.user.jsonstore_set.count }}
+  (Maximum Store Count: {{ request.user.profile.get_max_store_count }})
+</p>
+<p>
+  <strong>Max Size Per Individual Store:</strong>
+  {{ request.user.profile.get_max_store_data_size_in_kb }} KB
+</p>
+<p><strong>Total Storage Used For All Stores:</strong>
+  {{ request.user.profile.get_all_stores_data_size_in_kb }} KB /
+  {{ request.user.profile.get_max_all_stores_data_size_in_kb }} KB
+</p>
+<p><strong>Your API Call Limit:</strong> {{ SERVER_CONFIG.THROTTLE_RATE_USER }}</p>
+
+<!--div class="bottom-links">
+  <p><a href="{% url 'users:user_update_account_tier' %}">Manage your account limits</a></p>
+</div-->

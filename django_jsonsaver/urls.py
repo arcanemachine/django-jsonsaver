@@ -7,7 +7,7 @@ from . import views
 
 
 urlpatterns = [
-    path('', views.project_root, name='project_root'),
+    path('', views.ProjectRootTemplateView.as_view(), name='project_root'),
     path('contact_us/', views.ContactUsFormView.as_view(), name='contact_us'),
     path('terms-of-use/',
          views.TermsOfUseTemplateView.as_view(),

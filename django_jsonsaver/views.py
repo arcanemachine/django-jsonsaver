@@ -1,4 +1,3 @@
-# from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import render
 from django.views.generic import FormView, TemplateView
@@ -6,8 +5,8 @@ from django.views.generic import FormView, TemplateView
 from . import forms, helpers as h, tasks
 
 
-def project_root(request):
-    return render(request, 'project_root.html')
+class ProjectRootTemplateView(TemplateView):
+    template_name = 'project_root.html'
 
 
 class ContactUsFormView(SuccessMessageMixin, FormView):

@@ -11,7 +11,8 @@
 {% include 'users/user_account_status_template.html' %}
 
 <div class="bottom-links">
-  <p><a href="{% url 'api_schema' %}">View API Schema</a></p>
+  <p><a href="{% url 'api_generic:schema' %}">View API Schema</a></p>
   <p><a href="{% url 'users:user_detail_me' %}">View your account profile</a></p>
+  <p><a href="{% url 'users:user_update_is_public' %}">Change profile visibility (Currently set to: {% if request.user.profile.is_public %}Public{% else %}Private{% endif %})</a></p>
 </div>
 {% endblock content %}

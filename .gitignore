@@ -4,6 +4,7 @@
 data.dump
 geckodriver.log
 secret_key.py
+keys.py
 gunicorn.sh 
 todo
 base_template.html

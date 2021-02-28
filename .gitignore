@@ -7,6 +7,7 @@ secret_key.py
 keys.py
 gunicorn.sh 
 todo
+todo-test
 base_template.html
 menus/templatetags/
 deleteme/

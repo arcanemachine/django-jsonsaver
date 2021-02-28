@@ -29,9 +29,9 @@ class ContactUsFormView(SuccessMessageMixin, FormView):
         return h.get_next_url(self.request, '/')
 
 
-class TermsOfUseView(TemplateView):
+class TermsOfUseTemplateView(TemplateView):
     template_name = 'terms_of_use.html'
 
 
-class PrivacyPolicyView(TemplateView):
+class PrivacyPolicyTemplateView(TemplateView):
     template_name = 'privacy_policy.html'

@@ -9,9 +9,11 @@ from . import views
 urlpatterns = [
     path('', views.project_root, name='project_root'),
     path('contact_us/', views.ContactUsFormView.as_view(), name='contact_us'),
-    path('terms-of-use/', views.TermsOfUseView.as_view(), name='terms_of_use'),
+    path('terms-of-use/',
+         views.TermsOfUseTemplateView.as_view(),
+         name='terms_of_use'),
     path('privacy-policy/',
-         views.PrivacyPolicyView.as_view(),
+         views.PrivacyPolicyTemplateView.as_view(),
          name='privacy_policy'),
 
     # local apps

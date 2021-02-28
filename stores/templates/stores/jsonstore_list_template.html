@@ -71,6 +71,6 @@
 </div>
 {% else %}
   <p><a href="{% url 'users:user_detail_me' %}">View your profile</a></p>
-  <p><a href="{% url 'project_root' %}">Go to jsonSaver homepage</a></p>
+  <p><a href="{% url 'project_root' %}">Go to {{ PROJECT_NAME }} homepage</a></p>
 {% endif %}
 </div>

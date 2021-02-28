@@ -2,12 +2,12 @@
 
 {% block title %}{% endblock %}
 
-{% block body_title %}jsonSaver{% endblock %}
+{% block body_title %}{{ PROJECT_NAME }}{% endblock %}
 {% block body_subheading %}Privacy Policy{% endblock %}
 
 {% block content %}
 
-<p>This page is used to inform website visitors regarding our policies with the collection, use, and disclosure of Personal Information for anyone who uses our Service, the jsonSaver website and/or API as stated in our <a href="{% url 'terms_of_use' %}">Terms of Use</a>.</p>
+<p>This page is used to inform website visitors regarding our policies with the collection, use, and disclosure of Personal Information for anyone who uses our Service, the {{ PROJECT_NAME }} website and/or API as stated in our <a href="{% url 'terms_of_use' %}">Terms of Use</a>.</p>
 
 <p>If you choose to use our Service, then you agree to the collection and use of information in relation with this policy. The Personal Information that we collect are used for providing and improving the Service. We will not use or share your information with anyone except as described in this Privacy Policy.</p>
 
@@ -19,7 +19,7 @@
 
 <p>We want to inform you that whenever you visit our Service, we collect information that your browser sends to us that is called Log Data. This Log Data may include information such as your computer’s Internet Protocol ("IP") address, browser version, pages of our Service that you visit, the time and date of your visit, the time spent on those pages, and other statistics.</p>
 
-<p>This data will be used privately by jsonSaver and will not be sold to any third-parties.</p>
+<p>This data will be used privately by {{ PROJECT_NAME }} and will not be sold to any third-parties.</p>
 
 <h2 class="privacy-policy-item-title">Cookies</h2>
 

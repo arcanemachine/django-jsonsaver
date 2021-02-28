@@ -43,11 +43,6 @@ function showApiKey() {
       View your public profile{% if not user.profile.is_public %} (currently disabled){% endif %}
     </a>
   </p>
-  <p class="mt-4">
-    <a class="text-danger" href="{% url 'users:user_delete' %}">
-      Delete your account
-    </a>
-  </p>
 </div>
 
 {% endblock content %}

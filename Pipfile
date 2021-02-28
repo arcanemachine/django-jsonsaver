@@ -17,6 +17,7 @@ django-ses = "*"
 requests = "*"
 drf-spectacular = "*"
 psycopg2 = "*"
+factory-boy = "*"
 
 [dev-packages]
 

@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "296ef13cd8b53fb3086466b57f8123505ff09341931d2df2342ae42a80ea47f2"
+            "sha256": "258f603b4865d2f2eec796b7d96f643f0358ebd0d98c9b32a7ed24fe24fc32b2"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -182,6 +182,21 @@
             ],
             "index": "pypi",
             "version": "==0.13.2"
+        },
+        "factory-boy": {
+            "hashes": [
+                "sha256:1d3db4b44b8c8c54cdd8b83ae4bdb9aeb121e464400035f1f03ae0e1eade56a4",
+                "sha256:401cc00ff339a022f84d64a4339503d1689e8263a4478d876e58a3295b155c5b"
+            ],
+            "index": "pypi",
+            "version": "==3.2.0"
+        },
+        "faker": {
+            "hashes": [
+                "sha256:90b69e9e05d622edb2fa5ebfda7bef41c88675cace85e72689fde5b8723d00a3",
+                "sha256:da395fe545f40d4366b82b1a02448847a4586bd2b28af393b3edbd1e45d1e0fc"
+            ],
+            "version": "==6.5.0"
         },
         "future": {
             "hashes": [
@@ -430,6 +445,13 @@
                 "sha256:0f91fd2e829c44362cbcfab3e9ae12e22badaa8a29ad5ff599f9ec109f0454e8"
             ],
             "version": "==0.4.1"
+        },
+        "text-unidecode": {
+            "hashes": [
+                "sha256:1311f10e8b895935241623731c2ba64f4c455287888b18189350b67134a822e8",
+                "sha256:bad6603bb14d279193107714b288be206cac565dfa49aa5b105294dd5c4aab93"
+            ],
+            "version": "==1.3"
         },
         "traitlets": {
             "hashes": [

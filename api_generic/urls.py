@@ -14,9 +14,6 @@ urlpatterns = [
          SpectacularAPIView.as_view(),
          name='schema_yml'),
 
-    # local
-    path('v1/', include('api.urls')),
-
     # third-party
     path('auth/', include('rest_framework.urls')),
     path('auth/obtain-auth-token/',

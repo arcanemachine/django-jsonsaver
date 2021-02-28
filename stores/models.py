@@ -11,11 +11,11 @@ class JsonStore(models.Model):
     name = models.CharField(
         max_length=128, blank=True, null=True,
         help_text="Name will be lowercased and hyphenated for use in URLs.")
+    data = models.JSONField(default=dict, blank=True)
     is_public = models.BooleanField(
         help_text="Allow this store to be publicly accessible by name.",
         default=False)
 
-    data = models.JSONField(default=dict, blank=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
@@ -37,21 +37,10 @@ class JsonStore(models.Model):
 """
 store = {
   "user": 1,
-  "name": "dog-food",
-"data": {
-  "users": [
-    {
-      "id": 1,
-      "token": "8479437015867",
-      "data":
-      {
-        "username": "billmurray",
-        "password": "3F8V%24NtX*9S.9Vi)Kjwid",
-        "email": "billmurray@email.com",
-        "favorites": ["dogs", "cats", "bears"]
-      }
-    }
-  ]
-}
+  "name": "hello-world",
+  "data": {
+    "message": "hello world!"
+  },
+  "is_public": true
 }
 """

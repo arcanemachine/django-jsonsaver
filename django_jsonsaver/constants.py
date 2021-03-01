@@ -3,6 +3,17 @@ STORES_PAGINATE_BY = 25
 FORBIDDEN_STORE_NAMES = ['find']
 JSONSTORE_NAME_MAX_LENGTH = 128
 
+
+# testing
+TEST_USER_USERNAME = 'test_user'
+TEST_USER_FIRST_NAME = 'Test'
+TEST_USER_LAST_NAME = 'User'
+TEST_USER_EMAIL = 'test_user@email.com'
+TEST_USER_PASSWORD = 'my_password321'
+TEST_JSONSTORE_NAME = 'test_jsonstore'
+TEST_JSONSTORE_DATA = {'message': 'test-message'}
+
+
 # strings
 
 DJANGO_JSONSAVER_CONTACT_US_FORM_SUCCESS_MESSAGE =\
@@ -50,13 +61,3 @@ def FORM_ERROR_ALL_STORES_DATA_SIZE_OVER_MAX(user, store_data_size):
         f"{max_all_stores_data_size_in_kb} KB. The disk size of your "\
         f"entered data is {rounded_store_data_size} KB which is "\
         f"{store_data_size_excess} KB too large."
-
-
-# testing
-TEST_USER_USERNAME = 'test_user'
-TEST_USER_FIRST_NAME = 'Test'
-TEST_USER_LAST_NAME = 'User'
-TEST_USER_EMAIL = 'test_user@email.com'
-TEST_USER_PASSWORD = 'my_password321'
-TEST_JSONSTORE_NAME = 'test_jsonstore'
-TEST_JSONSTORE_DATA = {'message': 'test-message'}

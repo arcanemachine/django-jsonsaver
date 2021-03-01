@@ -28,8 +28,6 @@ class JsonStoreForm(forms.ModelForm):
         user = self.user
         obj = self.obj
 
-        breakpoint()
-
         # public store name cannot be blank
         if is_public and not name:
             self.add_error('name', ValidationError(

@@ -3,8 +3,7 @@ from django.core.exceptions import ValidationError
 from django.utils.text import slugify
 
 from .models import JsonStore
-from django_jsonsaver import constants as c
-from django_jsonsaver import helpers as h
+from django_jsonsaver import constants as c, helpers as h
 
 
 class JsonStoreForm(forms.ModelForm):

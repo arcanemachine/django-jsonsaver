@@ -1,15 +1,56 @@
+from django.core.exceptions import ValidationError
 from django.forms import widgets
-from django.test import SimpleTestCase
+from django.test import SimpleTestCase, TestCase
 
-from django_jsonsaver import constants as c
 from . import forms
+from .models import JsonStore
+from django_jsonsaver import constants as c, factories as f
+
+
+class JsonStoreFormTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.form = forms.JsonStoreForm
+        cls.form_instance = forms.JsonStoreForm()
+        cls.test_user = f.UserFactory()
+        cls.test_jsonstore = f.JsonStoreFactory(user=cls.test_user)
+
+    # META #
+    def test_meta_model_name(self):
+        self.assertEqual(self.form.Meta.model, JsonStore)
+
+    def test_meta_fields(self):
+        self.assertEqual(self.form.Meta.fields, ['data', 'name', 'is_public'])
+
+    def test_meta_widgets(self):
+        expected_widgets = {'data': widgets.Textarea}
+        self.assertEqual(self.form.Meta.widgets, expected_widgets)
+
+    # METHODS #
+
+    # __init__()
+    def test_method_init(self):
+        form = \
+            forms.JsonStoreForm(user=self.test_user, obj=self.test_jsonstore)
+        self.assertEqual(form.user, self.test_user)
+        self.assertEqual(form.obj, self.test_jsonstore)
+
+    # VALIDATION #
+    def test_validation_jsonstore_is_public_and_not_name(self):
+        form_data = {'data': {},
+                     'name': '',
+                     'is_public': True}
+        form = forms.JsonStoreForm(data=form_data)
+        self.assertFalse(form.is_valid())
+        with self.assertRaises(ValidationError):
+            form.clean()
 
 
 class JsonStoreLookupFormTest(SimpleTestCase):
     def setUp(self):
-        self.form = forms.JsonStoreLookupForm
         self.form_instance = forms.JsonStoreLookupForm()
 
+    # FIELDS #
     def test_form_fields_all_present(self):
         fields = [field for field in self.form_instance.fields]
         self.assertIn('jsonstore_name', fields)
@@ -39,9 +80,9 @@ class JsonStoreLookupFormTest(SimpleTestCase):
 
 class JsonStorePublicLookupFormTest(SimpleTestCase):
     def setUp(self):
-        self.form = forms.JsonStoreLookupPublicForm
         self.form_instance = forms.JsonStoreLookupPublicForm()
 
+    # FIELDS #
     def test_form_fields_all_present(self):
         fields = [field for field in self.form_instance.fields]
         self.assertIn('jsonstore_name', fields)

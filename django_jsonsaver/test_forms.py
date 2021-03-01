@@ -10,6 +10,7 @@ class ContactUsFormTest(SimpleTestCase):
         self.form = forms.ContactUsForm
         self.form_instance = forms.ContactUsForm()
 
+    # FIELDS #
     def test_form_fields_all_present(self):
         fields = [field for field in self.form_instance.fields]
         self.assertIn('first_name', fields)

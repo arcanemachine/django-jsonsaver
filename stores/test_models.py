@@ -155,13 +155,3 @@ class JsonStoreModelTest(TestCase):
         expected_url = reverse('stores:jsonstore_detail', kwargs={
             'jsonstore_pk': self.test_jsonstore.pk})
         self.assertEqual(self.test_jsonstore.get_absolute_url(), expected_url)
-
-    # save()
-    def test_save_method_slugifies_jsonstore_name(self):
-        test_jsonstore_with_new_name = f.JsonStoreFactory(user=self.test_user)
-        new_jsonstore_name = 'New Test JsonStore'
-
-        test_jsonstore_with_new_name.name = new_jsonstore_name
-        test_jsonstore_with_new_name.save()
-        self.assertEqual(
-            test_jsonstore_with_new_name.name, slugify(new_jsonstore_name))

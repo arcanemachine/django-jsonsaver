@@ -14,8 +14,11 @@ class JsonStoreSerializer(serializers.ModelSerializer):
         fields = ['id', 'user', 'is_public', 'name', 'data']
         read_only_fields = ['user']
 
+    def validate_name(self, value):
+        return slugify(value)
+
     def validate(self, data):
-        name = data.get('name', None)
+        name = data.get('name', '')
         store_data = data.get('data', {})
         is_public = data.get('is_public', False)
 

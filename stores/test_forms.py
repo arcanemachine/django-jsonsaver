@@ -1,10 +1,10 @@
-from django.core.exceptions import ValidationError
 from django.forms import widgets
 from django.test import SimpleTestCase, TestCase
+from django.utils.text import slugify
 
 from . import forms
 from .models import JsonStore
-from django_jsonsaver import constants as c, factories as f, helpers as h
+from django_jsonsaver import constants as c, factories as f
 from django_jsonsaver.server_config import MAX_STORE_DATA_SIZE_USER_FREE
 
 
@@ -46,7 +46,16 @@ class JsonStoreFormTest(TestCase):
         self.assertEqual(form.user, self.test_user)
         self.assertEqual(form.obj, self.test_jsonstore)
 
+    # clean_name()
+    def test_clean_name_returns_slugified_name(self):
+        name_to_be_slugified = 'Test JsonStore Name'
+        self.form_data.update({'name': name_to_be_slugified})
+        form = forms.JsonStoreForm(self.form_data, **self.form_kwargs_create)
+        self.assertEqual(form.clean_name(), slugify(name_to_be_slugified))
+
     # VALIDATION #
+
+    # clean()
     def test_validation_form_is_valid(self):
         form = forms.JsonStoreForm(self.form_data, **self.form_kwargs_create)
         self.assertTrue(form.is_valid())

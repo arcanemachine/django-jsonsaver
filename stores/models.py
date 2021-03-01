@@ -30,11 +30,6 @@ class JsonStore(models.Model):
         return reverse('stores:jsonstore_detail', kwargs={
             'jsonstore_pk': self.pk})
 
-    def save(self, *args, **kwargs):
-        if self.name and self.name != slugify(self.name):
-            self.name = slugify(self.name)
-        super().save(*args, **kwargs)
-
 
 """
 store = {

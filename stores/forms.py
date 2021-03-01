@@ -18,7 +18,8 @@ class JsonStoreForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
     def clean_name(self):
-        return slugify(self.data['name'])
+        name = self.data['name']
+        return slugify(name)
 
     def clean(self):
         name = self.cleaned_data.get('name')
@@ -51,7 +52,7 @@ class JsonStoreForm(forms.ModelForm):
                 params={'max_store_count': max_store_count}))
 
         # store name duplicate
-        stores_with_same_name = JsonStore.objects.filter(name=slugify(name))
+        stores_with_same_name = JsonStore.objects.filter(name=name)
         if is_public:
             different_user_public_stores_with_same_name = \
                 stores_with_same_name.exclude(user=user).filter(is_public=True)

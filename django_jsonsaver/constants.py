@@ -56,7 +56,7 @@ def FORM_ERROR_ALL_STORES_DATA_SIZE_OVER_MAX(user, store_data_size):
         user.profile.get_max_all_stores_data_size_in_kb()
     rounded_store_data_size = round(store_data_size / 1024, 2)
     store_data_size_excess =\
-        abs(rounded_store_data_size - max_all_stores_data_size_in_kb)
+        round(abs(rounded_store_data_size - max_all_stores_data_size_in_kb), 2)
     return f"The maximum storage capacity for all your JSON stores is "\
         f"{max_all_stores_data_size_in_kb} KB. The disk size of your "\
         f"entered data is {rounded_store_data_size} KB which is "\

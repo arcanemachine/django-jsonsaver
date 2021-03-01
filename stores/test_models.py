@@ -5,7 +5,6 @@ from django.urls import reverse
 from django.utils.text import slugify
 
 from django_jsonsaver import constants as c, factories as f
-from .models import JsonStore
 
 UserModel = get_user_model()
 
@@ -13,15 +12,17 @@ UserModel = get_user_model()
 class JsonStoreModelTest(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.test_user = f.UserFactory()
-        cls.test_jsonstore = f.JsonStoreFactory(user=cls.test_user)
+        cls.test_user = f.UserFactory(username=c.TEST_USER_USERNAME)
+        cls.test_jsonstore = f.JsonStoreFactory(
+            user=cls.test_user,
+            name=c.TEST_JSONSTORE_NAME,
+            data=c.TEST_JSONSTORE_DATA)
 
     def test_object_name(self):
         self.assertEqual(self.test_jsonstore._meta.object_name, 'JsonStore')
 
     def test_object_content(self):
-        expected_name = \
-            c.TEST_JSONSTORE_NAME + '_' + str(JsonStore.objects.count())
+        expected_name = c.TEST_JSONSTORE_NAME
         expected_data = c.TEST_JSONSTORE_DATA
 
         self.assertEqual(self.test_jsonstore.user, self.test_user)
@@ -148,7 +149,6 @@ class JsonStoreModelTest(TestCase):
             f"name: N/A, "\
             f"is_public: {test_jsonstore_with_empty_name.is_public}"
         self.assertEqual(str(test_jsonstore_with_empty_name), expected_string)
-        test_jsonstore_with_empty_name.delete()
 
     # get_absolute_url()
     def test_get_absolute_url(self):
@@ -165,4 +165,3 @@ class JsonStoreModelTest(TestCase):
         test_jsonstore_with_new_name.save()
         self.assertEqual(
             test_jsonstore_with_new_name.name, slugify(new_jsonstore_name))
-        test_jsonstore_with_new_name.delete()

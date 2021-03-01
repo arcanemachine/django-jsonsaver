@@ -4,16 +4,27 @@ from django.test import SimpleTestCase, TestCase
 
 from . import forms
 from .models import JsonStore
-from django_jsonsaver import constants as c, factories as f
+from django_jsonsaver import constants as c, factories as f, helpers as h
+from django_jsonsaver.server_config import MAX_STORE_DATA_SIZE_USER_FREE
 
 
 class JsonStoreFormTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.form = forms.JsonStoreForm
-        cls.form_instance = forms.JsonStoreForm()
+
         cls.test_user = f.UserFactory()
-        cls.test_jsonstore = f.JsonStoreFactory(user=cls.test_user)
+        cls.test_jsonstore = f.JsonStoreFactory(
+            user=cls.test_user,
+            name=f"{c.TEST_JSONSTORE_NAME}_UPDATE")
+        cls.form_kwargs_create = {'user': cls.test_user}
+        cls.form_kwargs_update = {'user': cls.test_user,
+                                  'obj': cls.test_jsonstore}
+
+    def setUp(self):
+        self.form_data = {'data': {},
+                          'name': '',
+                          'is_public': False}
 
     # META #
     def test_meta_model_name(self):
@@ -36,14 +47,98 @@ class JsonStoreFormTest(TestCase):
         self.assertEqual(form.obj, self.test_jsonstore)
 
     # VALIDATION #
-    def test_validation_jsonstore_is_public_and_not_name(self):
-        form_data = {'data': {},
-                     'name': '',
-                     'is_public': True}
-        form = forms.JsonStoreForm(data=form_data)
+    def test_validation_form_is_valid(self):
+        form = forms.JsonStoreForm(self.form_data, **self.form_kwargs_create)
+        self.assertTrue(form.is_valid())
+
+    def test_validation_public_store_name_cannot_be_blank(self):
+        self.form_data.update({'name': '',
+                               'is_public': True})
+        form = forms.JsonStoreForm(self.form_data, **self.form_kwargs_create)
         self.assertFalse(form.is_valid())
-        with self.assertRaises(ValidationError):
-            form.clean()
+        self.assertTrue(
+            form.has_error('name', 'public_store_name_cannot_be_blank'))
+
+    def test_validation_forbidden_store_names_not_allowed(self):
+        self.form_data.update({'name': c.FORBIDDEN_STORE_NAMES[0]})
+        form = forms.JsonStoreForm(self.form_data, **self.form_kwargs_create)
+        self.assertFalse(form.is_valid())
+        self.assertTrue(
+            form.has_error('name', 'forbidden_store_name_not_allowed'))
+
+    def test_validation_user_has_too_many_stores(self):
+        # create jsonstores until user limit is reached
+        while (self.test_user.jsonstore_set.count() <
+                self.test_user.profile.get_max_store_count()):
+            f.JsonStoreFactory(user=self.test_user)
+
+        # attempt to create a new jsonstore
+        self.form_data.update({'name': c.TEST_JSONSTORE_NAME})
+        form = forms.JsonStoreForm(self.form_data, **self.form_kwargs_create)
+        self.assertFalse(form.is_valid())
+        self.assertTrue(form.has_error('__all__', 'user_has_too_many_stores'))
+
+    def test_validation_store_public_name_duplicate_other_user(self):
+        # create other user and jsonstore
+        other_user = f.UserFactory()
+        other_jsonstore = f.JsonStoreFactory(
+            user=other_user,
+            name='other_jsonstore_name',
+            is_public=True)
+
+        # attempt to create store with duplicate name
+        self.form_data.update({
+            'name': other_jsonstore.name,
+            'is_public': True})
+        form = forms.JsonStoreForm(self.form_data, **self.form_kwargs_create)
+        self.assertFalse(form.is_valid())
+        self.assertTrue(
+            form.has_error('name', 'store_public_name_duplicate_other_user'))
+
+    def test_validation_store_name_duplicate_same_user_create(self):
+        # create other user and jsonstore
+        other_jsonstore = f.JsonStoreFactory(
+            user=self.test_user,
+            name='other_jsonstore_name')
+
+        # attempt to create store with duplicate name
+        self.form_data.update({'name': other_jsonstore.name})
+        form = forms.JsonStoreForm(self.form_data, **self.form_kwargs_create)
+        self.assertFalse(form.is_valid())
+        self.assertTrue(
+            form.has_error('name', 'store_name_duplicate_same_user'))
+
+    def test_validation_store_name_duplicate_same_user_update(self):
+        # create other user and jsonstore
+        other_jsonstore = f.JsonStoreFactory(
+            user=self.test_user,
+            name='other_jsonstore_name')
+
+        # attempt to update store with duplicate name
+        self.form_data.update({'name': other_jsonstore.name})
+        form = forms.JsonStoreForm(self.form_data, **self.form_kwargs_update)
+        self.assertFalse(form.is_valid())
+        self.assertTrue(
+            form.has_error('name', 'store_name_duplicate_same_user'))
+
+    def test_validation_store_data_size_over_max(self):
+        self.form_data.update(
+            {'data': {'message': 'a' * MAX_STORE_DATA_SIZE_USER_FREE}})
+        form = forms.JsonStoreForm(self.form_data, **self.form_kwargs_create)
+        self.assertFalse(form.is_valid())
+        self.assertTrue(form.has_error('data', 'store_data_size_over_max'))
+
+    def test_validation_all_stores_data_size_over_max(self):
+        almost_oversize_data_dict = \
+            {'message': 'a' * (MAX_STORE_DATA_SIZE_USER_FREE - 1024)}
+        almost_oversize_jsonstore = f.JsonStoreFactory(
+            user=self.test_user,
+            data=almost_oversize_data_dict)
+        self.form_data.update({'data': almost_oversize_data_dict})
+        form = forms.JsonStoreForm(self.form_data, **self.form_kwargs_create)
+        self.assertFalse(form.is_valid())
+        self.assertTrue(
+            form.has_error('data', 'all_stores_data_size_over_max'))
 
 
 class JsonStoreLookupFormTest(SimpleTestCase):

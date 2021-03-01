@@ -34,7 +34,7 @@ class JsonStoreForm(forms.ModelForm):
                 c.FORM_ERROR_STORE_PUBLIC_NAME_BLANK,
                 code='public_store_name_cannot_be_blank'))
 
-        # forbidden store names not allowed
+        # forbidden store name not allowed
         if name and name in c.FORBIDDEN_STORE_NAMES:
             self.add_error('name', ValidationError(
                 "The name '%(name)s' cannot be used as a store name.",
@@ -59,7 +59,7 @@ class JsonStoreForm(forms.ModelForm):
                 # store public name duplicate
                 self.add_error('name', ValidationError(
                     c.FORM_ERROR_STORE_PUBLIC_NAME_DUPLICATE,
-                    code='store_public_name_duplicate'))
+                    code='store_public_name_duplicate_other_user'))
         if obj:
             same_user_stores_with_same_name = \
                 stores_with_same_name.filter(user=user).exclude(pk=obj.pk)
@@ -67,13 +67,13 @@ class JsonStoreForm(forms.ModelForm):
                 # store name duplicate
                 self.add_error('name', ValidationError(
                     c.FORM_ERROR_STORE_NAME_DUPLICATE,
-                    code='store_name_duplicate'))
+                    code='store_name_duplicate_same_user'))
         else:
             if name and stores_with_same_name.filter(user=user).exists():
                 # store name duplicate
                 self.add_error('name', ValidationError(
                     c.FORM_ERROR_STORE_NAME_DUPLICATE,
-                    code='store_name_duplicate'))
+                    code='store_name_duplicate_same_user'))
 
         # store data size over max
         store_data_size = h.get_obj_size(store_data)

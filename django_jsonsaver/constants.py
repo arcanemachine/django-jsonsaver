@@ -4,6 +4,9 @@ STORES_PAGINATE_BY = 25
 # strings
 FORBIDDEN_STORE_NAMES = ['find']
 
+DJANGO_JSONSAVER_CONTACT_US_FORM_SUCCESS_MESSAGE = \
+    "Your message has been received. Thank you for your feedback."
+
 FORM_ERROR_STORE_NAME_DUPLICATE =\
     "You cannot have multiple stores with the same name."
 FORM_ERROR_STORE_PUBLIC_NAME_BLANK =\
@@ -14,14 +17,14 @@ FORM_ERROR_STORE_PUBLIC_NAME_DUPLICATE =\
 FORM_FIELD_CAPTCHA_HELP_TEXT = "Please confirm that you are a human "\
     "by entering the letters seen in the picture."
 
-MODEL_JSONSTORE_NAME_HELP_TEXT = \
+MODEL_JSONSTORE_NAME_HELP_TEXT =\
     "Name will be lowercased and hyphenated for use in URLs."
-MODEL_JSONSTORE_IS_PUBLIC_HELP_TEXT = \
+MODEL_JSONSTORE_IS_PUBLIC_HELP_TEXT =\
     "Allow this store to be publicly accessible by name."
 
 
 def FORM_ERROR_STORE_DATA_SIZE_OVER_MAX(user, store_data_size):
-    max_store_data_size_in_kb = \
+    max_store_data_size_in_kb =\
         user.profile.get_max_store_data_size_in_kb()
     rounded_store_data_size = round(store_data_size / 1024, 2)
     return f"The maximum data size per store for your account is "\
@@ -31,10 +34,10 @@ def FORM_ERROR_STORE_DATA_SIZE_OVER_MAX(user, store_data_size):
 
 
 def FORM_ERROR_ALL_STORES_DATA_SIZE_OVER_MAX(user, store_data_size):
-    max_all_stores_data_size_in_kb = \
+    max_all_stores_data_size_in_kb =\
         user.profile.get_max_all_stores_data_size_in_kb()
     rounded_store_data_size = round(store_data_size / 1024, 2)
-    store_data_size_excess = \
+    store_data_size_excess =\
         abs(rounded_store_data_size - max_all_stores_data_size_in_kb)
     return f"The maximum storage capacity for all your JSON stores is "\
         f"{max_all_stores_data_size_in_kb} KB. The disk size of your "\

@@ -1,8 +1,8 @@
 from django.contrib.messages.views import SuccessMessageMixin
-from django.shortcuts import render
 from django.views.generic import FormView, TemplateView
 
-from . import forms, helpers as h, tasks
+from . import constants as c, helpers as h
+from . import forms, tasks
 
 
 class ProjectRootTemplateView(TemplateView):
@@ -12,8 +12,7 @@ class ProjectRootTemplateView(TemplateView):
 class ContactUsFormView(SuccessMessageMixin, FormView):
     template_name = 'contact_us.html'
     form_class = forms.ContactUsForm
-    success_message = \
-        "Your message has been received. Thank you for your feedback."
+    success_message = c.DJANGO_JSONSAVER_CONTACT_US_FORM_SUCCESS_MESSAGE
 
     def form_valid(self, form):
         name = form.cleaned_data['first_name']
@@ -28,9 +27,13 @@ class ContactUsFormView(SuccessMessageMixin, FormView):
         return h.get_next_url(self.request, '/')
 
 
-class TermsOfUseTemplateView(TemplateView):
-    template_name = 'terms_of_use.html'
+class FaqTemplateView(TemplateView):
+    template_name = 'faq.html'
 
 
 class PrivacyPolicyTemplateView(TemplateView):
     template_name = 'privacy_policy.html'
+
+
+class TermsOfUseTemplateView(TemplateView):
+    template_name = 'terms_of_use.html'

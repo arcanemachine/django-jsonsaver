@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %}Frequently Asked Questions{% endblock %}
+
+{% block body_title %}Frequently Asked Questions{% endblock %}
+
+{% block content %}
+
+<h4 class="faq-item-title">How does {{ PROJECT_NAME }} work?</h4>
+<p>Simply register an account and confirm your email, and you can create and manage your JSON stores using either the web client or the API.</p>
+
+<h4 class="faq-item-title">Does my store data expire?</h4>
+<p>As of now, the data will not expire or be removed from the database. However, it is always a good idea to keep another backup of any important data.</p>
+
+<h4 class="faq-item-title">How can I access the data created using this service?</h4>
+<ul class="list-style-type-dashed">
+  <li>You can lookup a public store using our <a href="{% url 'stores:jsonstore_lookup_public' %}">public store lookup form</a>.</li>
+  <li>You can create, manage, and share your JSON stores using our <a href="{% url 'stores:jsonstore_list' %}">web-based interface</a>.</li>
+  <li>You can access our <a href="{% url 'api_generic:schema' %}">API</a> using your API key.</li>
+</ul>
+
+<h4 class="faq-item-title">Where is my API key?</h4>
+<p>Your API key can be found in your <a href="{% url 'users:user_detail_me' %}">user profile page.</a></p>
+
+<h4 class="faq-item-title">How do I use my API key?</h4>
+<p>
+  Simply include the following key-value pair in your HTTP header when making an API request to one of our endpoints:<br>
+  <code>Authorization: Token [your_api_key]</code>
+</p>
+
+<p>Example Using Javascript Fetch:</p>
+<pre class="code-example">Create a new publicly-accessible JSON store:
+
+let jsonStoreData = fetch('{{ BACKEND_SERVER_URL }}{% url 'api:jsonstore-list' %}', {
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Token e57af3bd58a56f21e9f888273546b82e7aed34cd'
+  },
+  body: {
+    "name": "hello-world",
+    "data": {
+      "message": "Hello World!"
+    },
+    "is_public": true
+  })
+  .then(res => res.json())
+</pre>
+
+<h4 class="faq-item-title">How can I get a new API key?</h4>
+<p>You can renew your API key <a href="{% url 'users:user_update_api_key' %}">here</a>.</p>
+
+<h4 class="faq-item-title">Where is the API schema?</h4>
+<p>The API schema can be found <a href="{% url 'api_generic:schema' %}">here</a>.</p>
+
+<h4 class="faq-item-title">How much does this cost?</h4>
+<p>This service is currently free.</p>
+
+<h4 class="faq-item-title">Can I create a public store?</h4>
+<p>Yes, you can choose to create a publicly-accessible store that can be looked up via a unique user-chosen name.</p>
+
+<h4 class="faq-item-title">Is my data private?</h4>
+<p>Any stores you create are private by default. However, we recommend encrypting any sensitive data before uploading it to protect yourself against the (unlikely) event of a breach.</p>
+
+<h4 class="faq-item-title">Do you sell my data?</h4>
+<p>This service does not use any method of gathering analytical data on its users, and does not sell or provide any data to third parties.</p>
+<p>In the future, we may use analytical data regarding users' usage patterns to improve our service, but we will never provide your data or personal information to any third parties for anything that resembles data-mining.</p>
+
+<div class="bottom-links">
+  <p><a href="{% url 'stores:jsonstore_create' %}">Create a JSON store</a></p>
+  <p><a href="{% url 'stores:jsonstore_lookup_public' %}">Lookup a public JSON store by name</a></p>
+  <p><a href="{% url 'faq' %}">Frequently Asked Questions</a></p>
+</div>
+
+{% endblock content %}
+
+{% block style %}
+{% endblock style %}

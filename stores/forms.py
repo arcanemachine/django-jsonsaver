@@ -27,19 +27,25 @@ class JsonStoreForm(forms.ModelForm):
 
         # public store name cannot be blank
         if is_public and not name:
-            raise ValidationError(c.FORM_ERROR_STORE_PUBLIC_NAME_BLANK)
+            raise ValidationError(
+                c.FORM_ERROR_STORE_PUBLIC_NAME_BLANK,
+                code='public_store_name_cannot_be_blank')
 
-        # store name not allowed
+        # forbidden store name not allowed
         if name and name in c.FORBIDDEN_STORE_NAMES:
             raise ValidationError(
-                f"The name '{name}' cannot be used as a store name.")
+                "The name '%(name)s' cannot be used as a store name.",
+                code='forbidden_store_name_not_allowed',
+                params={'name': name})
 
         # user has too many stores
         max_store_count = user.profile.get_max_store_count()
         if user.jsonstore_set.count() >= max_store_count:
             raise ValidationError(
-                f"You have reached the maximum of {max_store_count} "
-                "JSON stores. You cannot create any more stores.")
+                "You have reached the maximum of %(max_store_count)s "
+                "JSON stores. You cannot create any more stores.",
+                code='user_has_too_many_stores',
+                params={'max_store_count': max_store_count})
 
         # duplicate store name
         stores_with_same_name = JsonStore.objects.filter(name=slugify(name))

@@ -11,7 +11,6 @@ UserModel = get_user_model()
 
 
 class JsonStoreModelTest(TestCase):
-
     @classmethod
     def setUpTestData(cls):
         cls.test_user = f.UserFactory()
@@ -26,7 +25,7 @@ class JsonStoreModelTest(TestCase):
         expected_data = c.TEST_JSONSTORE_DATA
 
         self.assertEqual(self.test_jsonstore.user, self.test_user)
-        self.assertFalse(self.test_jsonstore.is_public)
+        self.assertEqual(self.test_jsonstore.is_public, False)
         self.assertEqual(self.test_jsonstore.name, expected_name)
         self.assertEqual(repr(self.test_jsonstore.data), repr(expected_data))
 
@@ -88,6 +87,10 @@ class JsonStoreModelTest(TestCase):
             self.test_jsonstore._meta.get_field('data').get_internal_type()
         self.assertEqual(field_type, 'JSONField')
 
+    def test_field_data_default(self):
+        default = self.test_jsonstore._meta.get_field('data').default
+        self.assertEqual(default, dict)
+
     def test_field_data_blank(self):
         blank = self.test_jsonstore._meta.get_field('data').blank
         self.assertEqual(blank, True)
@@ -102,6 +105,10 @@ class JsonStoreModelTest(TestCase):
         field_type = self.test_jsonstore._meta.get_field(
             'is_public').get_internal_type()
         self.assertEqual(field_type, 'BooleanField')
+
+    def test_field_data_default(self):
+        default = self.test_jsonstore._meta.get_field('is_public').default
+        self.assertEqual(default, False)
 
     def test_field_is_public_help_text(self):
         help_text = self.test_jsonstore._meta.get_field('is_public').help_text
@@ -124,14 +131,16 @@ class JsonStoreModelTest(TestCase):
         self.assertEqual(auto_now, True)
 
     # METHODS #
-    def test_method_str(self):
+
+    # __str__()
+    def test_method_str_with_name_populated(self):
         expected_string = f"id: {self.test_jsonstore.id}, "\
             f"user: {self.test_jsonstore.user.username}, "\
             f"name: {self.test_jsonstore.name}, "\
             f"is_public: {self.test_jsonstore.is_public}"
         self.assertEqual(str(self.test_jsonstore), expected_string)
 
-    def test_method_str_with_empty_name(self):
+    def test_method_str_with_name_blank(self):
         test_jsonstore_with_empty_name = \
             f.JsonStoreFactory(user=self.test_user, name='')
         expected_string = f"id: {test_jsonstore_with_empty_name.id}, "\
@@ -141,18 +150,19 @@ class JsonStoreModelTest(TestCase):
         self.assertEqual(str(test_jsonstore_with_empty_name), expected_string)
         test_jsonstore_with_empty_name.delete()
 
+    # get_absolute_url()
     def test_get_absolute_url(self):
         expected_url = reverse('stores:jsonstore_detail', kwargs={
             'jsonstore_pk': self.test_jsonstore.pk})
         self.assertEqual(self.test_jsonstore.get_absolute_url(), expected_url)
 
+    # save()
     def test_save_method_slugifies_jsonstore_name(self):
         test_jsonstore_with_new_name = f.JsonStoreFactory(user=self.test_user)
         new_jsonstore_name = 'New Test JsonStore'
 
         test_jsonstore_with_new_name.name = new_jsonstore_name
         test_jsonstore_with_new_name.save()
-        test_jsonstore_with_new_name.refresh_from_db()
         self.assertEqual(
             test_jsonstore_with_new_name.name, slugify(new_jsonstore_name))
         test_jsonstore_with_new_name.delete()

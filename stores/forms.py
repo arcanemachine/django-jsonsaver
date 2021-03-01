@@ -17,6 +17,9 @@ class JsonStoreForm(forms.ModelForm):
         self.obj = kwargs.pop('obj', None)
         super().__init__(*args, **kwargs)
 
+    def clean_name(self):
+        return slugify(self.data['name'])
+
     def clean(self):
         name = self.cleaned_data.get('name')
         store_data = self.cleaned_data.get('data')
@@ -24,6 +27,8 @@ class JsonStoreForm(forms.ModelForm):
 
         user = self.user
         obj = self.obj
+
+        breakpoint()
 
         # public store name cannot be blank
         if is_public and not name:
@@ -55,22 +60,22 @@ class JsonStoreForm(forms.ModelForm):
             if different_user_public_stores_with_same_name.exists():
                 # store public name duplicate
                 self.add_error('name', ValidationError(
-                    c.FORM_ERROR_STORE_PUBLIC_NAME_DUPLICATE),
-                    code='store_public_name_duplicate')
+                    c.FORM_ERROR_STORE_PUBLIC_NAME_DUPLICATE,
+                    code='store_public_name_duplicate'))
         if obj:
             same_user_stores_with_same_name = \
                 stores_with_same_name.filter(user=user).exclude(pk=obj.pk)
             if name and same_user_stores_with_same_name.exists():
                 # store name duplicate
                 self.add_error('name', ValidationError(
-                    c.FORM_ERROR_STORE_NAME_DUPLICATE),
-                    code='store_name_duplicate')
+                    c.FORM_ERROR_STORE_NAME_DUPLICATE,
+                    code='store_name_duplicate'))
         else:
             if name and stores_with_same_name.filter(user=user).exists():
                 # store name duplicate
                 self.add_error('name', ValidationError(
-                    c.FORM_ERROR_STORE_NAME_DUPLICATE),
-                    code='store_name_duplicate')
+                    c.FORM_ERROR_STORE_NAME_DUPLICATE,
+                    code='store_name_duplicate'))
 
         # store data size over max
         store_data_size = h.get_obj_size(store_data)

@@ -27,54 +27,65 @@ class JsonStoreForm(forms.ModelForm):
 
         # public store name cannot be blank
         if is_public and not name:
-            raise ValidationError(
+            self.add_error('name', ValidationError(
                 c.FORM_ERROR_STORE_PUBLIC_NAME_BLANK,
-                code='public_store_name_cannot_be_blank')
+                code='public_store_name_cannot_be_blank'))
 
-        # forbidden store name not allowed
+        # forbidden store names not allowed
         if name and name in c.FORBIDDEN_STORE_NAMES:
-            raise ValidationError(
+            self.add_error('name', ValidationError(
                 "The name '%(name)s' cannot be used as a store name.",
                 code='forbidden_store_name_not_allowed',
-                params={'name': name})
+                params={'name': name}))
 
         # user has too many stores
         max_store_count = user.profile.get_max_store_count()
         if user.jsonstore_set.count() >= max_store_count:
-            raise ValidationError(
+            self.add_error(None, ValidationError(
                 "You have reached the maximum of %(max_store_count)s "
                 "JSON stores. You cannot create any more stores.",
                 code='user_has_too_many_stores',
-                params={'max_store_count': max_store_count})
+                params={'max_store_count': max_store_count}))
 
-        # duplicate store name
+        # store name duplicate
         stores_with_same_name = JsonStore.objects.filter(name=slugify(name))
         if is_public:
             different_user_public_stores_with_same_name = \
                 stores_with_same_name.exclude(user=user).filter(is_public=True)
             if different_user_public_stores_with_same_name.exists():
-                raise ValidationError(c.FORM_ERROR_STORE_PUBLIC_NAME_DUPLICATE)
+                # store public name duplicate
+                self.add_error('name', ValidationError(
+                    c.FORM_ERROR_STORE_PUBLIC_NAME_DUPLICATE),
+                    code='store_public_name_duplicate')
         if obj:
             same_user_stores_with_same_name = \
                 stores_with_same_name.filter(user=user).exclude(pk=obj.pk)
             if name and same_user_stores_with_same_name.exists():
-                raise ValidationError(c.FORM_ERROR_STORE_NAME_DUPLICATE)
+                # store name duplicate
+                self.add_error('name', ValidationError(
+                    c.FORM_ERROR_STORE_NAME_DUPLICATE),
+                    code='store_name_duplicate')
         else:
             if name and stores_with_same_name.filter(user=user).exists():
-                raise ValidationError(c.FORM_ERROR_STORE_NAME_DUPLICATE)
+                # store name duplicate
+                self.add_error('name', ValidationError(
+                    c.FORM_ERROR_STORE_NAME_DUPLICATE),
+                    code='store_name_duplicate')
 
-        # store size is too large
+        # store data size over max
         store_data_size = h.get_obj_size(store_data)
         if store_data_size > user.profile.get_max_store_data_size():
-            raise ValidationError(
-                c.FORM_ERROR_STORE_DATA_SIZE_OVER_MAX(user, store_data_size))
+            self.add_error('data', ValidationError(
+                c.FORM_ERROR_STORE_DATA_SIZE_OVER_MAX(user, store_data_size),
+                code='store_data_size_over_max'))
 
         # store size will exceed user's total storage allowance
         if store_data_size + user.profile.get_all_stores_data_size() > \
                 user.profile.get_max_all_stores_data_size():
-            raise ValidationError(
+            self.add_error('data', ValidationError(
                 c.FORM_ERROR_ALL_STORES_DATA_SIZE_OVER_MAX(
-                    user, store_data_size))
+                    user, store_data_size),
+                code='all_stores_data_size_over_max'))
 
         return self.cleaned_data
 

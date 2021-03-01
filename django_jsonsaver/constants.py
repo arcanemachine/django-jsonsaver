@@ -14,6 +14,11 @@ FORM_ERROR_STORE_PUBLIC_NAME_DUPLICATE =\
 FORM_FIELD_CAPTCHA_HELP_TEXT = "Please confirm that you are a human "\
     "by entering the letters seen in the picture."
 
+MODEL_JSONSTORE_NAME_HELP_TEXT = \
+    "Name will be lowercased and hyphenated for use in URLs."
+MODEL_JSONSTORE_IS_PUBLIC_HELP_TEXT = \
+    "Allow this store to be publicly accessible by name."
+
 
 def FORM_ERROR_STORE_DATA_SIZE_OVER_MAX(user, store_data_size):
     max_store_data_size_in_kb = \
@@ -36,11 +41,12 @@ def FORM_ERROR_ALL_STORES_DATA_SIZE_OVER_MAX(user, store_data_size):
         f"entered data is {rounded_store_data_size} KB which is "\
         f"{store_data_size_excess} KB too large."
 
+
 # testing
 TEST_USER_USERNAME = 'test_user'
 TEST_USER_FIRST_NAME = 'Test'
 TEST_USER_LAST_NAME = 'User'
 TEST_USER_EMAIL = 'test_user@email.com'
 TEST_USER_PASSWORD = 'my_password321'
-TEST_JSONSTORE_NAME = 'test-jsonstore'
+TEST_JSONSTORE_NAME = 'test_jsonstore'
 TEST_JSONSTORE_DATA = {'message': 'test-message'}

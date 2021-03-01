@@ -3,6 +3,8 @@ from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
 
+from django_jsonsaver import constants as c
+
 
 class JsonStore(models.Model):
     user = \
@@ -10,11 +12,10 @@ class JsonStore(models.Model):
 
     name = models.CharField(
         max_length=128, blank=True, null=True,
-        help_text="Name will be lowercased and hyphenated for use in URLs.")
+        help_text=c.MODEL_JSONSTORE_NAME_HELP_TEXT)
     data = models.JSONField(default=dict, blank=True)
     is_public = models.BooleanField(
-        help_text="Allow this store to be publicly accessible by name.",
-        default=False)
+        default=False, help_text=c.MODEL_JSONSTORE_IS_PUBLIC_HELP_TEXT)
 
     updated_at = models.DateTimeField(auto_now=True)
 

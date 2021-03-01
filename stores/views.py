@@ -20,16 +20,6 @@ def stores_root(request):
     return HttpResponseRedirect(reverse(settings.LOGIN_URL))
 
 
-class JsonStoreLookupView(FormView):
-    form_class = forms.JsonStoreLookupForm
-    template_name = 'stores/jsonstore_lookup.html'
-
-    def form_valid(self, form):
-        return HttpResponseRedirect(
-            reverse('stores:jsonstore_detail_name', kwargs={
-                'jsonstore_name': form.cleaned_data['name']}))
-
-
 class JsonStoreListView(LoginRequiredMixin, ListView):
     model = JsonStore
     context_object_name = 'jsonstores'
@@ -68,6 +58,16 @@ class JsonStoreDetailView(UserPassesTestMixin, DetailView):
 
     def test_func(self):
         return self.get_object().user == self.request.user
+
+
+class JsonStoreLookupView(FormView):
+    form_class = forms.JsonStoreLookupForm
+    template_name = 'stores/jsonstore_lookup.html'
+
+    def form_valid(self, form):
+        return HttpResponseRedirect(
+            reverse('stores:jsonstore_detail_name', kwargs={
+                'jsonstore_name': form.cleaned_data['jsonstore_name']}))
 
 
 class JsonStoreNameDetailView(LoginRequiredMixin, DetailView):
@@ -115,7 +115,7 @@ class JsonStoreLookupPublicView(FormView):
     def form_valid(self, form):
         return HttpResponseRedirect(
             reverse('stores:jsonstore_detail_public', kwargs={
-                'jsonstore_name': form.cleaned_data['name']}))
+                'jsonstore_name': form.cleaned_data['jsonstore_name']}))
 
 
 class JsonStoreUpdateView(

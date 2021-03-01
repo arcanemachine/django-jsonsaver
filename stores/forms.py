@@ -7,20 +7,6 @@ from django_jsonsaver import constants as c
 from django_jsonsaver import helpers as h
 
 
-class JsonStoreLookupForm(forms.Form):
-    name = forms.CharField(
-        label="Find a public JSON store", max_length=128,
-        help_text="Your query will be converted to a URL-friendly format. "
-        "e.g. 'My Public STORE!' &rarr; 'my-public-store'")
-
-
-class JsonStoreLookupPublicForm(forms.Form):
-    name = forms.CharField(
-        label="Find a public JSON store", max_length=128,
-        help_text="Your query will be converted to a URL-friendly format. "
-        "e.g. 'My Public STORE!' &rarr; 'my-public-store'")
-
-
 class JsonStoreForm(forms.ModelForm):
     class Meta:
         model = JsonStore
@@ -86,3 +72,17 @@ class JsonStoreForm(forms.ModelForm):
                     user, store_data_size))
 
         return self.cleaned_data
+
+
+class JsonStoreLookupForm(forms.Form):
+    jsonstore_name = forms.CharField(
+        label=c.STORES_JSONSTORE_LOOKUP_FORM_LABEL,
+        max_length=c.JSONSTORE_NAME_MAX_LENGTH,
+        help_text=c.STORES_JSONSTORE_LOOKUP_FORM_HELP_TEXT)
+
+
+class JsonStoreLookupPublicForm(forms.Form):
+    jsonstore_name = forms.CharField(
+        label=c.STORES_JSONSTORE_LOOKUP_PUBLIC_FORM_LABEL,
+        max_length=c.JSONSTORE_NAME_MAX_LENGTH,
+        help_text=c.STORES_JSONSTORE_LOOKUP_FORM_HELP_TEXT)

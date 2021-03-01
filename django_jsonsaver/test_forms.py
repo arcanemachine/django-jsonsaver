@@ -1,7 +1,8 @@
 from django.forms import widgets
 from django.test import SimpleTestCase
 
-from . import constants as c, forms
+from . import constants as c
+from . import forms
 
 
 class ContactUsFormTest(SimpleTestCase):

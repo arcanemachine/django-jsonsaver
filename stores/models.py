@@ -11,11 +11,12 @@ class JsonStore(models.Model):
         models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     name = models.CharField(
-        max_length=128, blank=True, null=True,
+        max_length=c.JSONSTORE_NAME_MAX_LENGTH, blank=True, null=True,
         help_text=c.MODEL_JSONSTORE_NAME_HELP_TEXT)
     data = models.JSONField(default=dict, blank=True)
     is_public = models.BooleanField(
-        default=False, help_text=c.MODEL_JSONSTORE_IS_PUBLIC_HELP_TEXT)
+        help_text=c.MODEL_JSONSTORE_IS_PUBLIC_HELP_TEXT,
+        default=False)
 
     updated_at = models.DateTimeField(auto_now=True)
 

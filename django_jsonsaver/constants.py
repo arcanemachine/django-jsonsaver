@@ -1,11 +1,18 @@
 # constants
 STORES_PAGINATE_BY = 25
+FORBIDDEN_STORE_NAMES = ['find']
+JSONSTORE_NAME_MAX_LENGTH = 128
 
 # strings
-FORBIDDEN_STORE_NAMES = ['find']
 
-DJANGO_JSONSAVER_CONTACT_US_FORM_SUCCESS_MESSAGE = \
+DJANGO_JSONSAVER_CONTACT_US_FORM_SUCCESS_MESSAGE =\
     "Your message has been received. Thank you for your feedback."
+
+STORES_JSONSTORE_LOOKUP_FORM_LABEL = "Find your JSON store by name"
+STORES_JSONSTORE_LOOKUP_PUBLIC_FORM_LABEL = "Find a public JSON store by name"
+STORES_JSONSTORE_LOOKUP_FORM_HELP_TEXT =\
+    "Your query will be converted to a URL-friendly format. "\
+    "e.g. 'My Public STORE!' &rarr; 'my-public-store'"
 
 FORM_ERROR_STORE_NAME_DUPLICATE =\
     "You cannot have multiple stores with the same name."

@@ -3,15 +3,15 @@
 
 <p class="mt-4">
   <strong>Your JSON Store Count:</strong> {{ request.user.jsonstore_set.count }}
-  (Total allowed for this tier: {{ request.user.profile.get_max_store_count }})
+  (Total allowed for this tier: {{ request.user.profile.get_max_jsonstore_count }})
 </p>
 <p>
   <strong>Max Size Per Store on {{ request.user.profile.account_tier|capfirst }} Tier:</strong>
-  {{ request.user.profile.get_max_store_data_size_in_kb }} KB
+  {{ request.user.profile.get_max_jsonstore_data_size_in_kb }} KB
 </p>
 <p><strong>Storage Used:</strong>
-  {{ request.user.profile.get_all_stores_data_size_in_kb }} KB /
-  {{ request.user.profile.get_max_all_stores_data_size_in_kb }} KB
+  {{ request.user.profile.get_all_jsonstores_data_size_in_kb }} KB /
+  {{ request.user.profile.get_max_all_jsonstores_data_size_in_kb }} KB
 </p>
 <p><strong>Your Current API Call Limit:</strong> {{ SERVER_CONFIG.THROTTLE_RATE_USER }}</p>
 {% endcomment %}
@@ -20,15 +20,15 @@
 
 <p class="mt-4">
   <strong>Your JSON Store Count:</strong> {{ request.user.jsonstore_set.count }}
-  (Maximum Store Count: {{ request.user.profile.get_max_store_count }})
+  (Maximum Store Count: {{ request.user.profile.get_max_jsonstore_count }})
 </p>
 <p>
   <strong>Max Size Per Individual Store:</strong>
-  {{ request.user.profile.get_max_store_data_size_in_kb }} KB
+  {{ request.user.profile.get_max_jsonstore_data_size_in_kb }} KB
 </p>
 <p><strong>Total Storage Used For All Stores:</strong>
-  {{ request.user.profile.get_all_stores_data_size_in_kb }} KB /
-  {{ request.user.profile.get_max_all_stores_data_size_in_kb }} KB
+  {{ request.user.profile.get_all_jsonstores_data_size_in_kb }} KB /
+  {{ request.user.profile.get_max_all_jsonstores_data_size_in_kb }} KB
 </p>
 <p><strong>Your API Call Limit:</strong> {{ SERVER_CONFIG.THROTTLE_RATE_USER }}</p>
 

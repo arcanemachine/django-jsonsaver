@@ -1,7 +1,8 @@
-from django.http import JsonResponse
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
+from django.urls import reverse
 from rest_framework import generics, viewsets
-from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from . import serializers
 from .permissions import HasJsonStorePermissions
@@ -9,8 +10,7 @@ from stores.models import JsonStore
 
 
 def api_root(request):
-    return JsonResponse({
-        "message": "Visit jsonSaver.com/api/ to learn how our API works."})
+    return HttpResponseRedirect(reverse('api_generic:schema'))
 
 
 class JsonStoreViewSet(viewsets.ModelViewSet):

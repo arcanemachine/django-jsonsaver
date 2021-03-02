@@ -13,7 +13,7 @@
   </li>
   {% endfor %}
   {% if user_jsonstores_count and jsonstores.count < user_jsonstores_count %}
-    <div class="mt-2"><a href="{% url 'stores:jsonstore_list' %}">View the rest of your stores...</a></div>
+    <div class="mt-2"><a href="{% url 'stores:jsonstore_list' %}">View the rest of your JSON stores...</a></div>
   {% endif %}
 </ul>
 
@@ -66,8 +66,8 @@
 
 <div class="bottom-links">
 {% if not public_user or public_user.username == request.user.username %}
-  <p><a href="{% url 'stores:jsonstore_create' %}">Create new store</a></p>
-  <p><a href="{% url 'stores:jsonstore_lookup' %}">Personal store name lookup</a></p>
+  <p><a href="{% url 'stores:jsonstore_create' %}">Create new JSON store</a></p>
+  <p><a href="{% url 'stores:jsonstore_lookup' %}">Personal JSON store name lookup</a></p>
 </div>
 {% else %}
   <p><a href="{% url 'users:user_detail_me' %}">View your profile</a></p>

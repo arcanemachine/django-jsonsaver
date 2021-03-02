@@ -67,7 +67,8 @@ class JsonStoreNameDetailView(LoginRequiredMixin, DetailView):
 
     def dispatch(self, request, *args, **kwargs):
         if not self.get_object():
-            messages.error(request, "We could not find a store by that name.")
+            messages.error(
+                request, "We could not find a JSON store with that name.")
             return HttpResponseRedirect(
                 reverse('stores:jsonstore_lookup'))
         return super().dispatch(request, *args, **kwargs)
@@ -87,7 +88,8 @@ class JsonStorePublicNameDetailView(DetailView):
 
     def dispatch(self, request, *args, **kwargs):
         if not self.get_object():
-            messages.error(request, "We could not find a store by that name.")
+            messages.error(
+                request, "We could not find a JSON store with that name.")
             return HttpResponseRedirect(
                 reverse('stores:jsonstore_lookup_public'))
         return super().dispatch(request, *args, **kwargs)
@@ -142,7 +144,7 @@ class JsonStoreUpdateView(
 class JsonStoreDeleteView(UserPassesTestMixin, DeleteView):
     model = JsonStore
     pk_url_kwarg = 'jsonstore_pk'
-    success_message = "This store has been deleted."
+    success_message = "Your JSON store has been deleted."
     success_url = reverse_lazy('stores:jsonstore_list')
 
     def delete(self, request, *args, **kwargs):

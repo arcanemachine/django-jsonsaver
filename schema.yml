@@ -3,9 +3,9 @@ info:
   title: jsonSaver
   version: 0.0.l
 paths:
-  /api/api-token-auth/:
+  /api/auth/obtain-auth-token/:
     post:
-      operationId: api_api_token_auth_create
+      operationId: api_auth_obtain_auth_token_create
       description: ''
       tags:
       - api
@@ -31,9 +31,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/AuthToken'
           description: ''
-  /api/schema/:
+  /api/schema.yml:
     get:
-      operationId: api_schema_retrieve
+      operationId: api_schema.yml_retrieve
       description: |-
         OpenApi3 schema for this API. Format can be selected via content negotiation.
 
@@ -174,9 +174,9 @@ paths:
                 type: object
                 additionalProperties: {}
           description: ''
-  /api/v1/store/:
+  /api/v1/jsonstore/:
     get:
-      operationId: api_v1_store_list
+      operationId: api_v1_jsonstore_list
       description: ''
       tags:
       - api
@@ -193,7 +193,7 @@ paths:
                   $ref: '#/components/schemas/JsonStore'
           description: ''
     post:
-      operationId: api_v1_store_create
+      operationId: api_v1_jsonstore_create
       description: ''
       tags:
       - api
@@ -219,9 +219,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/JsonStore'
           description: ''
-  /api/v1/store/{id}/:
+  /api/v1/jsonstore/{id}/:
     get:
-      operationId: api_v1_store_retrieve
+      operationId: api_v1_jsonstore_retrieve
       description: ''
       parameters:
       - in: path
@@ -243,7 +243,7 @@ paths:
                 $ref: '#/components/schemas/JsonStore'
           description: ''
     put:
-      operationId: api_v1_store_update
+      operationId: api_v1_jsonstore_update
       description: ''
       parameters:
       - in: path
@@ -277,7 +277,7 @@ paths:
                 $ref: '#/components/schemas/JsonStore'
           description: ''
     patch:
-      operationId: api_v1_store_partial_update
+      operationId: api_v1_jsonstore_partial_update
       description: ''
       parameters:
       - in: path
@@ -310,7 +310,7 @@ paths:
                 $ref: '#/components/schemas/JsonStore'
           description: ''
     delete:
-      operationId: api_v1_store_destroy
+      operationId: api_v1_jsonstore_destroy
       description: ''
       parameters:
       - in: path
@@ -327,9 +327,9 @@ paths:
       responses:
         '204':
           description: No response body
-  /api/v1/store/name/{jsonstore_name}/:
+  /api/v1/jsonstore/name/{jsonstore_name}/:
     get:
-      operationId: api_v1_store_name_retrieve
+      operationId: api_v1_jsonstore_name_retrieve
       description: ''
       parameters:
       - in: path
@@ -350,7 +350,7 @@ paths:
                 $ref: '#/components/schemas/JsonStoreName'
           description: ''
     put:
-      operationId: api_v1_store_name_update
+      operationId: api_v1_jsonstore_name_update
       description: ''
       parameters:
       - in: path
@@ -382,7 +382,7 @@ paths:
                 $ref: '#/components/schemas/JsonStoreName'
           description: ''
     patch:
-      operationId: api_v1_store_name_partial_update
+      operationId: api_v1_jsonstore_name_partial_update
       description: ''
       parameters:
       - in: path
@@ -414,7 +414,7 @@ paths:
                 $ref: '#/components/schemas/JsonStoreName'
           description: ''
     delete:
-      operationId: api_v1_store_name_destroy
+      operationId: api_v1_jsonstore_name_destroy
       description: ''
       parameters:
       - in: path
@@ -430,9 +430,9 @@ paths:
       responses:
         '204':
           description: No response body
-  /api/v1/store/public/{jsonstore_name}/:
+  /api/v1/jsonstore/public/{jsonstore_name}/:
     get:
-      operationId: api_v1_store_public_retrieve
+      operationId: api_v1_jsonstore_public_retrieve
       description: ''
       parameters:
       - in: path
@@ -482,7 +482,7 @@ components:
           readOnly: true
         is_public:
           type: boolean
-          description: Allow this store to be publicly accessible by name.
+          description: Allow this JSON store to be publicly accessible by name.
         name:
           type: string
           nullable: true
@@ -503,7 +503,7 @@ components:
           additionalProperties: {}
         is_public:
           type: boolean
-          description: Allow this store to be publicly accessible by name.
+          description: Allow this JSON store to be publicly accessible by name.
     JsonStorePublic:
       type: object
       properties:
@@ -524,7 +524,7 @@ components:
           readOnly: true
         is_public:
           type: boolean
-          description: Allow this store to be publicly accessible by name.
+          description: Allow this JSON store to be publicly accessible by name.
         name:
           type: string
           nullable: true
@@ -541,7 +541,7 @@ components:
           additionalProperties: {}
         is_public:
           type: boolean
-          description: Allow this store to be publicly accessible by name.
+          description: Allow this JSON store to be publicly accessible by name.
   securitySchemes:
     cookieAuth:
       type: apiKey

@@ -1,12 +1,21 @@
 from django.conf import settings
 from django.db import models
 from django.urls import reverse
-from django.utils.text import slugify
 
 from django_jsonsaver import constants as c
 
 
 class JsonStore(models.Model):
+    """
+    store = {
+      "user": 1,
+      "name": "hello-world",
+      "data": {
+        "message": "hello world!"
+      },
+      "is_public": true
+    }
+    """
     user = \
         models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
@@ -29,15 +38,3 @@ class JsonStore(models.Model):
     def get_absolute_url(self):
         return reverse('stores:jsonstore_detail', kwargs={
             'jsonstore_pk': self.pk})
-
-
-"""
-store = {
-  "user": 1,
-  "name": "hello-world",
-  "data": {
-    "message": "hello world!"
-  },
-  "is_public": true
-}
-"""

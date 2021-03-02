@@ -9,7 +9,6 @@
   {% endif %}
 {% endblock %}
 
-
 {% block body_title %}
   Delete JSON Store - 
   {% if jsonstore.name %}
@@ -20,11 +19,26 @@
 {% endblock %}
 
 {% block content %}
+
+  {% if jsonstore.is_public %}
+    <div class="mb-5 alert alert-warning font-weight-bold">
+      <div>
+        This JSON store is public. If it is deleted, it can be registered by
+        another user on a first-come-first-serve basis.
+      </div>
+      <div class="mt-2">
+        Make sure that you don't have any code that references this JSON store,
+        as it could be exposed to malicious data if another users registers
+        this public store name.
+      </div>
+    </div>
+  {% endif %}
+
   Are you sure you want to delete this JSON Store?
   {% if jsonstore.name %}
-    ('{{ jsonstore.name }}')
+    (Store Name: '<strong>{{ jsonstore.name }}</strong>')
   {% else %}
-    (Store ID# {{ jsonstore.pk }})
+    (Store ID#: <strong>{{ jsonstore.pk }}</strong>)
   {% endif %}
 
   {% with confirm_text="Yes, I want to permanently delete this JSON store." confirm_style="danger" %}

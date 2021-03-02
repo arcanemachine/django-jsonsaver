@@ -1,6 +1,6 @@
 {% load crispy_forms_tags %}
 
-<form class="mt-4 form" method="post">
+<form class="mt-5 form" method="post">
 
   {% csrf_token %}
 
@@ -35,7 +35,8 @@
 
     {% if not cancel_button == False %}
       <span>
-        <button type="button" class="ml-2 btn btn-secondary" onclick="history.go(-1)">
+        <button type="button"
+                class="ml-2 btn btn-secondary" onclick="history.go(-1)">
           Cancel
         </button>
       </span>

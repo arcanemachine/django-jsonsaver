@@ -20,38 +20,38 @@ class Profile(models.Model):
     is_public = models.BooleanField(
         "Make this profile public",
         help_text="If this setting is active, users can look up this profile "
-        "based on your username and view all your public stores.",
+        "based on your username and view all your public JSON stores.",
         default=False)
     account_tier = models.CharField(max_length=128, default='free')
 
     def get_absolute_url(self):
         return reverse('users:user_detail_me')
 
-    def get_all_stores_data_size(self):
+    def get_all_jsonstores_data_size(self):
         result = 0
         for store in self.user.jsonstore_set.all():
             result += h.get_obj_size(store.data)
         return result
 
-    def get_all_stores_data_size_in_kb(self):
-        return round(self.get_all_stores_data_size() / 1024, 2)
+    def get_all_jsonstores_data_size_in_kb(self):
+        return round(self.get_all_jsonstores_data_size() / 1024, 2)
 
-    def get_max_store_count(self):
+    def get_max_jsonstore_count(self):
         if self.account_tier == 'free':
-            return sc.MAX_STORE_COUNT_USER_FREE
+            return sc.MAX_JSONSTORE_COUNT_USER_FREE
 
-    def get_max_store_data_size(self):
+    def get_max_jsonstore_data_size(self):
         if self.account_tier == 'free':
-            return sc.MAX_STORE_DATA_SIZE_USER_FREE
+            return sc.MAX_JSONSTORE_DATA_SIZE_USER_FREE
 
-    def get_max_store_data_size_in_kb(self):
+    def get_max_jsonstore_data_size_in_kb(self):
         if self.account_tier == 'free':
-            return h.bytes_to_kb(sc.MAX_STORE_DATA_SIZE_USER_FREE)
+            return h.bytes_to_kb(sc.MAX_JSONSTORE_DATA_SIZE_USER_FREE)
 
-    def get_max_all_stores_data_size(self):
+    def get_max_all_jsonstores_data_size(self):
         if self.account_tier == 'free':
-            return sc.MAX_ALL_STORES_DATA_SIZE_USER_FREE
+            return sc.MAX_ALL_JSONSTORES_DATA_SIZE_USER_FREE
 
-    def get_max_all_stores_data_size_in_kb(self):
+    def get_max_all_jsonstores_data_size_in_kb(self):
         if self.account_tier == 'free':
-            return h.bytes_to_kb(sc.MAX_ALL_STORES_DATA_SIZE_USER_FREE)
+            return h.bytes_to_kb(sc.MAX_ALL_JSONSTORES_DATA_SIZE_USER_FREE)

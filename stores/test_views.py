@@ -57,11 +57,22 @@ class JsonStoreListViewTest(TestCase):
         self.assertEqual(repr(self.view_instance.get_queryset()), qs_repr)
 
     # TEMPLATE #
-    def test_small_store_count_has_no_next_page(self):
+    def test_small_jsonstore_count_has_no_next_page(self):
         self.assertFalse(self.context['page_obj'].paginator.page(1).has_next())
 
-    def test_large_store_count_has_next_page(self):
+    def test_large_jsonstore_count_has_next_page(self):
         for i in range(c.JSONSTORE_LIST_PAGINATE_BY + 1):
             f.JsonStoreFactory(user=self.test_user)
         self.setUp()
         self.assertTrue(self.context['page_obj'].paginator.page(1).has_next())
+
+
+class JsonStoreCreateViewTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.test_user = f.UserFactory()
+        cls.current_test_url = reverse('stores:jsonstore_create')
+
+    # TEMPLATE
+
+    # def test_user_with_max_jsonstore

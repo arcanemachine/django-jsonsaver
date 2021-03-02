@@ -18,6 +18,7 @@ requests = "*"
 drf-spectacular = "*"
 psycopg2 = "*"
 factory-boy = "*"
+mock = "*"
 
 [dev-packages]
 

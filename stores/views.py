@@ -25,7 +25,7 @@ class JsonStoreListView(LoginRequiredMixin, ListView):
 class JsonStoreCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = JsonStore
     form_class = forms.JsonStoreForm
-    success_message = "Store created successfully"
+    success_message = c.JSONSTORE_CREATE_SUCCESS_MESSAGE
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -117,7 +117,7 @@ class JsonStoreUpdateView(
     model = JsonStore
     pk_url_kwarg = 'jsonstore_pk'
     form_class = forms.JsonStoreForm
-    success_message = "Store updated successfully"
+    success_message = c.JSONSTORE_UPDATE_SUCCESS_MESSAGE
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -144,7 +144,7 @@ class JsonStoreUpdateView(
 class JsonStoreDeleteView(UserPassesTestMixin, DeleteView):
     model = JsonStore
     pk_url_kwarg = 'jsonstore_pk'
-    success_message = "Your JSON store has been deleted."
+    success_message = c.JSONSTORE_DELETE_SUCCESS_MESSAGE
     success_url = reverse_lazy('stores:jsonstore_list')
 
     def delete(self, request, *args, **kwargs):

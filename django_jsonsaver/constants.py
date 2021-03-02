@@ -15,7 +15,6 @@ TEST_JSONSTORE_DATA = {'message': 'Test jsonstore data'}
 
 
 # strings
-
 DJANGO_JSONSAVER_CONTACT_US_FORM_SUCCESS_MESSAGE =\
     "Your message has been received. Thank you for your feedback."
 
@@ -24,6 +23,9 @@ STORES_JSONSTORE_LOOKUP_PUBLIC_FORM_LABEL = "Find a public JSON store by name"
 STORES_JSONSTORE_LOOKUP_FORM_HELP_TEXT =\
     "Your query will be converted to a URL-friendly format. "\
     "e.g. 'My Public STORE!' &rarr; 'my-public-store'"
+JSONSTORE_CREATE_SUCCESS_MESSAGE = "Store created successfully"
+JSONSTORE_UPDATE_SUCCESS_MESSAGE = "Store updated successfully"
+JSONSTORE_DELETE_SUCCESS_MESSAGE = "Store deleted successfully"
 
 FORM_ERROR_JSONSTORE_NAME_DUPLICATE =\
     "You cannot have multiple JSON stores with the same name."

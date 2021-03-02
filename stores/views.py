@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
@@ -10,6 +10,7 @@ from django.views.generic.edit import UpdateView
 
 from . import forms
 from .models import JsonStore
+from .permissions import UserHasJsonStorePermissionsMixin
 from django_jsonsaver import constants as c
 
 
@@ -44,12 +45,9 @@ class JsonStoreCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         return HttpResponseRedirect(self.get_success_url())
 
 
-class JsonStoreDetailView(UserPassesTestMixin, DetailView):
+class JsonStoreDetailView(UserHasJsonStorePermissionsMixin, DetailView):
     model = JsonStore
     pk_url_kwarg = 'jsonstore_pk'
-
-    def test_func(self):
-        return self.get_object().user == self.request.user
 
 
 class JsonStoreLookupView(FormView):
@@ -62,7 +60,7 @@ class JsonStoreLookupView(FormView):
                 'jsonstore_name': form.cleaned_data['jsonstore_name']}))
 
 
-class JsonStoreNameDetailView(LoginRequiredMixin, DetailView):
+class JsonStoreNameDetailView(UserHasJsonStorePermissionsMixin, DetailView):
     model = JsonStore
 
     def dispatch(self, request, *args, **kwargs):
@@ -113,7 +111,7 @@ class JsonStoreLookupPublicView(FormView):
 
 
 class JsonStoreUpdateView(
-        UserPassesTestMixin, SuccessMessageMixin, UpdateView):
+        UserHasJsonStorePermissionsMixin, SuccessMessageMixin, UpdateView):
     model = JsonStore
     pk_url_kwarg = 'jsonstore_pk'
     form_class = forms.JsonStoreForm
@@ -141,7 +139,7 @@ class JsonStoreUpdateView(
 
 
 # delete
-class JsonStoreDeleteView(UserPassesTestMixin, DeleteView):
+class JsonStoreDeleteView(UserHasJsonStorePermissionsMixin, DeleteView):
     model = JsonStore
     pk_url_kwarg = 'jsonstore_pk'
     success_message = c.JSONSTORE_DELETE_SUCCESS_MESSAGE

@@ -11,7 +11,12 @@
 
 {% block body_title %}JSON Store{% endblock %}
 {% block body_subheading %}
-  Store Info
+  Store Info 
+  {% if request.user == jsonstore.user and request.resolver_match.view_name == 'stores:jsonstore_detail_name' %}
+    - '{{ jsonstore.name }}'
+  {% elif request.user == jsonstore.user and request.resolver_match.view_name == 'stores:jsonstore_detail' %}
+    - ID #{{ jsonstore.pk }}
+  {% endif %}
 {% endblock %}
 
 {% block content %}
@@ -19,7 +24,7 @@
 {% if jsonstore.user == request.user and jsonstore.is_public %}
   <div class="my-2 alert alert-info font-weight-bold">
     <div>
-      This store is publicly accessible by anyone with access to its 
+      This store is publicly viewable by anyone with access to its 
       <a href="{{ BACKEND_SERVER_URL }}{% url 'stores:jsonstore_detail_public' jsonstore_name=jsonstore.name %}">
         public URL
       </a>
@@ -35,27 +40,61 @@
 
 <div class="mx-4 my-5 store-detail-info">
 
-  <p>Store ID#: 
-    <strong>{{ jsonstore.pk }}</strong>
+  <p>
+    <span class="font-weight-bold">Store ID#:</span>
+    <span class="ml-1">{{ jsonstore.pk }}</span>
+    {% if jsonstore.name and request.user == jsonstore.user and request.resolver_match.view_name != 'stores:jsonstore_detail' %}
+      <span class="ml-1">
+        (<a href="{% url 'stores:jsonstore_detail' jsonstore_pk=jsonstore.pk %}">private link</a>)
+      </span>
+    {% endif %}
   </p>
 
-  <p>Store Name:
-    <span class="font-weight-bold">
+  <p>
+    <span class="font-weight-bold">Store Name:</span>
+    <span class="ml-1">
       {% if jsonstore.name %}
         {{ jsonstore.name }}
       {% else %}
         N/A
       {% endif %}
     </span>
-  </p>
-
-  <p>Publicly accessible: 
-    {% if jsonstore.is_public %}
-      <strong>Yes</strong> (<a href="{% url 'stores:jsonstore_detail_public' jsonstore_name=jsonstore.name %}">link</a>)
-    {% else %}
-      <strong>No</strong>
+    {% if request.user == jsonstore.user and request.resolver_match.view_name != 'stores:jsonstore_detail_name' %}
+      <span class="ml-1">
+        (<a href="{% url 'stores:jsonstore_detail_name' jsonstore_name=jsonstore.name %}">private link</a>)
+      </span>
     {% endif %}
   </p>
+
+  {% if request.user == jsonstore.user %}
+    <p>
+      <span class="font-weight-bold">Private API Endpoint:</span>
+      <span class="ml-1">
+        {{ BACKEND_SERVER_URL }}{% url 'api:jsonstore-detail' pk=jsonstore.pk %}
+      </span>
+    </p>
+  {% endif %}
+
+  <p>
+    <span class="font-weight-bold">Publicly accessible:</span>
+    <span class="ml-1">
+      {% if jsonstore.is_public %}
+        Yes
+        <span class="ml-1">
+          (<a href="{% url 'stores:jsonstore_detail_public' jsonstore_name=jsonstore.name %}">public link</a>)
+        </span>
+      {% else %}
+        No
+      {% endif %}
+    </span>
+  </p>
+
+  {% if jsonstore.is_public %}
+    <p>
+    <span class="font-weight-bold">Public API Endpoint:</span>
+    <span class="ml-2">{{ BACKEND_SERVER_URL }}{% url 'api:jsonstore_detail_public' jsonstore_name=jsonstore.name %}
+    </p>
+  {% endif %}
 
   <div class="mt-4">Store Data:
     <pre id="store-data-output" class="m-4 p-3 store-data-output">

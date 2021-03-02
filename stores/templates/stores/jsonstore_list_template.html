@@ -4,10 +4,20 @@
   <li>
     <a href="{% if jsonstore.user.username == request.user.username %}{% url 'stores:jsonstore_detail' jsonstore_pk=jsonstore.pk %}{% else %}{% url 'stores:jsonstore_detail_public' jsonstore_name=jsonstore.name %}{% endif %}" title="{{ jsonstore.data }}">
       {% if jsonstore.name %}
-        Store Name: '{{ jsonstore.name }}'
-        {% if jsonstore.is_public %}(public){% endif %}
+      Store 
+        {% if request.user == jsonstore.user %}
+          ID #{{ jsonstore.id }}:
+        {% else %}
+          Name:
+        {% endif %}
+      '{{ jsonstore.name }}'
+        {% if jsonstore.is_public %}
+          (public)
+        {% else %}
+          (private)
+        {% endif %}
       {% else %}
-        Store ID#: {{ jsonstore.pk }}
+        Store ID #{{ jsonstore.pk }}
       {% endif %}
     </a>
   </li>

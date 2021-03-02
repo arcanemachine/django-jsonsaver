@@ -1,6 +1,4 @@
-from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponseRedirect
@@ -15,19 +13,13 @@ from .models import JsonStore
 from django_jsonsaver import constants as c
 
 
-@login_required
-def stores_root(request):
-    return HttpResponseRedirect(reverse(settings.LOGIN_URL))
-
-
 class JsonStoreListView(LoginRequiredMixin, ListView):
     model = JsonStore
     context_object_name = 'jsonstores'
-    paginate_by = c.STORES_PAGINATE_BY
+    paginate_by = c.JSONSTORE_LIST_PAGINATE_BY
 
     def get_queryset(self):
-        return JsonStore.objects.filter(user=self.request.user) \
-            .order_by('-updated_at')
+        return self.request.user.jsonstore_set.order_by('-updated_at')
 
 
 class JsonStoreCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):

@@ -472,7 +472,7 @@ class JsonStoreUpdateViewTest(SetUpTestCaseMixin, TestCase):
     def test_method_get_form_kwargs_obj(self):
         kwargs = self.view_instance.get_form_kwargs()
         self.assertIn('obj', kwargs)
-        self.assertEqual(kwargs['user'], self.test_jsonstore)
+        self.assertEqual(kwargs['obj'], self.test_jsonstore)
 
 
 class JsonStoreDeleteViewTest(SetUpTestCaseMixin, TestCase):

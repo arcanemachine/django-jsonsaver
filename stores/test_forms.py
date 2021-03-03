@@ -186,7 +186,7 @@ class JsonStoreLookupFormTest(SimpleTestCase):
 
 class JsonStorePublicLookupFormTest(SimpleTestCase):
     def setUp(self):
-        self.form_instance = forms.JsonStoreLookupPublicForm()
+        self.form_instance = forms.JsonStorePublicLookupForm()
 
     # FIELDS #
     def test_form_fields_all_present(self):

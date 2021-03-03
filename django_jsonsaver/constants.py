@@ -20,7 +20,7 @@ DJANGO_JSONSAVER_CONTACT_US_FORM_SUCCESS_MESSAGE =\
     "Your message has been received. Thank you for your feedback."
 
 STORES_JSONSTORE_LOOKUP_FORM_LABEL = "Find your JSON store by name"
-STORES_JSONSTORE_LOOKUP_PUBLIC_FORM_LABEL = "Find a public JSON store by name"
+STORES_JSONSTORE_PUBLIC_LOOKUP_FORM_LABEL = "Find a public JSON store by name"
 STORES_JSONSTORE_LOOKUP_FORM_HELP_TEXT =\
     "Your query will be converted to a URL-friendly format. "\
     "e.g. 'My Public STORE!' &rarr; 'my-public-store'"

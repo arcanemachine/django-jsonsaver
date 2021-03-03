@@ -50,8 +50,9 @@ class Profile(models.Model):
 
     def get_max_all_jsonstores_data_size(self):
         if self.account_tier == 'free':
-            return sc.MAX_ALL_JSONSTORES_DATA_SIZE_USER_FREE
+            return sc.MAX_JSONSTORE_ALL_JSONSTORES_DATA_SIZE_USER_FREE
 
     def get_max_all_jsonstores_data_size_in_kb(self):
         if self.account_tier == 'free':
-            return h.bytes_to_kb(sc.MAX_ALL_JSONSTORES_DATA_SIZE_USER_FREE)
+            return h.bytes_to_kb(
+                sc.MAX_JSONSTORE_ALL_JSONSTORES_DATA_SIZE_USER_FREE)

@@ -30,7 +30,7 @@ class JsonStoreSerializer(serializers.ModelSerializer):
                 c.FORM_ERROR_JSONSTORE_PUBLIC_NAME_BLANK)
 
         # jsonstore name not allowed
-        if name and name in c.FORBIDDEN_JSONSTORE_NAMES:
+        if name and name in c.JSONSTORE_FORBIDDEN_NAMES:
             raise serializers.ValidationError(
                 f"The name '{name}' cannot be used as a jsonstore name.")
 

@@ -94,5 +94,5 @@ class AllJsonStoresDataSizeOvermax(TestCase):
             sc.MAX_JSONSTORE_ALL_JSONSTORES_DATA_SIZE_USER_FREE
 
         self.assertTrue(
-            invalidators.all_jsonstores_data_size_over_max(
+            invalidators.jsonstore_all_jsonstores_data_size_over_max(
                 user, jsonstore_data_size))

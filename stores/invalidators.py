@@ -56,7 +56,7 @@ def jsonstore_data_size_over_max(jsonstore_data, user, jsonstore_data_size):
 
 
 # jsonstore size will exceed user's total storage allowance
-def all_jsonstores_data_size_over_max(user, jsonstore_data_size):
+def jsonstore_all_jsonstores_data_size_over_max(user, jsonstore_data_size):
     if jsonstore_data_size + user.profile.get_all_jsonstores_data_size() >=\
             user.profile.get_max_all_jsonstores_data_size():
         return True

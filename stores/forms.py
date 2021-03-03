@@ -42,17 +42,16 @@ class JsonStoreForm(forms.ModelForm):
                 code='jsonstore_forbidden_name_not_allowed',
                 params={'name': name}))
 
-        # user has too many jsonstores
+        # user jsonstore count over max
         user_max_jsonstore_count = user.profile.get_max_jsonstore_count()
         if invalidators.jsonstore_user_jsonstore_count_over_max(
                 user, user_max_jsonstore_count):
             self.add_error(None, ValidationError(
                 "You have reached the maximum of %(user_max_jsonstore_count)s "
                 "JSON stores. You cannot create any more stores.",
-                code='user_has_too_many_jsonstores',
+                code='jsonstore_user_jsonstore_count_over_max',
                 params={
-                    'jsonstore_user_jsonstore_count_over_max':
-                        user_max_jsonstore_count}))
+                    'user_max_jsonstore_count': user_max_jsonstore_count}))
 
         stores_with_same_name = JsonStore.objects.filter(name=slugify(name))
 

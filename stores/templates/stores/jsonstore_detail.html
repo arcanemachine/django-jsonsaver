@@ -11,7 +11,7 @@
 
 {% block body_title %}JSON Store{% endblock %}
 {% block body_subheading %}
-  Store Info 
+  {% if request.resolver_match.view_name == 'stores:jsonstore_detail_public' %}Public{% endif %} Store Info 
   {% if request.user == jsonstore.user and request.resolver_match.view_name == 'stores:jsonstore_detail_name' %}
     - '{{ jsonstore.name }}'
   {% elif request.user == jsonstore.user and request.resolver_match.view_name == 'stores:jsonstore_detail' %}

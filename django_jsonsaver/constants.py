@@ -6,6 +6,7 @@ JSONSTORE_NAME_MAX_LENGTH = 128
 
 # testing
 TEST_USER_USERNAME = 'test_user'
+TEST_USER_ADMIN_USERNAME = 'admin_user'
 TEST_USER_FIRST_NAME = 'Test'
 TEST_USER_LAST_NAME = 'User'
 TEST_USER_EMAIL = 'test_user@email.com'
@@ -48,7 +49,7 @@ def FORM_ERROR_JSONSTORE_DATA_SIZE_OVER_MAX(user, store_data_size):
         user.profile.get_max_jsonstore_data_size_in_kb()
     rounded_jsonstore_data_size = round(store_data_size / 1024, 2)
     return f"The maximum data size per store for your account is "\
-        f"{max_jsonstore_data_size_in_kb} KB. The disk size of your entered data "\
+        f"{max_jsonstore_data_size_in_kb} KB. The disk size of your entered "\
         f"data is {rounded_jsonstore_data_size} KB."
 
 

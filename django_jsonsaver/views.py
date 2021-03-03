@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic import FormView, TemplateView
 
@@ -20,6 +21,8 @@ class ContactUsFormView(SuccessMessageMixin, FormView):
         email = form.cleaned_data['email']
         message = form.cleaned_data['message']
         if not last_name:
+            if settings.DEBUG:
+                h.send_contact_us_email(name, email, message)
             tasks.send_contact_us_email_task(name, email, message)
         return super().form_valid(form)
 

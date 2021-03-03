@@ -16,6 +16,17 @@ class ProjectRootViewTest(TestCase):
         self.response = self.client.get(self.current_test_url)
         self.view_instance = self.response.context['view']
 
+    # request.GET
+    def test_get_method_unauthenticated_user(self):
+        self.assertEqual(self.response.status_code, 200)
+        self.assertTemplateUsed(self.response, 'project_root.html')
+
+    def test_get_method_authenticated_user(self):
+        self.client.login(
+            username=c.TEST_USER_USERNAME, password=c.TEST_USER_PASSWORD)
+        self.assertEqual(self.response.status_code, 200)
+        self.assertTemplateUsed(self.response, 'project_root.html')
+
     # view attributes
     def test_view_class_name(self):
         self.assertEqual(
@@ -29,17 +40,6 @@ class ProjectRootViewTest(TestCase):
 
     def test_template_name(self):
         self.assertEqual(self.view_instance.template_name, 'project_root.html')
-
-    # request.GET
-    def test_get_method_unauthenticated_user(self):
-        self.assertEqual(self.response.status_code, 200)
-        self.assertTemplateUsed(self.response, 'project_root.html')
-
-    def test_get_method_authenticated_user(self):
-        self.client.login(
-            username=c.TEST_USER_USERNAME, password=c.TEST_USER_PASSWORD)
-        self.assertEqual(self.response.status_code, 200)
-        self.assertTemplateUsed(self.response, 'project_root.html')
 
 
 class ContactUsFormViewTest(TestCase):

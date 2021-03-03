@@ -2,7 +2,6 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, DetailView, DeleteView, FormView,\
     ListView
@@ -50,7 +49,7 @@ class JsonStoreDetailView(UserHasJsonStorePermissionsMixin, DetailView):
     pk_url_kwarg = 'jsonstore_pk'
 
 
-class JsonStoreLookupView(FormView):
+class JsonStoreLookupView(LoginRequiredMixin, FormView):
     form_class = forms.JsonStoreLookupForm
     template_name = 'stores/jsonstore_lookup.html'
 
@@ -60,34 +59,33 @@ class JsonStoreLookupView(FormView):
                 'jsonstore_name': form.cleaned_data['jsonstore_name']}))
 
 
-class JsonStoreNameDetailView(UserHasJsonStorePermissionsMixin, DetailView):
+class JsonStoreNameDetailView(
+        LoginRequiredMixin, UserHasJsonStorePermissionsMixin, DetailView):
     model = JsonStore
 
     def dispatch(self, request, *args, **kwargs):
-        if not self.get_object():
+        if self.get_object() is None:
             messages.error(
-                request, "We could not find a JSON store with that name.")
+                request, "You do not have a JSON store with that name.")
             return HttpResponseRedirect(
                 reverse('stores:jsonstore_lookup'))
         return super().dispatch(request, *args, **kwargs)
 
     def get_object(self):
-        return get_object_or_404(
-            JsonStore,
-            name=self.kwargs['jsonstore_name'],
-            user=self.request.user)
-
-    def test_func(self):
-        return self.get_object().user == self.request.user
+        return JsonStore.objects.filter(
+            user__id=self.request.user.id,
+            name=self.kwargs['jsonstore_name']
+        ).first()
 
 
-class JsonStorePublicNameDetailView(DetailView):
+class JsonStorePublicDetailView(DetailView):
     model = JsonStore
 
     def dispatch(self, request, *args, **kwargs):
         if not self.get_object():
             messages.error(
-                request, "We could not find a JSON store with that name.")
+                request,
+                "We could not find a public JSON store with that name.")
             return HttpResponseRedirect(
                 reverse('stores:jsonstore_lookup_public'))
         return super().dispatch(request, *args, **kwargs)
@@ -95,9 +93,6 @@ class JsonStorePublicNameDetailView(DetailView):
     def get_object(self):
         return JsonStore.objects.filter(
             name=self.kwargs['jsonstore_name']).first()
-
-    def test_func(self):
-        return self.get_object().user == self.request.user
 
 
 class JsonStoreLookupPublicView(FormView):
@@ -124,8 +119,8 @@ class JsonStoreUpdateView(
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs['user'] = self.request.user
-        kwargs['obj'] = self.get_object()
+        kwargs.update({'user': self.request.user,
+                       'obj': self.get_object()})
         return kwargs
 
     def form_valid(self, form):
@@ -133,9 +128,6 @@ class JsonStoreUpdateView(
         self.object.user = self.request.user
         self.object.save()
         return HttpResponseRedirect(self.get_success_url())
-
-    def test_func(self):
-        return self.get_object().user == self.request.user
 
 
 # delete
@@ -149,6 +141,3 @@ class JsonStoreDeleteView(UserHasJsonStorePermissionsMixin, DeleteView):
         obj = self.get_object()
         messages.success(request, self.success_message % obj.__dict__)
         return super().delete(request, *args, **kwargs)
-
-    def test_func(self):
-        return self.get_object().user == self.request.user

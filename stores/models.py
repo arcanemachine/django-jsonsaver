@@ -2,7 +2,7 @@ from django.conf import settings
 from django.db import models
 from django.urls import reverse
 
-from django_jsonsaver import constants as c
+from django_jsonsaver import constants as c, helpers as h
 
 
 class JsonStore(models.Model):
@@ -38,3 +38,6 @@ class JsonStore(models.Model):
     def get_absolute_url(self):
         return reverse('stores:jsonstore_detail', kwargs={
             'jsonstore_pk': self.pk})
+
+    def get_data_size(self):
+        return round(h.get_obj_size(self.data) / 1024, 2)

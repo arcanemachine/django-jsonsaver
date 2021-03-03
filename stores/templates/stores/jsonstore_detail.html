@@ -11,7 +11,7 @@
 
 {% block body_title %}JSON Store{% endblock %}
 {% block body_subheading %}
-  {% if request.resolver_match.view_name == 'stores:jsonstore_detail_public' %}Public{% endif %} Store Info 
+  Store Info 
   {% if request.user == jsonstore.user and request.resolver_match.view_name == 'stores:jsonstore_detail_name' %}
     - '{{ jsonstore.name }}'
   {% elif request.user == jsonstore.user and request.resolver_match.view_name == 'stores:jsonstore_detail' %}
@@ -64,6 +64,11 @@
         (<a href="{% url 'stores:jsonstore_detail_name' jsonstore_name=jsonstore.name %}">private link</a>)
       </span>
     {% endif %}
+  </p>
+
+  <p>
+    <span class="font-weight-bold">Store Data Size:</span>
+    <span>{{ jsonstore.get_data_size }} KB</span>
   </p>
 
   {% if request.user == jsonstore.user %}

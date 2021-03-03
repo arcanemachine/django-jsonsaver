@@ -21,7 +21,7 @@ urlpatterns = [
          views.JsonStoreNameDetailView.as_view(),
          name='jsonstore_detail_name'),
     path('public/find/',
-         views.JsonStoreLookupPublicView.as_view(),
+         views.JsonStorePublicLookupView.as_view(),
          name='jsonstore_lookup_public'),
     path('public/<str:jsonstore_name>/',
          views.JsonStorePublicDetailView.as_view(),

@@ -95,8 +95,8 @@ class JsonStorePublicDetailView(DetailView):
             name=self.kwargs['jsonstore_name']).first()
 
 
-class JsonStoreLookupPublicView(FormView):
-    form_class = forms.JsonStoreLookupPublicForm
+class JsonStorePublicLookupView(FormView):
+    form_class = forms.JsonStorePublicLookupForm
     template_name = 'stores/jsonstore_lookup.html'
 
     def form_valid(self, form):
@@ -123,12 +123,6 @@ class JsonStoreUpdateView(
                        'obj': self.get_object()})
         return kwargs
 
-    def form_valid(self, form):
-        self.object = form.save(commit=False)
-        self.object.user = self.request.user
-        self.object.save()
-        return HttpResponseRedirect(self.get_success_url())
-
 
 # delete
 class JsonStoreDeleteView(UserHasJsonStorePermissionsMixin, DeleteView):
@@ -138,6 +132,5 @@ class JsonStoreDeleteView(UserHasJsonStorePermissionsMixin, DeleteView):
     success_url = reverse_lazy('stores:jsonstore_list')
 
     def delete(self, request, *args, **kwargs):
-        obj = self.get_object()
-        messages.success(request, self.success_message % obj.__dict__)
+        messages.success(request, self.success_message)
         return super().delete(request, *args, **kwargs)

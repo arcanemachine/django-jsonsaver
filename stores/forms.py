@@ -101,8 +101,8 @@ class JsonStoreLookupForm(forms.Form):
         help_text=c.STORES_JSONSTORE_LOOKUP_FORM_HELP_TEXT)
 
 
-class JsonStoreLookupPublicForm(forms.Form):
+class JsonStorePublicLookupForm(forms.Form):
     jsonstore_name = forms.CharField(
-        label=c.STORES_JSONSTORE_LOOKUP_PUBLIC_FORM_LABEL,
+        label=c.STORES_JSONSTORE_PUBLIC_LOOKUP_FORM_LABEL,
         max_length=c.JSONSTORE_NAME_MAX_LENGTH,
         help_text=c.STORES_JSONSTORE_LOOKUP_FORM_HELP_TEXT)

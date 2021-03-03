@@ -203,7 +203,7 @@ class JsonStorePublicLookupFormTest(SimpleTestCase):
     def test_field_jsonstore_name_label(self):
         self.assertEqual(
             self.form_instance.fields['jsonstore_name'].label,
-            c.STORES_JSONSTORE_LOOKUP_PUBLIC_FORM_LABEL)
+            c.STORES_JSONSTORE_PUBLIC_LOOKUP_FORM_LABEL)
 
     def test_field_jsonstore_name_max_length(self):
         self.assertEqual(

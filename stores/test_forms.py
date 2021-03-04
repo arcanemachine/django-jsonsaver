@@ -1,11 +1,10 @@
 from django.forms import widgets
 from django.test import SimpleTestCase, TestCase
-from django.utils.text import slugify
 
 from . import forms
 from .models import JsonStore
-from django_jsonsaver import constants as c, factories as f
-from django_jsonsaver.server_config import MAX_JSONSTORE_DATA_SIZE_USER_FREE
+from django_jsonsaver import \
+    constants as c, factories as f, server_config as sc
 
 
 class JsonStoreFormTest(TestCase):
@@ -51,7 +50,7 @@ class JsonStoreFormTest(TestCase):
         name_to_be_slugified = 'Test JsonStore Name'
         self.form_data.update({'name': name_to_be_slugified})
         form = forms.JsonStoreForm(self.form_data, **self.form_kwargs_create)
-        self.assertEqual(form.clean_name(), slugify(name_to_be_slugified))
+        self.assertEqual(form.clean_name(), 'test-jsonstore-name')
 
     # VALIDATION #
 
@@ -136,14 +135,14 @@ class JsonStoreFormTest(TestCase):
 
     def test_validation_jsonstore_data_size_over_max(self):
         self.form_data.update(
-            {'data': {'message': 'a' * MAX_JSONSTORE_DATA_SIZE_USER_FREE}})
+            {'data': {'message': 'a' * sc.MAX_JSONSTORE_DATA_SIZE_USER_FREE}})
         form = forms.JsonStoreForm(self.form_data, **self.form_kwargs_create)
         self.assertFalse(form.is_valid())
         self.assertTrue(form.has_error('data', 'jsonstore_data_size_over_max'))
 
     def test_validation_jsonstore_all_jsonstores_data_size_over_max(self):
         almost_oversize_data_dict = \
-            {'message': 'a' * (MAX_JSONSTORE_DATA_SIZE_USER_FREE - 1024)}
+            {'message': 'a' * (sc.MAX_JSONSTORE_DATA_SIZE_USER_FREE - 1024)}
         f.JsonStoreFactory(
             user=self.test_user,
             data=almost_oversize_data_dict)

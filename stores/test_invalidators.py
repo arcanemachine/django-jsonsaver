@@ -1,6 +1,6 @@
 from django.test import SimpleTestCase, TestCase
 
-from . import invalidators
+from . import invalidators as iv
 from .models import JsonStore
 from django_jsonsaver import \
     constants as c, factories as f, server_config as sc
@@ -12,16 +12,14 @@ class JsonStorePublicNameCannotBeBlankTest(SimpleTestCase):
         is_public = True
 
         self.assertTrue(
-            invalidators.jsonstore_public_name_cannot_be_blank(
-                name, is_public))
+            iv.jsonstore_public_name_cannot_be_blank(name, is_public))
 
 
 class JsonStoreForbiddenNameNotAllowedTest(SimpleTestCase):
     def test_jsonstore_forbidden_name_not_allowed(self):
         name = c.JSONSTORE_FORBIDDEN_NAMES[0]
 
-        self.assertTrue(
-            invalidators.jsonstore_forbidden_name_not_allowed(name))
+        self.assertTrue(iv.jsonstore_forbidden_name_not_allowed(name))
 
 
 class JsonstoreUserJsonstoreCountOverMaxTest(TestCase):
@@ -30,7 +28,7 @@ class JsonstoreUserJsonstoreCountOverMaxTest(TestCase):
         user_max_jsonstore_count = 0
 
         self.assertTrue(
-            invalidators.jsonstore_user_jsonstore_count_over_max(
+            iv.jsonstore_user_jsonstore_count_over_max(
                 user, user_max_jsonstore_count))
 
 
@@ -43,7 +41,7 @@ class JsonstoreNameDuplicateSameUserCreateTest(TestCase):
         stores_with_same_name = JsonStore.objects.filter(name=name)
 
         self.assertTrue(
-            invalidators.jsonstore_name_duplicate_same_user_create(
+            iv.jsonstore_name_duplicate_same_user_create(
                 name, user, obj, stores_with_same_name))
 
 
@@ -57,7 +55,7 @@ class JsonstoreNameDuplicateSameUserUpdateTest(TestCase):
         stores_with_same_name = JsonStore.objects.filter(name=name)
 
         self.assertTrue(
-            invalidators.jsonstore_name_duplicate_same_user_update(
+            iv.jsonstore_name_duplicate_same_user_update(
                 name, user, obj, stores_with_same_name))
 
 
@@ -72,7 +70,7 @@ class JsonstorePublicNameDuplicateTest(TestCase):
         stores_with_same_name = JsonStore.objects.filter(name=name)
 
         self.assertTrue(
-            invalidators.jsonstore_public_name_duplicate(
+            iv.jsonstore_public_name_duplicate(
                 name, is_public, user, stores_with_same_name))
 
 
@@ -83,7 +81,7 @@ class JsonstoreDataSizeOverMaxTest(TestCase):
         jsonstore_data_size = sc.MAX_JSONSTORE_DATA_SIZE_USER_FREE
 
         self.assertTrue(
-            invalidators.jsonstore_data_size_over_max(
+            iv.jsonstore_data_size_over_max(
                 jsonstore_data, user, jsonstore_data_size))
 
 
@@ -94,5 +92,5 @@ class AllJsonStoresDataSizeOvermax(TestCase):
             sc.MAX_JSONSTORE_ALL_JSONSTORES_DATA_SIZE_USER_FREE
 
         self.assertTrue(
-            invalidators.jsonstore_all_jsonstores_data_size_over_max(
+            iv.jsonstore_all_jsonstores_data_size_over_max(
                 user, jsonstore_data_size))

@@ -14,10 +14,21 @@ TEST_USER_PASSWORD = 'my_password321'
 TEST_JSONSTORE_NAME = 'test_jsonstore'
 TEST_JSONSTORE_DATA = {'message': 'Test jsonstore data'}
 
+# STRINGS #
 
-# strings
+# project_folder
 DJANGO_JSONSAVER_CONTACT_US_FORM_SUCCESS_MESSAGE =\
     "Your message has been received. Thank you for your feedback."
+
+# captcha
+FORM_FIELD_CAPTCHA_HELP_TEXT = "Please confirm that you are a human "\
+    "by entering the letters seen in the picture."
+
+# JsonStore
+MODEL_JSONSTORE_NAME_HELP_TEXT =\
+    "Name will be lowercased and hyphenated for use in URLs."
+MODEL_JSONSTORE_IS_PUBLIC_HELP_TEXT =\
+    "Allow this JSON store to be publicly accessible by name."
 
 STORES_JSONSTORE_LOOKUP_FORM_LABEL = "Find your JSON store by name"
 STORES_JSONSTORE_PUBLIC_LOOKUP_FORM_LABEL = "Find a public JSON store by name"
@@ -35,13 +46,15 @@ FORM_ERROR_JSONSTORE_PUBLIC_NAME_BLANK =\
 FORM_ERROR_JSONSTORE_PUBLIC_NAME_DUPLICATE =\
     "This publicly-accessible JSON store name is already in use."
 
-FORM_FIELD_CAPTCHA_HELP_TEXT = "Please confirm that you are a human "\
-    "by entering the letters seen in the picture."
 
-MODEL_JSONSTORE_NAME_HELP_TEXT =\
-    "Name will be lowercased and hyphenated for use in URLs."
-MODEL_JSONSTORE_IS_PUBLIC_HELP_TEXT =\
-    "Allow this JSON store to be publicly accessible by name."
+def FORM_ERROR_JSONSTORE_FORBIDDEN_NAME_NOT_ALLOWED(name):
+    return f"The name '{name}' cannot be used as a jsonstore name."
+
+
+def FORM_ERROR_JSONSTORE_USER_JSONSTORE_COUNT_OVER_MAX(
+        user, user_max_jsonstore_count):
+    return f"You have reached the maximum of {user_max_jsonstore_count} JSON "\
+        "stores. You cannot create any more JSON stores."
 
 
 def FORM_ERROR_JSONSTORE_DATA_SIZE_OVER_MAX(user, store_data_size):
@@ -58,9 +71,8 @@ def FORM_ERROR_ALL_JSONSTORES_DATA_SIZE_OVER_MAX(user, jsonstore_data_size):
         user.profile.get_max_all_jsonstores_data_size_in_kb()
     rounded_jsonstore_data_size = round(jsonstore_data_size / 1024, 2)
     jsonstore_data_size_excess =\
-        round(abs(rounded_jsonstore_data_size -
-              max_all_jsonstores_data_size_in_kb), 2)
+        round(abs(jsonstore_data_size - max_all_jsonstores_data_size_in_kb), 2)
     return f"The maximum storage capacity for all your JSON stores is "\
         f"{max_all_jsonstores_data_size_in_kb} KB. The disk size of your "\
-        f"entered data is {rounded_jsonstore_data_size} KB which is "\
+        f"entered data is {rounded_jsonstore_data_size} KB, which is "\
         f"{jsonstore_data_size_excess} KB too large."

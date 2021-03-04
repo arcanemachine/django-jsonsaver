@@ -23,7 +23,7 @@ class JsonStoreViewSet(viewsets.ModelViewSet):
         return super().list(request)
 
 
-class JsonStoreDetailName(generics.RetrieveUpdateDestroyAPIView):
+class JsonStoreNameDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.JsonStoreNameSerializer
     permission_classes = [HasJsonStorePermissions]
 
@@ -34,7 +34,7 @@ class JsonStoreDetailName(generics.RetrieveUpdateDestroyAPIView):
             user__id=self.request.user.id)
 
 
-class JsonStoreDetailPublic(generics.RetrieveAPIView):
+class JsonStorePublicDetail(generics.RetrieveAPIView):
     serializer_class = serializers.JsonStorePublicSerializer
     permission_classes = [AllowAny]
 

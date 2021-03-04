@@ -239,7 +239,8 @@ class JsonStoreNameSerializerTest(APITestCase):
 
     def test_meta_fields(self):
         self.assertEqual(
-            self.test_serializer.Meta.fields, ['data', 'is_public'])
+            self.test_serializer.Meta.fields,
+            ['id', 'user', 'data', 'name', 'is_public'])
 
 
 class JsonStorePublicSerializerTest(APITestCase):
@@ -257,9 +258,8 @@ class JsonStorePublicSerializerTest(APITestCase):
         self.assertEqual(self.test_serializer.Meta.model.__name__, 'JsonStore')
 
     def test_meta_fields(self):
-        self.assertEqual(self.test_serializer.Meta.fields, ['data'])
+        self.assertEqual(self.test_serializer.Meta.fields, ['data', 'name'])
 
     def test_meta_read_only_fields(self):
-        self.assertEqual(self.test_serializer.Meta.read_only_fields, ['data'])
-
-
+        self.assertEqual(
+            self.test_serializer.Meta.read_only_fields, ['data', 'name'])

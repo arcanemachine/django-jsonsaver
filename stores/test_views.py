@@ -28,6 +28,9 @@ class JsonStoreListViewTest(SetUpTestCaseMixin, TestCase):
     def test_view_class_name(self):
         self.assertEqual(self.view.__name__, 'JsonStoreListView')
 
+    def test_view_base_count(self):
+        self.assertEqual(len(self.view.__bases__), 2)
+
     def test_view_mixins(self):
         self.assertEqual(self.view.__bases__[0].__name__, 'LoginRequiredMixin')
 
@@ -83,6 +86,9 @@ class JsonStoreCreateViewTest(SetUpTestCaseMixin, TestCase):
     # view attributes
     def test_view_class_name(self):
         self.assertEqual(self.view.__name__, 'JsonStoreCreateView')
+
+    def test_view_base_count(self):
+        self.assertEqual(len(self.view.__bases__), 3)
 
     def test_view_mixins(self):
         self.assertEqual(self.view.__bases__[0].__name__, 'LoginRequiredMixin')
@@ -153,6 +159,9 @@ class JsonStoreDetailViewTest(SetUpTestCaseMixin, TestCase):
     def test_view_class_name(self):
         self.assertEqual(self.view.__name__, 'JsonStoreDetailView')
 
+    def test_view_base_count(self):
+        self.assertEqual(len(self.view.__bases__), 2)
+
     def test_view_mixins(self):
         self.assertEqual(
             self.view.__bases__[0].__name__,
@@ -192,6 +201,9 @@ class JsonStoreLookupViewTest(SetUpTestCaseMixin, TestCase):
     # view attributes
     def test_view_class_name(self):
         self.assertEqual(self.view.__name__, 'JsonStoreLookupView')
+
+    def test_view_base_count(self):
+        self.assertEqual(len(self.view.__bases__), 2)
 
     def test_view_mixins(self):
         self.assertEqual(
@@ -243,6 +255,9 @@ class JsonStoreNameDetailViewTest(SetUpTestCaseMixin, TestCase):
     # view attributes
     def test_view_class_name(self):
         self.assertEqual(self.view.__name__, 'JsonStoreNameDetailView')
+
+    def test_view_base_count(self):
+        self.assertEqual(len(self.view.__bases__), 3)
 
     def test_view_mixins(self):
         self.assertEqual(
@@ -307,6 +322,9 @@ class JsonStorePublicDetailViewTest(SetUpTestCaseMixin, TestCase):
     def test_view_class_name(self):
         self.assertEqual(self.view.__name__, 'JsonStorePublicDetailView')
 
+    def test_view_base_count(self):
+        self.assertEqual(len(self.view.__bases__), 1)
+
     def test_view_parent_class(self):
         self.assertEqual(self.view.__bases__[-1].__name__, 'DetailView')
 
@@ -364,6 +382,9 @@ class JsonStorePublicLookupViewTest(SetUpTestCaseMixin, TestCase):
     def test_view_class_name(self):
         self.assertEqual(self.view.__name__, 'JsonStorePublicLookupView')
 
+    def test_view_base_count(self):
+        self.assertEqual(len(self.view.__bases__), 1)
+
     def test_view_parent_class(self):
         self.assertEqual(self.view.__bases__[-1].__name__, 'FormView')
 
@@ -411,6 +432,9 @@ class JsonStoreUpdateViewTest(SetUpTestCaseMixin, TestCase):
     # view attributes
     def test_view_class_name(self):
         self.assertEqual(self.view.__name__, 'JsonStoreUpdateView')
+
+    def test_view_base_count(self):
+        self.assertEqual(len(self.view.__bases__), 3)
 
     def test_view_mixins(self):
         self.assertEqual(
@@ -474,6 +498,9 @@ class JsonStoreDeleteViewTest(SetUpTestCaseMixin, TestCase):
     # view attributes
     def test_view_class_name(self):
         self.assertEqual(self.view.__name__, 'JsonStoreDeleteView')
+
+    def test_view_base_count(self):
+        self.assertEqual(len(self.view.__bases__), 2)
 
     def test_view_mixins(self):
         self.assertEqual(

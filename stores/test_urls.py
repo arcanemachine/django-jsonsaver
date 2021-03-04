@@ -2,7 +2,7 @@ from django.urls import reverse, resolve
 from django.test import SimpleTestCase
 
 
-class JsonStoreListViewTest(SimpleTestCase):
+class JsonStoreListViewUrlTest(SimpleTestCase):
     def test_url_reverse(self):
         self.assertEqual(reverse('stores:jsonstore_list'), '/stores/')
 
@@ -11,7 +11,7 @@ class JsonStoreListViewTest(SimpleTestCase):
             resolve('/stores/').view_name, 'stores:jsonstore_list')
 
 
-class JsonStoreCreateViewTest(SimpleTestCase):
+class JsonStoreCreateViewUrlTest(SimpleTestCase):
     def test_url_reverse(self):
         self.assertEqual(reverse('stores:jsonstore_create'), '/stores/new/')
 
@@ -20,7 +20,7 @@ class JsonStoreCreateViewTest(SimpleTestCase):
             resolve('/stores/').view_name, 'stores:jsonstore_list')
 
 
-class JsonStoreDetailViewTest(SimpleTestCase):
+class JsonStoreDetailViewUrlTest(SimpleTestCase):
     def test_url_reverse(self):
         self.assertEqual(reverse('stores:jsonstore_detail', kwargs={
             'jsonstore_pk': 1}), '/stores/1/')
@@ -30,7 +30,7 @@ class JsonStoreDetailViewTest(SimpleTestCase):
             resolve('/stores/1/').view_name, 'stores:jsonstore_detail')
 
 
-class JsonStoreLookupViewTest(SimpleTestCase):
+class JsonStoreLookupViewUrlTest(SimpleTestCase):
     def test_url_reverse(self):
         self.assertEqual(
             reverse('stores:jsonstore_lookup'), '/stores/name/find/')
@@ -40,7 +40,7 @@ class JsonStoreLookupViewTest(SimpleTestCase):
             resolve('/stores/name/find/').view_name, 'stores:jsonstore_lookup')
 
 
-class JsonStoreNameDetailViewTest(SimpleTestCase):
+class JsonStoreNameDetailViewUrlTest(SimpleTestCase):
     def test_url_reverse(self):
         self.assertEqual(reverse('stores:jsonstore_detail_name', kwargs={
             'jsonstore_name': 'test_jsonstore'}),
@@ -52,7 +52,7 @@ class JsonStoreNameDetailViewTest(SimpleTestCase):
             'stores:jsonstore_detail_name')
 
 
-class JsonStorePublicLookupViewTest(SimpleTestCase):
+class JsonStorePublicLookupViewUrlTest(SimpleTestCase):
     def test_url_reverse(self):
         self.assertEqual(
             reverse('stores:jsonstore_lookup_public'), '/stores/public/find/')
@@ -63,7 +63,7 @@ class JsonStorePublicLookupViewTest(SimpleTestCase):
             'stores:jsonstore_lookup_public')
 
 
-class JsonStorePublicDetailViewTest(SimpleTestCase):
+class JsonStorePublicDetailViewUrlTest(SimpleTestCase):
     def test_url_reverse(self):
         self.assertEqual(reverse('stores:jsonstore_detail_public', kwargs={
             'jsonstore_name': 'test_jsonstore'}),
@@ -75,7 +75,7 @@ class JsonStorePublicDetailViewTest(SimpleTestCase):
             'stores:jsonstore_detail_public')
 
 
-class JsonStoreUpdateViewTest(SimpleTestCase):
+class JsonStoreUpdateUrlTest(SimpleTestCase):
     def test_url_reverse(self):
         self.assertEqual(reverse('stores:jsonstore_update', kwargs={
             'jsonstore_pk': 1}), '/stores/1/update/')
@@ -85,7 +85,7 @@ class JsonStoreUpdateViewTest(SimpleTestCase):
             resolve('/stores/1/update/').view_name, 'stores:jsonstore_update')
 
 
-class JsonStoreDeleteViewTest(SimpleTestCase):
+class JsonStoreDeleteUrlTest(SimpleTestCase):
     def test_url_reverse(self):
         self.assertEqual(reverse('stores:jsonstore_delete', kwargs={
             'jsonstore_pk': 1}), '/stores/1/delete/')

@@ -13,9 +13,9 @@ urlpatterns = [
          views.api_root,
          name='api_root'),
     path('jsonstore/name/<str:jsonstore_name>/',
-         views.JsonStoreDetailName.as_view(),
+         views.JsonStoreNameDetail.as_view(),
          name='jsonstore_detail_name'),
     path('jsonstore/public/<str:jsonstore_name>/',
-         views.JsonStoreDetailPublic.as_view(),
+         views.JsonStorePublicDetail.as_view(),
          name='jsonstore_detail_public'),
 ] + router.urls

@@ -2,6 +2,7 @@ import json
 
 from django.contrib.auth.models import AnonymousUser
 from django.urls import reverse
+from mock import Mock
 from rest_framework.test import APIRequestFactory, APITestCase
 
 from . import views
@@ -44,12 +45,12 @@ class ApiRootTest(APITestCase):
 class JsonStoreViewSetTest(APITestCase):
     @classmethod
     def setUpTestData(cls):
+        cls.factory = APIRequestFactory()
         cls.test_user = f.UserFactory()
         cls.test_jsonstore = f.JsonStoreFactory(user=cls.test_user)
 
     def setUp(self):
         self.view = views.JsonStoreViewSet
-        self.factory = APIRequestFactory()
 
     # ATTRIBUTES #
     def test_view_name(self):
@@ -87,3 +88,105 @@ class JsonStoreViewSetTest(APITestCase):
         content_pks = [jsonstore['id'] for jsonstore in json.loads(content)]
         qs = JsonStore.objects.filter(pk__in=content_pks)
         self.assertEqual(repr(self.test_user.jsonstore_set.all()), repr(qs))
+
+
+class JsonStoreNameDetailTest(APITestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.factory = APIRequestFactory()
+        cls.test_user = f.UserFactory()
+
+    def setUp(self):
+        self.view = views.JsonStoreNameDetail
+        self.test_jsonstore = f.JsonStoreFactory(user=self.test_user)
+
+    # ATTRIBUTES #
+    def test_view_name(self):
+        self.assertEqual(self.view.__name__, 'JsonStoreNameDetail')
+
+    def test_view_parent_class(self):
+        self.assertEqual(
+            self.view.__bases__[-1].__name__, 'RetrieveUpdateDestroyAPIView')
+
+    def test_view_serializer_class_name(self):
+        self.assertEqual(
+            self.view.serializer_class.__name__, 'JsonStoreNameSerializer')
+
+    def test_view_permission_classes(self):
+        self.assertEqual(len(self.view.permission_classes), 1)
+        self.assertEqual(
+            self.view.permission_classes[0].__name__,
+            'HasJsonStorePermissions')
+
+    # METHODS #
+    def test_method_get_object(self):
+        mocked_self = Mock()
+        mocked_self.kwargs = {'jsonstore_name': self.test_jsonstore.name}
+        mocked_self.request = Mock()  # remove this line
+        mocked_self.request.user = self.test_user
+        obj = self.view.get_object(mocked_self)
+        self.assertEqual(obj, self.test_jsonstore)
+
+    # FUNCTIONAL #
+
+    # get_object()
+    def test_method_get_object_returns_expected_object(self):
+        test_kwargs = {'jsonstore_name': self.test_jsonstore.name}
+        test_url = reverse('api:jsonstore_detail_name', kwargs=test_kwargs)
+        request = self.factory.get(test_url, kwargs=test_kwargs)
+        request.user = self.test_user
+        response = self.view.as_view()(request, **test_kwargs)
+        response.render()
+        parsed_content = json.loads(response.content)
+        obj_id = parsed_content['id']
+        obj = JsonStore.objects.get(id=obj_id)
+        self.assertEqual(obj, self.test_jsonstore)
+
+
+class JsonStorePublicDetailTest(APITestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.factory = APIRequestFactory()
+
+    def setUp(self):
+        self.view = views.JsonStorePublicDetail
+        self.test_jsonstore = f.JsonStoreFactory(is_public=True)
+
+    # ATTRIBUTES #
+    def test_view_name(self):
+        self.assertEqual(self.view.__name__, 'JsonStorePublicDetail')
+
+    def test_view_parent_class(self):
+        self.assertEqual(
+            self.view.__bases__[-1].__name__, 'RetrieveAPIView')
+
+    def test_view_serializer_class_name(self):
+        self.assertEqual(
+            self.view.serializer_class.__name__, 'JsonStorePublicSerializer')
+
+    def test_view_permission_classes(self):
+        self.assertEqual(len(self.view.permission_classes), 1)
+        self.assertEqual(self.view.permission_classes[0].__name__, 'AllowAny')
+
+    # METHODS #
+    def test_method_get_object(self):
+        mocked_self = Mock()
+        mocked_self.kwargs = {'jsonstore_name': self.test_jsonstore.name}
+        mocked_self.request = Mock()
+        obj = self.view.get_object(mocked_self)
+        self.assertEqual(obj, self.test_jsonstore)
+
+    # FUNCTIONAL #
+
+    # get_object()
+    def test_method_get_object_returns_expected_object(self):
+        test_kwargs = {'jsonstore_name': self.test_jsonstore.name}
+        test_url = reverse('api:jsonstore_detail_public', kwargs=test_kwargs)
+        request = self.factory.get(test_url, kwargs=test_kwargs)
+        request.user = AnonymousUser()
+        response = self.view.as_view()(request, **test_kwargs)
+        response.render()
+        parsed_content = json.loads(response.content)
+        obj_id = parsed_content['name']
+        obj = JsonStore.objects.get(name=obj_id, is_public=True)
+        self.assertEqual(obj, self.test_jsonstore)

@@ -28,7 +28,11 @@ class SetUpTestCaseMixin:
             self.get_response(test_url)
 
 
-def get_decorators(function):
+def get_function_args(f):
+    return inspect.getargspec(f).args
+
+
+def get_function_decorators(function):
     """Returns list of decorator names used in a given function."""
     source = inspect.getsource(function)
     index = source.find("def ")

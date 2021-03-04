@@ -1,11 +1,11 @@
-import inspect
+import json
 
 from django.contrib.auth.models import AnonymousUser
 from django.urls import reverse
 from rest_framework.test import APIRequestFactory, APITestCase
 
 from . import views
-from django_jsonsaver import factories as f
+from django_jsonsaver import factories as f, helpers_testing as ht
 from stores.models import JsonStore
 
 
@@ -23,7 +23,7 @@ class ApiRootTest(APITestCase):
         self.assertEqual(self.view.__name__, 'api_root')
 
     def test_view_args(self):
-        args = inspect.getargspec(self.view).args
+        args = ht.get_function_args(self.view)
         self.assertEqual(len(args), 1)
         self.assertEqual(args[0], 'request')
 
@@ -75,4 +75,15 @@ class JsonStoreViewSetTest(APITestCase):
             'HasJsonStorePermissions')
 
     # METHODS #
-
+    def test_method_list_filters_objects_by_user_id(self):
+        for i in range(2):
+            f.JsonStoreFactory()
+            f.JsonStoreFactory(user=self.test_user)
+        request = self.factory.get(reverse('api:jsonstore-list'))
+        request.user = self.test_user
+        response = self.view.as_view({'get': 'list'})(request)
+        response.render()
+        content = response.content
+        content_pks = [jsonstore['id'] for jsonstore in json.loads(content)]
+        qs = JsonStore.objects.filter(pk__in=content_pks)
+        self.assertEqual(repr(self.test_user.jsonstore_set.all()), repr(qs))

@@ -25,9 +25,16 @@ class JsonStoreFormTest(TestCase):
                           'name': '',
                           'is_public': False}
 
+    # ATTRIBUTES #
+    def test_form_class_name(self):
+        self.assertEqual(self.form.__name__, 'JsonStoreForm')
+
+    def test_form_parent_class_name(self):
+        self.assertEqual(self.form.__bases__[-1].__name__, 'ModelForm')
+
     # META #
     def test_meta_model_name(self):
-        self.assertEqual(self.form.Meta.model, JsonStore)
+        self.assertEqual(self.form.Meta.model.__name__, 'JsonStore')
 
     def test_meta_fields(self):
         self.assertEqual(self.form.Meta.fields, ['data', 'name', 'is_public'])
@@ -156,10 +163,18 @@ class JsonStoreFormTest(TestCase):
 
 class JsonStoreLookupFormTest(SimpleTestCase):
     def setUp(self):
+        self.form = forms.JsonStoreLookupForm
         self.form_instance = forms.JsonStoreLookupForm()
 
+    # ATTRIBUTES #
+    def test_form_class_name(self):
+        self.assertEqual(self.form.__name__, 'JsonStoreLookupForm')
+
+    def test_form_parent_class_name(self):
+        self.assertEqual(self.form.__bases__[-1].__name__, 'Form')
+
     # FIELDS #
-    def test_form_fields_all_present(self):
+    def test_form_fields_present(self):
         fields = [field for field in self.form_instance.fields]
         self.assertIn('jsonstore_name', fields)
         self.assertEqual(len(fields), 1)
@@ -188,7 +203,15 @@ class JsonStoreLookupFormTest(SimpleTestCase):
 
 class JsonStorePublicLookupFormTest(SimpleTestCase):
     def setUp(self):
+        self.form = forms.JsonStorePublicLookupForm
         self.form_instance = forms.JsonStorePublicLookupForm()
+
+    # ATTRIBUTES #
+    def test_form_class_name(self):
+        self.assertEqual(self.form.__name__, 'JsonStorePublicLookupForm')
+
+    def test_form_parent_class_name(self):
+        self.assertEqual(self.form.__bases__[-1].__name__, 'Form')
 
     # FIELDS #
     def test_form_fields_all_present(self):

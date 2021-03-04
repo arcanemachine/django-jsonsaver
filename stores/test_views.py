@@ -1,34 +1,11 @@
 from django.contrib.messages import get_messages
 from django.test import TestCase
 from django.urls import reverse
-from html import unescape
 from mock import Mock
 
 from django_jsonsaver import constants as c, factories as f
+from django_jsonsaver.helpers_testing import SetUpTestCaseMixin
 from . import views
-
-
-class SetUpTestCaseMixin:
-    def get_response(self, test_url=None):
-        if test_url:
-            self.response = self.client.get(test_url)
-        else:
-            self.response = self.client.get(self.current_test_url)
-
-    def setUp(self, auth=True, test_url=None):
-        if auth:
-            self.client.login(username=self.test_user.username,
-                              password=c.TEST_USER_PASSWORD)
-            self.get_response(test_url)
-            if self.response.status_code == 200:
-                self.context = self.response.context
-                self.html = unescape(self.response.content.decode('utf-8'))
-                self.view_instance = self.response.context['view']
-            else:
-                self.context = self.html = self.view_instance = None
-        else:
-            self.client.logout()
-            self.get_response(test_url)
 
 
 class JsonStoreListViewTest(SetUpTestCaseMixin, TestCase):

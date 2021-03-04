@@ -11,7 +11,7 @@ class JsonStoreSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = JsonStore
-        fields = ['id', 'user', 'is_public', 'name', 'data']
+        fields = ['id', 'user', 'data', 'name', 'is_public']
         read_only_fields = ['user']
 
     def create(self, validated_data):

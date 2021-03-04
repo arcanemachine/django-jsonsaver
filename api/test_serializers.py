@@ -19,19 +19,22 @@ class JsonStoreSerializerTest(APITestCase):
         self.factory = APIRequestFactory()
 
     # ATTRIBUTES #
+    def test_serializer_class_name(self):
+        self.assertEqual(self.test_serializer.__name__, 'JsonStoreSerializer')
+
+    # META #
     def test_meta_model_name(self):
         self.assertEqual(self.test_serializer.Meta.model.__name__, 'JsonStore')
 
     def test_meta_fields(self):
         self.assertEqual(
             self.test_serializer.Meta.fields,
-            ['id', 'user', 'is_public', 'name', 'data'])
+            ['id', 'user', 'data', 'name', 'is_public'])
 
     def test_meta_read_only_fields(self):
-        self.assertEqual(
-            self.test_serializer.Meta.read_only_fields, ['user'])
+        self.assertEqual(self.test_serializer.Meta.read_only_fields, ['user'])
 
-    # METHODS
+    # METHODS #
 
     # create()
     def test_create_adds_user_to_object(self):
@@ -218,4 +221,45 @@ class JsonStoreSerializerTest(APITestCase):
             serializer.errors['non_field_errors'][0].__str__(),
             c.FORM_ERROR_ALL_JSONSTORES_DATA_SIZE_OVER_MAX(
                 self.test_user, h.get_obj_size(large_jsonstore_data)))
+
+
+class JsonStoreNameSerializerTest(APITestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.test_serializer = serializers.JsonStoreNameSerializer
+
+    # ATTRIBUTES #
+    def test_serializer_class_name(self):
+        self.assertEqual(
+            self.test_serializer.__name__, 'JsonStoreNameSerializer')
+
+    # META #
+    def test_meta_model_name(self):
+        self.assertEqual(self.test_serializer.Meta.model.__name__, 'JsonStore')
+
+    def test_meta_fields(self):
+        self.assertEqual(
+            self.test_serializer.Meta.fields, ['data', 'is_public'])
+
+
+class JsonStorePublicSerializerTest(APITestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.test_serializer = serializers.JsonStorePublicSerializer
+
+    # ATTRIBUTES #
+    def test_serializer_class_name(self):
+        self.assertEqual(
+            self.test_serializer.__name__, 'JsonStorePublicSerializer')
+
+    # META #
+    def test_meta_model_name(self):
+        self.assertEqual(self.test_serializer.Meta.model.__name__, 'JsonStore')
+
+    def test_meta_fields(self):
+        self.assertEqual(self.test_serializer.Meta.fields, ['data'])
+
+    def test_meta_read_only_fields(self):
+        self.assertEqual(self.test_serializer.Meta.read_only_fields, ['data'])
+
 

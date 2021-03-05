@@ -20,10 +20,10 @@ class ApiRootTest(APITestCase):
         self.factory = APIRequestFactory()
 
     # ATTRIBUTES #
-    def test_view_name(self):
+    def test_view_function_name(self):
         self.assertEqual(self.view.__name__, 'api_root')
 
-    def test_view_args(self):
+    def test_view_function_args(self):
         args = ht.get_function_args(self.view)
         self.assertEqual(len(args), 1)
         self.assertEqual(args[0], 'request')

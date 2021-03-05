@@ -84,4 +84,5 @@ class UserUsernameRecoverForm(forms.Form):
 
 
 class UserPasswordResetForm(PasswordResetForm):
-    captcha = CaptchaField(help_text=c.FORM_FIELD_CAPTCHA_HELP_TEXT)
+    captcha = CaptchaField(
+        label="CAPTCHA", help_text=c.FORM_FIELD_CAPTCHA_HELP_TEXT)

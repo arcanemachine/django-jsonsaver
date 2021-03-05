@@ -293,3 +293,98 @@ class UserUpdateEmailFormTest(TestCase):
     def test_form_is_valid(self):
         form = self.test_form(data=self.test_form_data)
         self.assertTrue(form.is_valid())
+
+
+class UserUsernameRecoverFormTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.test_form = forms.UserUsernameRecoverForm
+        cls.test_form_instance = forms.UserUsernameRecoverForm()
+        cls.test_user = f.UserFactory()
+
+    def setUp(self):
+        self.test_form_data = {'email': self.test_user.email,
+                               'captcha_0': 'test',
+                               'captcha_1': 'PASSED'}
+
+    # ATTRIBUTES #
+    def test_form_class_name(self):
+        self.assertEqual(
+            self.test_form.__name__, 'UserUsernameRecoverForm')
+
+    def test_form_parent_class_name(self):
+        self.assertEqual(
+            self.test_form.__bases__[-1].__name__, 'Form')
+
+    # FIELDS #
+
+    # email
+    def test_field_email_field_type(self):
+        field_type = self.test_form_instance.fields['email'].__class__.__name__
+        self.assertEqual(field_type, 'EmailField')
+
+    def test_field_email_label(self):
+        label = self.test_form_instance.fields['email'].label
+        self.assertEqual(label, 'Your email address')
+
+    # captcha
+    def test_field_captcha_field_type(self):
+        field_type = \
+            self.test_form_instance.fields['captcha'].__class__.__name__
+        self.assertEqual(field_type, 'CaptchaField')
+
+    def test_field_captcha_label(self):
+        label = self.test_form_instance.fields['captcha'].label
+        self.assertEqual(label, 'CAPTCHA')
+
+    def test_field_captcha_help_text(self):
+        help_text = self.test_form_instance.fields['captcha'].help_text
+        self.assertEqual(help_text, c.FORM_FIELD_CAPTCHA_HELP_TEXT)
+
+    # VALIDATION #
+    def test_form_is_valid(self):
+        form = self.test_form(data=self.test_form_data)
+        self.assertTrue(form.is_valid())
+
+
+class UserPasswordResetFormTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.test_form = forms.UserPasswordResetForm
+        cls.test_form_instance = forms.UserPasswordResetForm()
+        cls.test_user = f.UserFactory()
+
+    def setUp(self):
+        self.test_form_data = {'email': self.test_user.email,
+                               'captcha_0': 'test',
+                               'captcha_1': 'PASSED'}
+
+    # ATTRIBUTES #
+    def test_form_class_name(self):
+        self.assertEqual(
+            self.test_form.__name__, 'UserPasswordResetForm')
+
+    def test_form_parent_class_name(self):
+        self.assertEqual(
+            self.test_form.__bases__[-1].__name__, 'PasswordResetForm')
+
+    # FIELDS #
+
+    # captcha
+    def test_field_captcha_field_type(self):
+        field_type = \
+            self.test_form_instance.fields['captcha'].__class__.__name__
+        self.assertEqual(field_type, 'CaptchaField')
+
+    def test_field_captcha_label(self):
+        label = self.test_form_instance.fields['captcha'].label
+        self.assertEqual(label, 'CAPTCHA')
+
+    def test_field_captcha_help_text(self):
+        help_text = self.test_form_instance.fields['captcha'].help_text
+        self.assertEqual(help_text, c.FORM_FIELD_CAPTCHA_HELP_TEXT)
+
+    # VALIDATION #
+    def test_form_is_valid(self):
+        form = self.test_form(data=self.test_form_data)
+        self.assertTrue(form.is_valid())

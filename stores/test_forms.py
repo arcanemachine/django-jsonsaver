@@ -59,11 +59,6 @@ class JsonStoreFormTest(TestCase):
         form = forms.JsonStoreForm(self.form_data, **self.form_kwargs_create)
         self.assertEqual(form.clean_name(), 'test-jsonstore-name')
 
-    # VALIDATION #
-    def test_validation_form_is_valid(self):
-        form = forms.JsonStoreForm(self.form_data, **self.form_kwargs_create)
-        self.assertTrue(form.is_valid())
-
     # clean()
     def test_validation_jsonstore_public_name_cannot_be_blank(self):
         self.form_data.update({'name': '',
@@ -159,6 +154,11 @@ class JsonStoreFormTest(TestCase):
         self.assertTrue(
             form.has_error(
                 'data', 'jsonstore_all_jsonstores_data_size_over_max'))
+
+    # VALIDATION #
+    def test_validation_form_is_valid(self):
+        form = forms.JsonStoreForm(self.form_data, **self.form_kwargs_create)
+        self.assertTrue(form.is_valid())
 
 
 class JsonStoreLookupFormTest(SimpleTestCase):

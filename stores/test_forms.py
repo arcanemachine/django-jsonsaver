@@ -2,7 +2,6 @@ from django.forms import widgets
 from django.test import SimpleTestCase, TestCase
 
 from . import forms
-from .models import JsonStore
 from django_jsonsaver import \
     constants as c, factories as f, server_config as sc
 
@@ -60,7 +59,6 @@ class JsonStoreFormTest(TestCase):
         self.assertEqual(form.clean_name(), 'test-jsonstore-name')
 
     # VALIDATION #
-
     def test_validation_form_is_valid(self):
         form = forms.JsonStoreForm(self.form_data, **self.form_kwargs_create)
         self.assertTrue(form.is_valid())

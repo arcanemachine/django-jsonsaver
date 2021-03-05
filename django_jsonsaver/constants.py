@@ -43,6 +43,10 @@ JSONSTORE_CREATE_SUCCESS_MESSAGE = "Store created successfully"
 JSONSTORE_UPDATE_SUCCESS_MESSAGE = "Store updated successfully"
 JSONSTORE_DELETE_SUCCESS_MESSAGE = "Store deleted successfully"
 
+# User
+USER_FORM_EMAIL_ERROR_DUPLICATE = \
+    "This email address is registered to another account."
+
 # Profile
 PROFILE_MODEL_IS_PUBLIC_VERBOSE_NAME = "Make this profile publicly accessible"
 PROFILE_MODEL_IS_PUBLIC_HELP_TEXT = \

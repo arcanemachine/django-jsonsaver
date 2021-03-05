@@ -37,6 +37,9 @@ class UserRegisterView(CreateView):
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
+        # do not process form if honeypot field filled (name)
+        if self.form.cleaned_data.get('name', None):
+            return HttpResponseRedirect(self.get_success_url())
         self.object = form.save(commit=False)
         self.object.is_active = False
         self.object.save()

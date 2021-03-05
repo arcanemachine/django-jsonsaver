@@ -46,6 +46,8 @@ JSONSTORE_DELETE_SUCCESS_MESSAGE = "Store deleted successfully"
 # User
 USER_FORM_EMAIL_ERROR_DUPLICATE = \
     "This email address is registered to another account."
+USER_FORM_EMAIL_ERROR_SAME_EMAIL = \
+    "This email address is already registered to your account."
 
 # Profile
 PROFILE_MODEL_IS_PUBLIC_VERBOSE_NAME = "Make this profile publicly accessible"

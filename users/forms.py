@@ -24,6 +24,7 @@ class NewUserCreationForm(UserCreationForm):
     def clean_email(self):
         email = self.data['email'].lower()
         if UserModel.objects.filter(email=email).exists():
+            # email is registered to another user
             self.add_error('email', ValidationError(
                 c.USER_FORM_EMAIL_ERROR_DUPLICATE,
                 code='email_error_duplicate'))
@@ -34,31 +35,46 @@ class NewUserCreationForm(UserCreationForm):
 
 
 class UserAuthenticationForm(AuthenticationForm):
-    captcha = CaptchaField(help_text=c.FORM_FIELD_CAPTCHA_HELP_TEXT)
+    captcha = CaptchaField(
+        label="CAPTCHA", help_text=c.FORM_FIELD_CAPTCHA_HELP_TEXT)
 
     def clean_username(self):
         return self.data['username'].lower()
 
 
 class UserActivationEmailResendForm(forms.Form):
-    email = forms.EmailField(label="Your email address")
+    email = forms.EmailField(label="Enter your email address")
     captcha = CaptchaField(
         label="CAPTCHA", help_text=c.FORM_FIELD_CAPTCHA_HELP_TEXT)
 
 
 class UserUpdateEmailForm(forms.Form):
-    email = forms.EmailField(label="Enter your email address")
+    email = forms.EmailField(label="Enter your new email address")
     captcha = CaptchaField(
         label="CAPTCHA", help_text=c.FORM_FIELD_CAPTCHA_HELP_TEXT)
 
-    def clean(self):
-        # do not allow duplicate email addresses
-        email = self.cleaned_data['email']
-        if UserModel.objects.filter(email=email).exists():
-            self.add_error('email', ValidationError(
-                c.USER_FORM_EMAIL_ERROR_DUPLICATE,
-                code='email_error_duplicate'))
-        return self.cleaned_data
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+
+    def clean_email(self):
+        email = self.data['email'].lower()
+        users_with_this_email = UserModel.objects.filter(email=email)
+        if users_with_this_email.exists():
+
+            # email is user's current email address
+            if users_with_this_email.first() == self.user:
+                self.add_error('email', ValidationError(
+                    c.USER_FORM_EMAIL_ERROR_SAME_EMAIL,
+                    code='email_error_same_email'))
+
+            # email is registered to another user
+            else:
+                self.add_error('email', ValidationError(
+                    c.USER_FORM_EMAIL_ERROR_DUPLICATE,
+                    code='email_error_duplicate'))
+
+        return email
 
 
 class UserUsernameRecoverForm(forms.Form):

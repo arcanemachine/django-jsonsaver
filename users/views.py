@@ -160,6 +160,12 @@ class UserUpdateView(LoginRequiredMixin, SuccessMessageMixin, TemplateView):
     model = Profile
     template_name = 'users/user_update.html'
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs.update({'user': self.request.user,
+                       'obj': self.get_object()})
+        return kwargs
+
 
 class UserUpdateIsPublicView(
         LoginRequiredMixin, SuccessMessageMixin, UpdateView):

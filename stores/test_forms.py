@@ -46,8 +46,9 @@ class JsonStoreFormTest(TestCase):
 
     # __init__()
     def test_method_init(self):
-        form = \
-            forms.JsonStoreForm(user=self.test_user, obj=self.test_jsonstore)
+        form_kwargs = {"user": self.test_user,
+                       "obj": self.test_jsonstore}
+        form = forms.JsonStoreForm(**form_kwargs)
         self.assertEqual(form.user, self.test_user)
         self.assertEqual(form.obj, self.test_jsonstore)
 
@@ -152,7 +153,8 @@ class JsonStoreFormTest(TestCase):
             user=self.test_user,
             data=almost_oversize_data_dict)
         self.form_data.update({'data': almost_oversize_data_dict})
-        form = forms.JsonStoreForm(self.form_data, **self.form_kwargs_create)
+        form = \
+            forms.JsonStoreForm(data=self.form_data, **self.form_kwargs_create)
         self.assertFalse(form.is_valid())
         self.assertTrue(
             form.has_error(

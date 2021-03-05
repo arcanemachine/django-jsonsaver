@@ -2,7 +2,7 @@ from django.urls import reverse
 from mock import Mock
 from rest_framework.test import APIRequestFactory, APITestCase
 
-from . import serializers, views
+from . import serializers
 from django_jsonsaver import \
     constants as c, factories as f, helpers as h, server_config as sc
 
@@ -10,7 +10,6 @@ from django_jsonsaver import \
 class JsonStoreSerializerTest(APITestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.view = views.JsonStoreViewSet
         cls.test_serializer = serializers.JsonStoreSerializer
         cls.test_user = f.UserFactory()
 
@@ -21,6 +20,10 @@ class JsonStoreSerializerTest(APITestCase):
     # ATTRIBUTES #
     def test_serializer_class_name(self):
         self.assertEqual(self.test_serializer.__name__, 'JsonStoreSerializer')
+
+    def test_serializer_parent_class_name(self):
+        self.assertEqual(
+            self.test_serializer.__bases__[0].__name__, 'ModelSerializer')
 
     # META #
     def test_meta_model_name(self):

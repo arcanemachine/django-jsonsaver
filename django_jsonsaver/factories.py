@@ -31,17 +31,6 @@ class UserFactory(factory.django.DjangoModelFactory):
     last_login = None
 
 
-class ProfileFactory(factory.django.DjangoModelFactory):
-    class meta:
-        model = Profile
-
-    user = factory.SubFactory(UserFactory)
-    activation_code = Profile.get_activation_code()
-    wants_email = None
-    is_public = False
-    account_tier = 'free'
-
-
 class JsonStoreFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = JsonStore
@@ -50,3 +39,14 @@ class JsonStoreFactory(factory.django.DjangoModelFactory):
     name = factory.Sequence(lambda n: f'{c.TEST_JSONSTORE_NAME}_{n+1}')
     data = c.TEST_JSONSTORE_DATA
     is_public = False
+
+
+# class ProfileFactory(factory.django.DjangoModelFactory):
+#     class Meta:
+#         model = Profile
+#
+#     user = factory.SubFactory(UserFactory)
+#     activation_code = Profile.get_activation_code()
+#     wants_email = None
+#     is_public = False
+#     account_tier = 'free'

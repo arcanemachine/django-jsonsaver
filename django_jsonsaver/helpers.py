@@ -34,7 +34,7 @@ def kb_to_bytes(kb):
 
 
 def bytes_to_kb(kb):
-    return int(kb / 1024)
+    return kb / 1024
 
 
 # email

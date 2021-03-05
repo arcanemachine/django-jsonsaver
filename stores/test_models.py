@@ -2,9 +2,9 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.test import TestCase
 from django.urls import reverse
-from django.utils.text import slugify
 
 from django_jsonsaver import constants as c, factories as f
+from stores.models import JsonStore
 
 UserModel = get_user_model()
 
@@ -12,23 +12,19 @@ UserModel = get_user_model()
 class JsonStoreModelTest(TestCase):
     @classmethod
     def setUpTestData(cls):
+        cls.test_model = JsonStore
         cls.test_user = f.UserFactory(username=c.TEST_USER_USERNAME)
-        cls.test_jsonstore = f.JsonStoreFactory(
+        cls.test_jsonstore = JsonStore.objects.create(
             user=cls.test_user,
             name=c.TEST_JSONSTORE_NAME,
             data=c.TEST_JSONSTORE_DATA)
 
-    def test_object_name(self):
-        self.assertEqual(self.test_jsonstore._meta.object_name, 'JsonStore')
+    # ATTRIBUTES #
+    def test_model_class_name(self):
+        self.assertEqual(self.test_model.__name__, 'JsonStore')
 
-    def test_object_content(self):
-        expected_name = c.TEST_JSONSTORE_NAME
-        expected_data = c.TEST_JSONSTORE_DATA
-
-        self.assertEqual(self.test_jsonstore.user, self.test_user)
-        self.assertEqual(self.test_jsonstore.is_public, False)
-        self.assertEqual(self.test_jsonstore.name, expected_name)
-        self.assertEqual(repr(self.test_jsonstore.data), repr(expected_data))
+    def test_model_parent_class_name(self):
+        self.assertEqual(self.test_model.__bases__[0].__name__, 'Model')
 
     # FIELDS #
 
@@ -107,7 +103,7 @@ class JsonStoreModelTest(TestCase):
             'is_public').get_internal_type()
         self.assertEqual(field_type, 'BooleanField')
 
-    def test_field_data_default(self):
+    def test_field_is_public_default(self):
         default = self.test_jsonstore._meta.get_field('is_public').default
         self.assertEqual(default, False)
 
@@ -155,3 +151,19 @@ class JsonStoreModelTest(TestCase):
         expected_url = reverse('stores:jsonstore_detail', kwargs={
             'jsonstore_pk': self.test_jsonstore.pk})
         self.assertEqual(self.test_jsonstore.get_absolute_url(), expected_url)
+
+    # FUNCTIONAL #
+    def test_model_object_content_and_methods(self):
+        expected_name = c.TEST_JSONSTORE_NAME
+        expected_data = c.TEST_JSONSTORE_DATA
+
+        # content
+        self.assertEqual(self.test_jsonstore.user, self.test_user)
+        self.assertEqual(repr(self.test_jsonstore.data), repr(expected_data))
+        self.assertEqual(self.test_jsonstore.name, expected_name)
+        self.assertEqual(self.test_jsonstore.is_public, False)
+
+        self.assertEqual(
+            self.test_jsonstore.get_absolute_url(),
+            reverse('stores:jsonstore_detail', kwargs={
+                'jsonstore_pk': self.test_jsonstore.pk}))

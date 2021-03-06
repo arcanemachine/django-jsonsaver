@@ -6,7 +6,7 @@
 
 {% block body_start_script %}
 function showApiKey() {
-  let userToken = '{{ user_token }}'
+  let userToken = '{{ request.user.auth_token }}'
   if (userToken) {
     alert(`Your API key is '${userToken}'`);
   }

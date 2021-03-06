@@ -112,15 +112,14 @@ class UserLoginView(SuccessMessageMixin, LoginView):
     form_class = forms.UserAuthenticationForm
     template_name = 'users/login.html'
     redirect_authenticated_user = True
-    success_message = "You are now logged in."
+    success_message = c.USER_VIEW_LOGIN_SUCCESS_MESSAGE
 
     def post(self, request, *args, **kwargs):
         username = request.POST.get('username')
         temp_user = UserModel.objects.filter(username=username).first()
         if temp_user and not temp_user.is_active:
             messages.warning(
-                request, "Your account has not been activated. "
-                "Please check your email inbox for your activation email.")
+                request, c.USER_VIEW_LOGIN_ACTIVATE_ACCOUNT_REMINDER)
             return HttpResponseRedirect(
                 reverse('users:user_activation_email_resend'))
         return super().post(request, *args, **kwargs)
@@ -129,29 +128,23 @@ class UserLoginView(SuccessMessageMixin, LoginView):
 class UserDetailMeView(LoginRequiredMixin, DetailView):
     template_name = 'users/user_detail_me.html'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        user_jsonstores = JsonStore.objects.filter(user=self.request.user)
-        context.update({
-            'jsonstores': user_jsonstores.order_by('-updated_at')[:5],
-            'user_jsonstores_count': user_jsonstores.count(),
-            'user_token': Token.objects.get(user=self.request.user)})
-        return context
-
     def get_object(self):
         return self.request.user
 
 
-class UserDetailPublicView(LoginRequiredMixin, DetailView):
+class UserDetailPublicView(DetailView):
     template_name = 'users/user_detail_public.html'
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.profile.is_public:
+            # if request.user if profile owner, notify them of private
+            # account status and redirect to user_update_is_public
             if request.user == self.get_object():
                 messages.info(
                     request, "Your account's visibility is set to private.")
                 return HttpResponseRedirect(
                     reverse('users:user_update_is_public'))
+            # if request.user is not profile owner, return 404
             else:
                 raise Http404
         return super().dispatch(request, *args, **kwargs)
@@ -162,7 +155,6 @@ class UserDetailPublicView(LoginRequiredMixin, DetailView):
             user=self.get_object(),
             is_public=True)
         context.update({
-            'public_user': self.get_object(),
             'jsonstores': user_jsonstores.order_by('-updated_at')[:5]})
         return context
 

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
-{% block title %}{{ public_user.username }}'s Public JSON Stores{% endblock %}
-{% block body_title %}{{ public_user.username }}'s Public JSON Stores{% endblock %}
+{% block title %}{{ object.username }}'s Public JSON Stores{% endblock %}
+{% block body_title %}{{ object.username }}'s Public JSON Stores{% endblock %}
 
 {% block content %}
 
@@ -12,8 +12,8 @@
 {% endwith %}
 
 <div class="bottom-links">
-  {% if request.user.username == public_user.username %}
-    <p><a href="{% url 'users:user_detail_me' %}">View your personal profile</a></p>
+  {% if object == request.user %}
+    <p><a href="{% url 'users:user_detail_me' %}">View your non-public profile</a></p>
   {% endif %}
 </div>
 

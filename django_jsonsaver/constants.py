@@ -59,6 +59,10 @@ USER_VIEW_USER_ACTIVATE_ACCOUNT_ALREADY_ACTIVE = \
     "Your account has already been activated."
 USER_VIEW_USER_ACTIVATE_SUCCESS_MESSAGE = \
     "Account confirmed! You may now login."
+USER_VIEW_LOGIN_SUCCESS_MESSAGE = "You are now logged in."
+USER_VIEW_LOGIN_ACTIVATE_ACCOUNT_REMINDER = \
+    "Your account has not been activated. "\
+    "Please check your email inbox for your activation email."
 
 # Profile
 PROFILE_MODEL_IS_PUBLIC_VERBOSE_NAME = "Make this profile publicly accessible"

@@ -75,7 +75,7 @@
 {% endif %}
 
 <div class="bottom-links">
-{% if not public_user or public_user.username == request.user.username %}
+{% if object == request.user %}
   <p><a href="{% url 'stores:jsonstore_create' %}">Create new JSON store</a></p>
   <p><a href="{% url 'stores:jsonstore_lookup' %}">Personal JSON store name lookup</a></p>
 </div>

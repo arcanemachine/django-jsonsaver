@@ -24,8 +24,8 @@ class ProjectRootTemplateViewTest(TestCase):
         self.assertTemplateUsed(self.response, self.view.template_name)
 
     def test_request_get_method_authenticated_user(self):
-        self.client.login(
-            username=c.TEST_USER_USERNAME, password=c.TEST_USER_PASSWORD)
+        self.assertTrue(self.client.login(
+            username=self.test_user.username, password=c.TEST_USER_PASSWORD))
         self.assertEqual(self.response.status_code, 200)
         self.assertTemplateUsed(self.response, self.view.template_name)
 
@@ -58,8 +58,8 @@ class ContactUsFormViewTest(TestCase):
             self.response, self.view.template_name)
 
     def test_request_get_method_authenticated_user(self):
-        self.client.login(
-            username=c.TEST_USER_USERNAME, password=c.TEST_USER_PASSWORD)
+        self.assertTrue(self.client.login(
+            username=self.test_user.username, password=c.TEST_USER_PASSWORD))
         self.assertEqual(self.response.status_code, 200)
         self.assertTemplateUsed(
             self.response, self.view.template_name)
@@ -161,8 +161,8 @@ class FaqTemplateViewTest(TestCase):
         self.assertTemplateUsed(self.response, self.view.template_name)
 
     def test_request_get_method_authenticated_user(self):
-        self.client.login(
-            username=c.TEST_USER_USERNAME, password=c.TEST_USER_PASSWORD)
+        self.assertTrue(self.client.login(
+            username=self.test_user.username, password=c.TEST_USER_PASSWORD))
         self.assertEqual(self.response.status_code, 200)
         self.assertTemplateUsed(
             self.response, self.view.template_name)
@@ -207,8 +207,8 @@ class TermsOfUseTemplateViewTest(TestCase):
         self.assertTemplateUsed(self.response, self.view.template_name)
 
     def test_request_get_method_authenticated_user(self):
-        self.client.login(
-            username=c.TEST_USER_USERNAME, password=c.TEST_USER_PASSWORD)
+        self.assertTrue(self.client.login(
+            username=self.test_user.username, password=c.TEST_USER_PASSWORD))
         self.assertEqual(self.response.status_code, 200)
         self.assertTemplateUsed(self.response, self.view.template_name)
 
@@ -238,7 +238,7 @@ class PrivacyPolicyTemplateViewTest(TestCase):
         self.assertTemplateUsed(self.response, self.view.template_name)
 
     def test_request_get_method_authenticated_user(self):
-        self.client.login(
-            username=c.TEST_USER_USERNAME, password=c.TEST_USER_PASSWORD)
+        self.assertTrue(self.client.login(
+            username=self.test_user.username, password=c.TEST_USER_PASSWORD))
         self.assertEqual(self.response.status_code, 200)
         self.assertTemplateUsed(self.response, self.view.template_name)

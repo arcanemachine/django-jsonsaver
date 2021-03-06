@@ -40,7 +40,7 @@ urlpatterns = [
          views.UserDetailPublicView.as_view(),
          name='user_detail_public'),
     path('me/settings/',
-         views.UserUpdateView.as_view(),
+         views.UserUpdateTemplateView.as_view(),
          name='user_update'),
     path('me/settings/account-upgrade/',
          views.UserUpdateAccountTierView.as_view(),
@@ -55,7 +55,7 @@ urlpatterns = [
          auth_views.PasswordChangeView.as_view(
              template_name='users/password_change_form.html'),
          name='password_change'),
-    path('me/update/settings/profile-visibility/',
+    path('me/settings/profile-visibility/',
          views.UserUpdateIsPublicView.as_view(),
          name='user_update_is_public'),
     path('me/renew-api-key/',

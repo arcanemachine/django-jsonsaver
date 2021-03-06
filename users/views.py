@@ -177,15 +177,10 @@ class UserDetailPublicView(DetailView):
         return get_object_or_404(UserModel, username=self.kwargs['username'])
 
 
-class UserUpdateView(LoginRequiredMixin, SuccessMessageMixin, TemplateView):
+class UserUpdateTemplateView(
+        LoginRequiredMixin, SuccessMessageMixin, TemplateView):
     model = Profile
     template_name = 'users/user_update.html'
-
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs.update({'user': self.request.user,
-                       'obj': self.get_object()})
-        return kwargs
 
 
 class UserUpdateAccountTierView(LoginRequiredMixin, TemplateView):

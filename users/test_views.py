@@ -77,9 +77,8 @@ class UserRegisterViewTest(TestCase):
 
     def test_request_get_method_authenticated_user(self):
         test_user = f.UserFactory()
-        self.assertTrue(
-            self.client.login(username=test_user.username,
-                              password=c.TEST_USER_PASSWORD))
+        self.assertTrue(self.client.login(
+            username=test_user.username, password=c.TEST_USER_PASSWORD))
         response = self.client.get(self.test_url)
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, self.view.success_url)
@@ -253,9 +252,8 @@ class UserActivationEmailResendViewTest(TestCase):
 
     def test_request_get_method_authenticated_user(self):
         test_user = f.UserFactory()
-        self.assertTrue(
-            self.client.login(username=test_user.username,
-                              password=c.TEST_USER_PASSWORD))
+        self.assertTrue(self.client.login(
+            username=test_user.username, password=c.TEST_USER_PASSWORD))
         response = self.client.get(self.test_url)
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, self.view.success_url)
@@ -360,10 +358,9 @@ class UserActivateViewTest(TestCase):
         self.assertEqual(response.url, reverse(settings.LOGIN_URL))
 
     def test_request_get_method_authenticated_user(self):
-        test_user = f.UserFactory()
-        self.assertTrue(
-            self.client.login(username=test_user.username,
-                              password=c.TEST_USER_PASSWORD))
+        active_user = f.UserFactory()
+        self.assertTrue(self.client.login(
+            username=active_user.username, password=c.TEST_USER_PASSWORD))
         response = self.client.get(self.test_url)
         self.assertEqual(response.status_code, 302)
 
@@ -373,6 +370,7 @@ class UserActivateViewTest(TestCase):
         self.assertEqual(
             str(messages[0]), c.USER_VIEW_USER_ACTIVATE_ACCOUNT_ALREADY_ACTIVE)
 
+    # bad kwargs
     def test_request_get_method_unauthenticated_user_bad_kwargs(self):
         self.test_url = reverse('users:user_activate', kwargs={
             'activation_code': 'bad_kwargs'})
@@ -435,9 +433,8 @@ class UserLoginViewTest(TestCase):
 
     def test_request_get_method_authenticated_user(self):
         test_user = f.UserFactory()
-        self.assertTrue(
-            self.client.login(username=test_user.username,
-                              password=c.TEST_USER_PASSWORD))
+        self.assertTrue(self.client.login(
+            username=test_user.username, password=c.TEST_USER_PASSWORD))
         response = self.client.get(self.test_url)
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse(settings.LOGIN_REDIRECT_URL))
@@ -509,9 +506,8 @@ class UserDetailMeViewTest(TestCase):
 
     def test_request_get_method_authenticated_user(self):
         test_user = f.UserFactory()
-        self.assertTrue(
-            self.client.login(username=test_user.username,
-                              password=c.TEST_USER_PASSWORD))
+        self.assertTrue(self.client.login(
+            username=test_user.username, password=c.TEST_USER_PASSWORD))
         response = self.client.get(self.test_url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(self.view.template_name)
@@ -521,9 +517,8 @@ class UserDetailMeViewTest(TestCase):
     # get_context_data
     def test_method_get_object_returns_expected_object_using_client(self):
         test_user = f.UserFactory()
-        self.assertTrue(
-            self.client.login(username=test_user.username,
-                              password=c.TEST_USER_PASSWORD))
+        self.assertTrue(self.client.login(
+            username=test_user.username, password=c.TEST_USER_PASSWORD))
         response = self.client.get(self.test_url)
         self.assertEqual(response.context['object'], test_user)
 
@@ -567,9 +562,8 @@ class UserDetailPublicViewTest(TestCase):
         self.assertTemplateUsed(self.view.template_name)
 
     def test_request_get_method_authenticated_user(self):
-        self.assertTrue(
-            self.client.login(username=self.test_user.username,
-                              password=c.TEST_USER_PASSWORD))
+        self.assertTrue(self.client.login(
+            username=self.test_user.username, password=c.TEST_USER_PASSWORD))
         response = self.client.get(self.test_url)
 
         self.assertEqual(response.status_code, 200)
@@ -634,3 +628,49 @@ class UserDetailPublicViewTest(TestCase):
         obj = view_instance.get_object()
         self.assertEqual(obj, self.test_user)
 
+
+class UserUpdateTemplateViewTest(TestCase):
+    def setUp(self):
+        self.view = views.UserUpdateTemplateView
+
+        self.test_user = f.UserFactory()
+        self.test_user.profile.is_public = True
+        self.test_user.profile.save()
+
+        self.test_url = reverse('users:user_update')
+
+    # ATTRIBUTES
+    def test_view_name(self):
+        self.assertEqual(self.view.__name__, 'UserUpdateTemplateView')
+
+    def test_view_mixins(self):
+        mixins = self.view.__bases__
+        self.assertEqual(mixins[0].__name__, 'LoginRequiredMixin')
+        self.assertEqual(mixins[1].__name__, 'SuccessMessageMixin')
+        self.assertEqual(len(mixins[:-1]), 2)
+
+    def test_view_parent_class(self):
+        self.assertEqual(self.view.__bases__[-1].__name__, 'TemplateView')
+
+    def test_view_model_name(self):
+        self.assertEqual(self.view.model.__name__, 'Profile')
+
+    def test_view_template_name(self):
+        self.assertEqual(self.view.template_name, 'users/user_update.html')
+
+    # request.GET
+    def test_request_get_method_unauthenticated_user(self):
+        response = self.client.get(self.test_url)
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(
+            response.url,
+            f"{reverse(settings.LOGIN_URL)}?next={response.wsgi_request.path}")
+
+    def test_request_get_method_authenticated_user(self):
+        self.assertTrue(self.client.login(
+            username=self.test_user.username, password=c.TEST_USER_PASSWORD))
+        response = self.client.get(self.test_url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(self.view.template_name)

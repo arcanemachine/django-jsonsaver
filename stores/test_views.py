@@ -28,11 +28,10 @@ class JsonStoreListViewTest(SetUpTestCaseMixin, TestCase):
     def test_view_class_name(self):
         self.assertEqual(self.view.__name__, 'JsonStoreListView')
 
-    def test_view_base_count(self):
-        self.assertEqual(len(self.view.__bases__), 2)
-
     def test_view_mixins(self):
-        self.assertEqual(self.view.__bases__[0].__name__, 'LoginRequiredMixin')
+        mixins = self.view.__bases__
+        self.assertEqual(mixins[0].__name__, 'LoginRequiredMixin')
+        self.assertEqual(len(mixins[:-1]), 1)
 
     def test_view_parent_class(self):
         self.assertEqual(self.view.__bases__[-1].__name__, 'ListView')
@@ -87,13 +86,11 @@ class JsonStoreCreateViewTest(SetUpTestCaseMixin, TestCase):
     def test_view_class_name(self):
         self.assertEqual(self.view.__name__, 'JsonStoreCreateView')
 
-    def test_view_base_count(self):
-        self.assertEqual(len(self.view.__bases__), 3)
-
     def test_view_mixins(self):
-        self.assertEqual(self.view.__bases__[0].__name__, 'LoginRequiredMixin')
-        self.assertEqual(
-            self.view.__bases__[1].__name__, 'SuccessMessageMixin')
+        mixins = self.view.__bases__
+        self.assertEqual(mixins[0].__name__, 'LoginRequiredMixin')
+        self.assertEqual(mixins[1].__name__, 'SuccessMessageMixin')
+        self.assertEqual(len(mixins[:-1]), 2)
 
     def test_view_parent_class(self):
         self.assertEqual(self.view.__bases__[-1].__name__, 'CreateView')
@@ -159,13 +156,11 @@ class JsonStoreDetailViewTest(SetUpTestCaseMixin, TestCase):
     def test_view_class_name(self):
         self.assertEqual(self.view.__name__, 'JsonStoreDetailView')
 
-    def test_view_base_count(self):
-        self.assertEqual(len(self.view.__bases__), 2)
-
     def test_view_mixins(self):
+        mixins = self.view.__bases__
         self.assertEqual(
-            self.view.__bases__[0].__name__,
-            'UserHasJsonStorePermissionsMixin')
+            mixins[0].__name__, 'UserHasJsonStorePermissionsMixin')
+        self.assertEqual(len(self.view.__bases__[:-1]), 1)
 
     def test_view_parent_class(self):
         self.assertEqual(self.view.__bases__[-1].__name__, 'DetailView')
@@ -202,12 +197,10 @@ class JsonStoreLookupViewTest(SetUpTestCaseMixin, TestCase):
     def test_view_class_name(self):
         self.assertEqual(self.view.__name__, 'JsonStoreLookupView')
 
-    def test_view_base_count(self):
-        self.assertEqual(len(self.view.__bases__), 2)
-
     def test_view_mixins(self):
-        self.assertEqual(
-            self.view.__bases__[0].__name__, 'LoginRequiredMixin')
+        mixins = self.view.__bases__
+        self.assertEqual(mixins[0].__name__, 'LoginRequiredMixin')
+        self.assertEqual(len(mixins[:-1]), 1)
 
     def test_view_parent_class(self):
         self.assertEqual(self.view.__bases__[-1].__name__, 'FormView')
@@ -256,15 +249,12 @@ class JsonStoreNameDetailViewTest(SetUpTestCaseMixin, TestCase):
     def test_view_class_name(self):
         self.assertEqual(self.view.__name__, 'JsonStoreNameDetailView')
 
-    def test_view_base_count(self):
-        self.assertEqual(len(self.view.__bases__), 3)
-
     def test_view_mixins(self):
+        mixins = self.view.__bases__
+        self.assertEqual(mixins[0].__name__, 'LoginRequiredMixin')
         self.assertEqual(
-            self.view.__bases__[0].__name__, 'LoginRequiredMixin')
-        self.assertEqual(
-            self.view.__bases__[1].__name__,
-            'UserHasJsonStorePermissionsMixin')
+            mixins[1].__name__, 'UserHasJsonStorePermissionsMixin')
+        self.assertEqual(len(mixins[:-1]), 2)
 
     def test_view_parent_class(self):
         self.assertEqual(self.view.__bases__[-1].__name__, 'DetailView')
@@ -321,9 +311,6 @@ class JsonStorePublicDetailViewTest(SetUpTestCaseMixin, TestCase):
     # view attributes
     def test_view_class_name(self):
         self.assertEqual(self.view.__name__, 'JsonStorePublicDetailView')
-
-    def test_view_base_count(self):
-        self.assertEqual(len(self.view.__bases__), 1)
 
     def test_view_parent_class(self):
         self.assertEqual(self.view.__bases__[-1].__name__, 'DetailView')
@@ -382,9 +369,6 @@ class JsonStorePublicLookupViewTest(SetUpTestCaseMixin, TestCase):
     def test_view_class_name(self):
         self.assertEqual(self.view.__name__, 'JsonStorePublicLookupView')
 
-    def test_view_base_count(self):
-        self.assertEqual(len(self.view.__bases__), 1)
-
     def test_view_parent_class(self):
         self.assertEqual(self.view.__bases__[-1].__name__, 'FormView')
 
@@ -433,15 +417,12 @@ class JsonStoreUpdateViewTest(SetUpTestCaseMixin, TestCase):
     def test_view_class_name(self):
         self.assertEqual(self.view.__name__, 'JsonStoreUpdateView')
 
-    def test_view_base_count(self):
-        self.assertEqual(len(self.view.__bases__), 3)
-
     def test_view_mixins(self):
+        mixins = self.view.__bases__
         self.assertEqual(
-            self.view.__bases__[0].__name__,
-            'UserHasJsonStorePermissionsMixin')
-        self.assertEqual(
-            self.view.__bases__[1].__name__, 'SuccessMessageMixin')
+            mixins[0].__name__, 'UserHasJsonStorePermissionsMixin')
+        self.assertEqual(mixins[1].__name__, 'SuccessMessageMixin')
+        self.assertEqual(len(mixins[:-1]), 2)
 
     def test_view_parent_class(self):
         self.assertEqual(self.view.__bases__[-1].__name__, 'UpdateView')
@@ -499,13 +480,11 @@ class JsonStoreDeleteViewTest(SetUpTestCaseMixin, TestCase):
     def test_view_class_name(self):
         self.assertEqual(self.view.__name__, 'JsonStoreDeleteView')
 
-    def test_view_base_count(self):
-        self.assertEqual(len(self.view.__bases__), 2)
-
     def test_view_mixins(self):
+        mixins = self.view.__bases__
         self.assertEqual(
-            self.view.__bases__[0].__name__,
-            'UserHasJsonStorePermissionsMixin')
+            mixins[0].__name__, 'UserHasJsonStorePermissionsMixin')
+        self.assertEqual(len(mixins[:-1]), 1)
 
     def test_view_parent_class(self):
         self.assertEqual(self.view.__bases__[-1].__name__, 'DeleteView')

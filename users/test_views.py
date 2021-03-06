@@ -10,6 +10,7 @@ from django.urls import reverse
 from . import views
 from django_jsonsaver import \
     constants as c, factories as f, helpers_testing as ht
+from stores.models import JsonStore
 
 UserModel = get_user_model()
 
@@ -76,8 +77,9 @@ class UserRegisterViewTest(TestCase):
 
     def test_request_get_method_authenticated_user(self):
         test_user = f.UserFactory()
-        self.client.login(username=test_user.username,
-                          password=c.TEST_USER_PASSWORD)
+        self.assertTrue(
+            self.client.login(username=test_user.username,
+                              password=c.TEST_USER_PASSWORD))
         response = self.client.get(self.current_test_url)
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, self.view.success_url)
@@ -251,8 +253,9 @@ class UserActivationEmailResendViewTest(TestCase):
 
     def test_request_get_method_authenticated_user(self):
         test_user = f.UserFactory()
-        self.client.login(username=test_user.username,
-                          password=c.TEST_USER_PASSWORD)
+        self.assertTrue(
+            self.client.login(username=test_user.username,
+                              password=c.TEST_USER_PASSWORD))
         response = self.client.get(self.current_test_url)
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, self.view.success_url)
@@ -327,10 +330,10 @@ class UserActivationEmailResendViewTest(TestCase):
 class UserActivateViewTest(TestCase):
     def setUp(self):
         self.view = views.user_activate
+        self.test_user = f.UserFactory(is_active=False)
         self.current_test_url = reverse('users:user_activate', kwargs={
             'activation_code': self.test_user.profile.activation_code})
         self.success_url = reverse(settings.LOGIN_URL)
-        self.test_user = f.UserFactory(is_active=False)
 
     # ATTRIBUTES
     def test_view_function_name(self):
@@ -358,8 +361,9 @@ class UserActivateViewTest(TestCase):
 
     def test_request_get_method_authenticated_user(self):
         test_user = f.UserFactory()
-        self.client.login(username=test_user.username,
-                          password=c.TEST_USER_PASSWORD)
+        self.assertTrue(
+            self.client.login(username=test_user.username,
+                              password=c.TEST_USER_PASSWORD))
         response = self.client.get(self.current_test_url)
         self.assertEqual(response.status_code, 302)
 
@@ -402,12 +406,12 @@ class UserLoginViewTest(TestCase):
         self.assertEqual(self.view.__name__, 'UserLoginView')
 
     def test_view_mixins(self):
-        self.assertEqual(
-            self.view.__bases__[0].__name__, 'SuccessMessageMixin')
+        mixins = self.view.__bases__
+        self.assertEqual(mixins[0].__name__, 'SuccessMessageMixin')
+        self.assertEqual(len(mixins[:-1]), 1)
 
     def test_view_parent_class(self):
-        self.assertEqual(
-            self.view.__bases__[-1].__name__, 'LoginView')
+        self.assertEqual(self.view.__bases__[-1].__name__, 'LoginView')
 
     def test_view_form_class_name(self):
         self.assertEqual(
@@ -431,11 +435,12 @@ class UserLoginViewTest(TestCase):
 
     def test_request_get_method_authenticated_user(self):
         test_user = f.UserFactory()
-        self.client.login(username=test_user.username,
-                          password=c.TEST_USER_PASSWORD)
+        self.assertTrue(
+            self.client.login(username=test_user.username,
+                              password=c.TEST_USER_PASSWORD))
         response = self.client.get(self.current_test_url)
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.url, reverse('users:user_detail_me'))
+        self.assertEqual(response.url, reverse(settings.LOGIN_REDIRECT_URL))
 
     # METHODS #
 
@@ -467,7 +472,7 @@ class UserLoginViewTest(TestCase):
             self.current_test_url, form_data)
 
         # user is logged in and redirected to UserDetailMe
-        self.assertEqual(response.wsgi_request.user == test_user)
+        self.assertEqual(response.wsgi_request.user, test_user)
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse('users:user_detail_me'))
 
@@ -482,12 +487,13 @@ class UserDetailMeViewTest(TestCase):
         self.assertEqual(self.view.__name__, 'UserDetailMeView')
 
     def test_view_mixins(self):
+        mixins = self.view.__bases__
         self.assertEqual(
             self.view.__bases__[0].__name__, 'LoginRequiredMixin')
+        self.assertEqual(len(mixins[:-1]), 1)
 
     def test_view_parent_class(self):
-        self.assertEqual(
-            self.view.__bases__[-1].__name__, 'DetailView')
+        self.assertEqual(self.view.__bases__[-1].__name__, 'DetailView')
 
     def test_view_template_name(self):
         self.assertEqual(self.view.template_name, 'users/user_detail_me.html')
@@ -503,19 +509,21 @@ class UserDetailMeViewTest(TestCase):
 
     def test_request_get_method_authenticated_user(self):
         test_user = f.UserFactory()
-        self.client.login(username=test_user.username,
-                          password=c.TEST_USER_PASSWORD)
+        self.assertTrue(
+            self.client.login(username=test_user.username,
+                              password=c.TEST_USER_PASSWORD))
         response = self.client.get(self.current_test_url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed('users/user_detail_me.html')
+        self.assertTemplateUsed(self.view.template_name)
 
     # METHODS
 
     # get_context_data
     def test_method_get_object_returns_expected_object_using_client(self):
         test_user = f.UserFactory()
-        self.client.login(username=test_user.username,
-                          password=c.TEST_USER_PASSWORD)
+        self.assertTrue(
+            self.client.login(username=test_user.username,
+                              password=c.TEST_USER_PASSWORD))
         response = self.client.get(self.current_test_url)
         self.assertEqual(response.context['object'], test_user)
 
@@ -532,70 +540,97 @@ class UserDetailMeViewTest(TestCase):
 class UserDetailPublicViewTest(TestCase):
     def setUp(self):
         self.view = views.UserDetailPublicView
-        self.current_test_url = reverse('users:user_detail_public')
+
+        self.test_user = f.UserFactory()
+        self.test_user.profile.is_public = True
+        self.test_user.profile.save()
+
+        self.current_test_url = reverse('users:user_detail_public', kwargs={
+            'username': self.test_user.username})
 
     # ATTRIBUTES
     def test_view_name(self):
         self.assertEqual(self.view.__name__, 'UserDetailPublicView')
 
     def test_view_parent_class(self):
-        self.assertEqual(
-            self.view.__bases__[-1].__name__, 'DetailView')
+        self.assertEqual(self.view.__bases__[-1].__name__, 'DetailView')
 
     def test_view_template_name(self):
         self.assertEqual(
             self.view.template_name, 'users/user_detail_public.html')
 
+    # request.GET
+    def test_request_get_method_unauthenticated_user(self):
+        response = self.client.get(self.current_test_url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(self.view.template_name)
+
+    def test_request_get_method_authenticated_user(self):
+        self.assertTrue(
+            self.client.login(username=self.test_user.username,
+                              password=c.TEST_USER_PASSWORD))
+        response = self.client.get(self.current_test_url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(self.view.template_name)
+
     # METHODS #
 
     # dispatch()
-    def test_method_dispatch_profile_is_public_and_user_is_same_user(self):
-        # show account visiblility status message
-        # redirect to UserUpdateIsPublicView
-        pass
+    def test_method_dispatch_profile_is_private_and_user_is_same_user(self):
+        self.test_user.profile.is_public = False
+        self.test_user.profile.save()
 
-    def test_method_dispatch_profile_is_public_and_user_is_other_user(self):
-        pass
+        self.assertTrue(
+            self.client.login(username=self.test_user.username,
+                              password=c.TEST_USER_PASSWORD))
+        response = self.client.get(self.current_test_url)
+
+        # show account visiblility status message
+        messages = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(
+            str(messages[0]), c.USER_VIEW_DETAIL_PUBLIC_SAME_USER_IS_PRIVATE)
+
+        # redirect to UserUpdateIsPublicView
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('users:user_update_is_public'))
+
+    def test_method_dispatch_profile_is_private_and_user_is_other_user(self):
+        self.test_user.profile.is_public = False
+        self.test_user.profile.save()
+
+        response = self.client.get(self.current_test_url)
+
+        # return 404
+        self.assertEqual(response.status_code, 404)
 
     # get_context_data()
     def test_get_context_data_returns_expected_jsonstores(self):
-        pass
+        # generate jsonstores
+        for i in range(6):
+            f.JsonStoreFactory(user=self.test_user, is_public=True)
+            f.JsonStoreFactory(is_public=True if i % 2 == 0 else False)
+        expected_qs = JsonStore.objects.filter(user=self.test_user) \
+            .order_by('-updated_at')
+
+        request = RequestFactory().get(self.current_test_url)
+        request.user = AnonymousUser()
+        view_instance = self.view()
+        view_instance.setup(request)
+        view_instance.kwargs = {'username': self.test_user.username}
+        view_instance.object = view_instance.get_object()
+        context = view_instance.get_context_data()
+        self.assertEqual(repr(context['jsonstores']), repr(expected_qs))
 
     # get_object()
     def test_get_object_returns_expected_object(self):
-        # use requestfactory
-        pass
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        request = RequestFactory().get(self.current_test_url)
+        request.user = AnonymousUser()
+        view_instance = self.view()
+        view_instance.setup(request)
+        view_instance.kwargs = {'username': self.test_user.username}
+        obj = view_instance.get_object()
+        self.assertEqual(obj, self.test_user)
 

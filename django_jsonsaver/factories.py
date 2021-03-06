@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 
 from django_jsonsaver import constants as c
 from stores.models import JsonStore
-from users.models import Profile
+# from users.models import Profile
 
 UserModel = get_user_model()
 
@@ -39,14 +39,3 @@ class JsonStoreFactory(factory.django.DjangoModelFactory):
     name = factory.Sequence(lambda n: f'{c.TEST_JSONSTORE_NAME}_{n+1}')
     data = c.TEST_JSONSTORE_DATA
     is_public = False
-
-
-# class ProfileFactory(factory.django.DjangoModelFactory):
-#     class Meta:
-#         model = Profile
-#
-#     user = factory.SubFactory(UserFactory)
-#     activation_code = Profile.get_activation_code()
-#     wants_email = None
-#     is_public = False
-#     account_tier = 'free'

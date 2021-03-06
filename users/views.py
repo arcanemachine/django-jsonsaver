@@ -125,6 +125,25 @@ class UserLoginView(SuccessMessageMixin, LoginView):
         return super().post(request, *args, **kwargs)
 
 
+class UserUsernameRecoverView(FormView):
+    form_class = forms.UserUsernameRecoverForm
+    template_name = 'users/user_username_recover.html'
+
+    def form_valid(self, form):
+        email = form.cleaned_data['email']
+        user = UserModel.objects.filter(email=email).first()
+
+        if user:
+            tasks.send_user_username_recover_email_task.delay(
+                email, user.username)
+            if settings.DEBUG:
+                h.send_user_username_recover_email(email, user.username)
+        messages.success(
+            self.request, "If a user account exists with that email address, "
+            "then we have sent them an email containing their username.")
+        return HttpResponseRedirect(reverse('users:login'))
+
+
 class UserDetailMeView(LoginRequiredMixin, DetailView):
     template_name = 'users/user_detail_me.html'
 
@@ -136,15 +155,12 @@ class UserDetailPublicView(DetailView):
     template_name = 'users/user_detail_public.html'
 
     def dispatch(self, request, *args, **kwargs):
-        if not request.user.profile.is_public:
-            # if request.user if profile owner, notify them of private
-            # account status and redirect to user_update_is_public
+        if not self.get_object().profile.is_public:
             if request.user == self.get_object():
                 messages.info(
-                    request, "Your account's visibility is set to private.")
+                    request, c.USER_VIEW_DETAIL_PUBLIC_SAME_USER_IS_PRIVATE)
                 return HttpResponseRedirect(
                     reverse('users:user_update_is_public'))
-            # if request.user is not profile owner, return 404
             else:
                 raise Http404
         return super().dispatch(request, *args, **kwargs)
@@ -153,9 +169,8 @@ class UserDetailPublicView(DetailView):
         context = super().get_context_data(**kwargs)
         user_jsonstores = JsonStore.objects.filter(
             user=self.get_object(),
-            is_public=True)
-        context.update({
-            'jsonstores': user_jsonstores.order_by('-updated_at')[:5]})
+            is_public=True).order_by('-updated_at')
+        context.update({'jsonstores': user_jsonstores})
         return context
 
     def get_object(self):
@@ -171,17 +186,6 @@ class UserUpdateView(LoginRequiredMixin, SuccessMessageMixin, TemplateView):
         kwargs.update({'user': self.request.user,
                        'obj': self.get_object()})
         return kwargs
-
-
-class UserUpdateIsPublicView(
-        LoginRequiredMixin, SuccessMessageMixin, UpdateView):
-    model = Profile
-    fields = ('is_public',)
-    template_name = 'users/user_update_is_public.html'
-    success_message = "Your profile settings have been updated."
-
-    def get_object(self):
-        return self.request.user.profile
 
 
 class UserUpdateAccountTierView(LoginRequiredMixin, TemplateView):
@@ -218,25 +222,6 @@ class UserUpdateEmailView(LoginRequiredMixin, FormView):
         return HttpResponseRedirect(reverse('users:user_detail_me'))
 
 
-class UserUsernameRecoverView(FormView):
-    form_class = forms.UserUsernameRecoverForm
-    template_name = 'users/user_username_recover.html'
-
-    def form_valid(self, form):
-        email = form.cleaned_data['email']
-        user = UserModel.objects.filter(email=email).first()
-
-        if user:
-            tasks.send_user_username_recover_email_task.delay(
-                email, user.username)
-            if settings.DEBUG:
-                h.send_user_username_recover_email(email, user.username)
-        messages.success(
-            self.request, "If a user account exists with that email address, "
-            "then we have sent them an email containing their username.")
-        return HttpResponseRedirect(reverse('users:login'))
-
-
 @login_required
 def user_update_email_confirm(request, activation_code):
     user = get_object_or_404(
@@ -252,6 +237,17 @@ def user_update_email_confirm(request, activation_code):
     messages.success(
         request, f"Your email address has been updated to '{user.email}'.")
     return HttpResponseRedirect(reverse('users:user_detail_me'))
+
+
+class UserUpdateIsPublicView(
+        LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+    model = Profile
+    fields = ('is_public',)
+    template_name = 'users/user_update_is_public.html'
+    success_message = "Your profile settings have been updated."
+
+    def get_object(self):
+        return self.request.user.profile
 
 
 class UserUpdateApiKeyView(LoginRequiredMixin, TemplateView):

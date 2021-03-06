@@ -33,9 +33,6 @@ class ProjectRootTemplateViewTest(TestCase):
     def test_view_class_name(self):
         self.assertEqual(self.view.__name__, 'ProjectRootTemplateView')
 
-    def test_view_base_count(self):
-        self.assertEqual(len(self.view.__bases__), 1)
-
     def test_view_parent_class_name(self):
         self.assertEqual(self.view.__bases__[-1].__name__, 'TemplateView')
 
@@ -71,12 +68,10 @@ class ContactUsFormViewTest(TestCase):
     def test_view_class_name(self):
         self.assertEqual(self.view.__name__, 'ContactUsFormView')
 
-    def test_view_base_count(self):
-        self.assertEqual(len(self.view.__bases__), 2)
-
     def test_view_mixins(self):
-        self.assertEqual(
-            self.view.__bases__[0].__name__, 'SuccessMessageMixin')
+        mixins = self.view.__bases__
+        self.assertEqual(mixins[0].__name__, 'SuccessMessageMixin')
+        self.assertEqual(len(mixins[:-1]), 1)
 
     def test_view_parent_class_name(self):
         self.assertEqual(self.view.__bases__[-1].__name__, 'FormView')
@@ -176,9 +171,6 @@ class FaqTemplateViewTest(TestCase):
     def test_view_class_name(self):
         self.assertEqual(self.view.__name__, 'FaqTemplateView')
 
-    def test_view_base_count(self):
-        self.assertEqual(len(self.view.__bases__), 1)
-
     def test_parent_class_name(self):
         self.assertEqual(self.view.__bases__[-1].__name__, 'TemplateView')
 
@@ -200,9 +192,6 @@ class TermsOfUseTemplateViewTest(TestCase):
     # view attributes
     def test_view_class_name(self):
         self.assertEqual(self.view.__name__, 'TermsOfUseTemplateView')
-
-    def test_view_base_count(self):
-        self.assertEqual(len(self.view.__bases__), 1)
 
     def test_parent_class_name(self):
         self.assertEqual(
@@ -236,9 +225,6 @@ class PrivacyPolicyTemplateViewTest(TestCase):
         self.view_instance = self.response.context['view']
 
     # view attributes
-    def test_view_base_count(self):
-        self.assertEqual(len(self.view.__bases__), 1)
-
     def test_parent_class_name(self):
         self.assertEqual(self.view.__bases__[-1].__name__, 'TemplateView')
 

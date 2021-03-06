@@ -63,6 +63,8 @@ USER_VIEW_LOGIN_SUCCESS_MESSAGE = "You are now logged in."
 USER_VIEW_LOGIN_ACTIVATE_ACCOUNT_REMINDER = \
     "Your account has not been activated. "\
     "Please check your email inbox for your activation email."
+USER_VIEW_DETAIL_PUBLIC_SAME_USER_IS_PRIVATE = \
+    "Your account's visibility is set to private."
 
 # Profile
 PROFILE_MODEL_IS_PUBLIC_VERBOSE_NAME = "Make this profile publicly accessible"

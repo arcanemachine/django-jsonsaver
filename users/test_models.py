@@ -1,20 +1,12 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.test import TestCase
-from rest_framework.authtoken.models import Token
 
 from django_jsonsaver import \
     constants as c, factories as f, helpers as h, server_config as sc
 from .models import Profile
 
 UserModel = get_user_model()
-
-
-class UserModelTest(TestCase):
-    def test_new_user_creation_triggers_api_token_creation(self):
-        self.assertEqual(Token.objects.count(), 0) 
-        f.UserFactory()
-        self.assertEqual(Token.objects.count(), 1) 
 
 
 class ProfileModelTest(TestCase):
@@ -266,9 +258,3 @@ class ProfileModelTest(TestCase):
         self.assertEqual(
             profile.get_max_jsonstore_all_jsonstores_data_size_in_kb(),
             h.bytes_to_kb(sc.MAX_JSONSTORE_ALL_JSONSTORES_DATA_SIZE_USER_FREE))
-
-    def test_new_user_creation_triggers_user_profile_creation(self):
-        old_profile_count = Profile.objects.count()
-        f.UserFactory()
-        new_profile_count = Profile.objects.count()
-        self.assertTrue(new_profile_count == old_profile_count + 1)

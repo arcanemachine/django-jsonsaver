@@ -15,7 +15,7 @@ from rest_framework.authtoken.models import Token
 
 from . import forms
 from .models import Profile
-from django_jsonsaver import helpers as h
+from django_jsonsaver import constants as c, helpers as h
 from django_jsonsaver import tasks
 from stores.models import JsonStore
 
@@ -38,8 +38,9 @@ class UserRegisterView(CreateView):
 
     def form_valid(self, form):
         # do not process form if honeypot field filled (name)
-        if self.form.cleaned_data.get('name', None):
-            return HttpResponseRedirect(self.get_success_url())
+        if form.cleaned_data.get('name', None):
+            self.object = None
+            return HttpResponseRedirect(self.success_url)
         self.object = form.save(commit=False)
         self.object.is_active = False
         self.object.save()
@@ -50,10 +51,8 @@ class UserRegisterView(CreateView):
         if settings.DEBUG:
             h.send_welcome_email(
                 user.email, user.profile.activation_code)
-        messages.success(
-            self.request, "Success! Please check your email inbox for "
-            "your confirmation message.")
-        return HttpResponseRedirect(self.get_success_url())
+        messages.success(self.request, c.USER_VIEW_REGISTER_SUCCESS_MESSAGE)
+        return HttpResponseRedirect(self.success_url)
 
 
 class UserActivationEmailResend(FormView):

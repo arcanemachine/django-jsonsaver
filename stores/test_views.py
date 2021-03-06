@@ -124,7 +124,7 @@ class JsonStoreCreateViewTest(SetUpTestCaseMixin, TestCase):
 
     # form_valid()
     def test_method_form_valid_assigns_request_user_to_user(self):
-        form = Mock()  # create mocked form
+        form = Mock()  # create mock form
         obj = Mock()  # create dummy object
         obj.save = Mock(return_value=None)  # with dummy return value
         obj.get_absolute_url = Mock(return_value='/')  # returns dummy url

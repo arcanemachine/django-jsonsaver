@@ -41,13 +41,13 @@ class JsonStoreSerializerTest(APITestCase):
 
     # create()
     def test_create_adds_user_to_object(self):
-        mocked_self = Mock()
-        mocked_self.context = {'request': Mock()}
-        mocked_self.context['request'].user = self.test_user
+        mock_self = Mock()
+        mock_self.context = {'request': Mock()}
+        mock_self.context['request'].user = self.test_user
         validated_data = {"data": {},
                           "name": '',
                           "is_public": False}
-        result = self.test_serializer.create(mocked_self, validated_data)
+        result = self.test_serializer.create(mock_self, validated_data)
         self.assertEqual(result.user, self.test_user)
 
     # validate_name()

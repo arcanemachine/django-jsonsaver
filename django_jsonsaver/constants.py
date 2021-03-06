@@ -14,7 +14,7 @@ TEST_USER_USERNAME = 'test_user'
 TEST_USER_ADMIN_USERNAME = 'admin_user'
 TEST_USER_FIRST_NAME = 'Test'
 TEST_USER_LAST_NAME = 'User'
-TEST_USER_FULL_NAME = f'{TEST_USER_FIRST_NAME} + {TEST_USER_LAST_NAME}'
+TEST_USER_FULL_NAME = f'{TEST_USER_FIRST_NAME} {TEST_USER_LAST_NAME}'
 TEST_USER_EMAIL = 'test_user@email.com'
 TEST_USER_PASSWORD = 'my_password321'
 
@@ -48,6 +48,8 @@ USER_FORM_EMAIL_ERROR_DUPLICATE = \
     "This email address is registered to another account."
 USER_FORM_EMAIL_ERROR_SAME_EMAIL = \
     "This email address is already registered to your account."
+USER_VIEW_REGISTER_SUCCESS_MESSAGE = \
+    "Success! Please check your email inbox for your confirmation message."
 
 # Profile
 PROFILE_MODEL_IS_PUBLIC_VERBOSE_NAME = "Make this profile publicly accessible"

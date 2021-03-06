@@ -120,11 +120,11 @@ class JsonStoreNameDetailTest(APITestCase):
 
     # METHODS #
     def test_method_get_object(self):
-        mocked_self = Mock()
-        mocked_self.kwargs = {'jsonstore_name': self.test_jsonstore.name}
-        mocked_self.request = Mock()  # remove this line
-        mocked_self.request.user = self.test_user
-        obj = self.view.get_object(mocked_self)
+        mock_self = Mock()
+        mock_self.kwargs = {'jsonstore_name': self.test_jsonstore.name}
+        mock_self.request = Mock()  # remove this line
+        mock_self.request.user = self.test_user
+        obj = self.view.get_object(mock_self)
         self.assertEqual(obj, self.test_jsonstore)
 
     # FUNCTIONAL #
@@ -170,10 +170,10 @@ class JsonStorePublicDetailTest(APITestCase):
 
     # METHODS #
     def test_method_get_object(self):
-        mocked_self = Mock()
-        mocked_self.kwargs = {'jsonstore_name': self.test_jsonstore.name}
-        mocked_self.request = Mock()
-        obj = self.view.get_object(mocked_self)
+        mock_self = Mock()
+        mock_self.kwargs = {'jsonstore_name': self.test_jsonstore.name}
+        mock_self.request = Mock()
+        obj = self.view.get_object(mock_self)
         self.assertEqual(obj, self.test_jsonstore)
 
     # FUNCTIONAL #

@@ -17,7 +17,7 @@ urlpatterns = [
          views.users_root,
          name='users_activate_root'),
     path('activate/resend/',
-         views.UserActivationEmailResend.as_view(),
+         views.UserActivationEmailResendView.as_view(),
          name='user_activation_email_resend'),
     path('activate/<str:activation_code>/',
          views.user_activate,

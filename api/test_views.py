@@ -29,12 +29,12 @@ class ApiRootTest(APITestCase):
         self.assertEqual(args[0], 'request')
 
     # request.GET
-    def test_get_method_unauthenticated_user_using_client(self):
+    def test_request_get_method_unauthenticated_user_with_client(self):
         response = self.client.get(self.current_test_url)
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse('api_generic:schema'))
 
-    def test_get_method_unauthenticated_user_using_request_factory(self):
+    def test_request_get_method_unauthenticated_user_with_requestfactory(self):
         request = self.factory.get(self.current_test_url)
         request.user = AnonymousUser()
         response = self.view(request)

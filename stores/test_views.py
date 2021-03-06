@@ -16,11 +16,11 @@ class JsonStoreListViewTest(SetUpTestCaseMixin, TestCase):
         cls.current_test_url = reverse('stores:jsonstore_list')
 
     # request.GET
-    def test_get_method_unauthenticated_user(self):
+    def test_request_get_method_unauthenticated_user(self):
         self.setUp(auth=False)
         self.assertEqual(self.response.status_code, 302)
 
-    def test_get_method_authenticated_user(self):
+    def test_request_get_method_authenticated_user(self):
         self.assertEqual(self.response.status_code, 200)
         self.assertTemplateUsed(self.response, 'stores/jsonstore_list.html')
 
@@ -75,11 +75,11 @@ class JsonStoreCreateViewTest(SetUpTestCaseMixin, TestCase):
         cls.current_test_url = reverse('stores:jsonstore_create')
 
     # request.GET
-    def test_get_method_unauthenticated_user(self):
+    def test_request_get_method_unauthenticated_user(self):
         self.setUp(auth=False)
         self.assertEqual(self.response.status_code, 302)
 
-    def test_get_method_authenticated_user(self):
+    def test_request_get_method_authenticated_user(self):
         self.assertEqual(self.response.status_code, 200)
         self.assertTemplateUsed(self.response, 'stores/jsonstore_form.html')
 
@@ -147,11 +147,11 @@ class JsonStoreDetailViewTest(SetUpTestCaseMixin, TestCase):
             'jsonstore_pk': cls.test_jsonstore.pk})
 
     # request.GET
-    def test_get_method_unauthenticated_user(self):
+    def test_request_get_method_unauthenticated_user(self):
         self.setUp(auth=False)
         self.assertEqual(self.response.status_code, 302)
 
-    def test_get_method_authenticated_user(self):
+    def test_request_get_method_authenticated_user(self):
         self.assertEqual(self.response.status_code, 200)
         self.assertTemplateUsed(self.response, 'stores/jsonstore_detail.html')
 
@@ -190,11 +190,11 @@ class JsonStoreLookupViewTest(SetUpTestCaseMixin, TestCase):
         cls.current_test_url = reverse('stores:jsonstore_lookup')
 
     # request.GET
-    def test_get_method_unauthenticated_user(self):
+    def test_request_get_method_unauthenticated_user(self):
         self.setUp(auth=False)
         self.assertEqual(self.response.status_code, 302)
 
-    def test_get_method_authenticated_user(self):
+    def test_request_get_method_authenticated_user(self):
         self.assertEqual(self.response.status_code, 200)
         self.assertTemplateUsed(self.response, 'stores/jsonstore_lookup.html')
 
@@ -245,11 +245,11 @@ class JsonStoreNameDetailViewTest(SetUpTestCaseMixin, TestCase):
             'jsonstore_name': cls.test_jsonstore.name})
 
     # request.GET
-    def test_get_method_unauthenticated_user(self):
+    def test_request_get_method_unauthenticated_user(self):
         self.setUp(auth=False)
         self.assertEqual(self.response.status_code, 302)
 
-    def test_get_method_authenticated_user(self):
+    def test_request_get_method_authenticated_user(self):
         self.assertEqual(self.response.status_code, 200)
 
     # view attributes
@@ -311,11 +311,11 @@ class JsonStorePublicDetailViewTest(SetUpTestCaseMixin, TestCase):
             kwargs={'jsonstore_name': cls.test_jsonstore.name})
 
     # request.GET
-    def test_get_method_unauthenticated_user(self):
+    def test_request_get_method_unauthenticated_user(self):
         self.setUp(auth=False)
         self.assertEqual(self.response.status_code, 200)
 
-    def test_get_method_authenticated_user(self):
+    def test_request_get_method_authenticated_user(self):
         self.assertEqual(self.response.status_code, 200)
 
     # view attributes
@@ -370,11 +370,11 @@ class JsonStorePublicLookupViewTest(SetUpTestCaseMixin, TestCase):
         cls.current_test_url = reverse('stores:jsonstore_lookup_public')
 
     # request.GET
-    def test_get_method_unauthenticated_user(self):
+    def test_request_get_method_unauthenticated_user(self):
         self.setUp(auth=False)
         self.assertEqual(self.response.status_code, 200)
 
-    def test_get_method_authenticated_user(self):
+    def test_request_get_method_authenticated_user(self):
         self.assertEqual(self.response.status_code, 200)
         self.assertTemplateUsed(self.response, 'stores/jsonstore_lookup.html')
 
@@ -421,11 +421,11 @@ class JsonStoreUpdateViewTest(SetUpTestCaseMixin, TestCase):
             'jsonstore_pk': cls.test_jsonstore.pk})
 
     # request.GET
-    def test_get_method_unauthenticated_user(self):
+    def test_request_get_method_unauthenticated_user(self):
         self.setUp(auth=False)
         self.assertEqual(self.response.status_code, 302)
 
-    def test_get_method_authenticated_user(self):
+    def test_request_get_method_authenticated_user(self):
         self.assertEqual(self.response.status_code, 200)
         self.assertTemplateUsed(self.response, 'stores/jsonstore_form.html')
 
@@ -486,11 +486,11 @@ class JsonStoreDeleteViewTest(SetUpTestCaseMixin, TestCase):
             'jsonstore_pk': cls.test_jsonstore.pk})
 
     # request.GET
-    def test_get_method_unauthenticated_user(self):
+    def test_request_get_method_unauthenticated_user(self):
         self.setUp(auth=False)
         self.assertEqual(self.response.status_code, 302)
 
-    def test_get_method_authenticated_user(self):
+    def test_request_get_method_authenticated_user(self):
         self.assertEqual(self.response.status_code, 200)
         self.assertTemplateUsed(
             self.response, 'stores/jsonstore_confirm_delete.html')

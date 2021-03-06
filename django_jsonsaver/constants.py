@@ -50,6 +50,15 @@ USER_FORM_EMAIL_ERROR_SAME_EMAIL = \
     "This email address is already registered to your account."
 USER_VIEW_REGISTER_SUCCESS_MESSAGE = \
     "Success! Please check your email inbox for your confirmation message."
+USER_VIEW_ACTIVATION_EMAIL_RESEND_ACCOUNT_ALREADY_ACTIVE = \
+    "This account has already been activated."
+USER_VIEW_ACTIVATION_EMAIL_RESEND_SUCCESS_MESSAGE = \
+    "If the email address you entered matches an account that has not yet "\
+    "been activated, then we have resent an activation email to that address."
+USER_VIEW_USER_ACTIVATE_ACCOUNT_ALREADY_ACTIVE = \
+    "Your account has already been activated."
+USER_VIEW_USER_ACTIVATE_SUCCESS_MESSAGE = \
+    "Account confirmed! You may now login."
 
 # Profile
 PROFILE_MODEL_IS_PUBLIC_VERBOSE_NAME = "Make this profile publicly accessible"

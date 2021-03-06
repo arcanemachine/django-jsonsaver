@@ -32,7 +32,7 @@ class UserRegisterView(CreateView):
     success_url = reverse_lazy(settings.LOGIN_URL)
 
     def dispatch(self, request, *args, **kwargs):
-        if self.request.user.is_authenticated:
+        if request.user.is_authenticated:
             return HttpResponseRedirect(self.success_url)
         return super().dispatch(request, *args, **kwargs)
 
@@ -55,17 +55,26 @@ class UserRegisterView(CreateView):
         return HttpResponseRedirect(self.success_url)
 
 
-class UserActivationEmailResend(FormView):
+class UserActivationEmailResendView(FormView):
     template_name = 'users/user_activation_email_resend.html'
     form_class = forms.UserActivationEmailResendForm
+    success_url = reverse_lazy(settings.LOGIN_URL)
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return HttpResponseRedirect(self.success_url)
+        return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
         user = \
             UserModel.objects.filter(email=form.cleaned_data['email']).first()
+        # notify user if account is already active
         if user and user.is_active:
             messages.info(
-                self.request, "This account has already been activated.")
+                self.request,
+                c.USER_VIEW_ACTIVATION_EMAIL_RESEND_ACCOUNT_ALREADY_ACTIVE)
             return HttpResponseRedirect(reverse(settings.LOGIN_URL))
+        # if account exists and is not active, resend welcome email
         if user and not user.is_active:
             tasks.send_welcome_email_task.delay(
                 user.email, user.profile.activation_code)
@@ -73,24 +82,30 @@ class UserActivationEmailResend(FormView):
                 h.send_welcome_email(
                     user.email, user.profile.activation_code)
         messages.success(
-            self.request, "If the email address you entered "
-            "matches an account that has not yet been activated, "
-            "then we have resent an activation email to that address.")
-        return HttpResponseRedirect(reverse('users:login'))
+            self.request, c.USER_VIEW_ACTIVATION_EMAIL_RESEND_SUCCESS_MESSAGE)
+        return HttpResponseRedirect(self.success_url)
 
 
 def user_activate(request, activation_code):
+    success_url = reverse(settings.LOGIN_URL)
+
+    # activate user
     user = get_object_or_404(
         UserModel, profile__activation_code=activation_code)
-    if user.is_active:
-        messages.info(request, "Your account has already been activated.")
-        return HttpResponseRedirect(reverse(settings.LOGIN_URL))
+    if user.is_active or request.user.is_authenticated:
+        messages.info(
+            request, c.USER_VIEW_USER_ACTIVATE_ACCOUNT_ALREADY_ACTIVE)
+        return HttpResponseRedirect(success_url)
     user.is_active = True
     user.save()
+
+    # remove activation code from profile
     user.profile.activation_code = None
-    Token.objects.get_or_create(user=user)
-    messages.success(request, "Account confirmed! You may now login.")
-    return HttpResponseRedirect(reverse(settings.LOGIN_URL))
+    user.profile.save()
+
+    # show success_message and redirect to success_url
+    messages.success(request, c.USER_VIEW_USER_ACTIVATE_SUCCESS_MESSAGE)
+    return HttpResponseRedirect(success_url)
 
 
 class UserLoginView(SuccessMessageMixin, LoginView):

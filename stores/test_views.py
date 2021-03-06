@@ -13,7 +13,7 @@ class JsonStoreListViewTest(SetUpTestCaseMixin, TestCase):
     def setUpTestData(cls):
         cls.view = views.JsonStoreListView
         cls.test_user = f.UserFactory()
-        cls.current_test_url = reverse('stores:jsonstore_list')
+        cls.test_url = reverse('stores:jsonstore_list')
 
     # request.GET
     def test_request_get_method_unauthenticated_user(self):
@@ -71,7 +71,7 @@ class JsonStoreCreateViewTest(SetUpTestCaseMixin, TestCase):
     def setUpTestData(cls):
         cls.view = views.JsonStoreCreateView
         cls.test_user = f.UserFactory()
-        cls.current_test_url = reverse('stores:jsonstore_create')
+        cls.test_url = reverse('stores:jsonstore_create')
 
     # request.GET
     def test_request_get_method_unauthenticated_user(self):
@@ -140,7 +140,7 @@ class JsonStoreDetailViewTest(SetUpTestCaseMixin, TestCase):
         cls.view = views.JsonStoreDetailView
         cls.test_user = f.UserFactory()
         cls.test_jsonstore = f.JsonStoreFactory(user=cls.test_user)
-        cls.current_test_url = reverse('stores:jsonstore_detail', kwargs={
+        cls.test_url = reverse('stores:jsonstore_detail', kwargs={
             'jsonstore_pk': cls.test_jsonstore.pk})
 
     # request.GET
@@ -182,7 +182,7 @@ class JsonStoreLookupViewTest(SetUpTestCaseMixin, TestCase):
         cls.view = views.JsonStoreLookupView
         cls.test_user = f.UserFactory()
         cls.test_jsonstore = f.JsonStoreFactory(user=cls.test_user)
-        cls.current_test_url = reverse('stores:jsonstore_lookup')
+        cls.test_url = reverse('stores:jsonstore_lookup')
 
     # request.GET
     def test_request_get_method_unauthenticated_user(self):
@@ -234,7 +234,7 @@ class JsonStoreNameDetailViewTest(SetUpTestCaseMixin, TestCase):
         cls.view = views.JsonStoreNameDetailView
         cls.test_user = f.UserFactory()
         cls.test_jsonstore = f.JsonStoreFactory(user=cls.test_user)
-        cls.current_test_url = reverse('stores:jsonstore_detail_name', kwargs={
+        cls.test_url = reverse('stores:jsonstore_detail_name', kwargs={
             'jsonstore_name': cls.test_jsonstore.name})
 
     # request.GET
@@ -296,7 +296,7 @@ class JsonStorePublicDetailViewTest(SetUpTestCaseMixin, TestCase):
         cls.view = views.JsonStorePublicDetailView
         cls.test_user = f.UserFactory()
         cls.test_jsonstore = f.JsonStoreFactory(user=cls.test_user)
-        cls.current_test_url = reverse(
+        cls.test_url = reverse(
             'stores:jsonstore_detail_public',
             kwargs={'jsonstore_name': cls.test_jsonstore.name})
 
@@ -354,7 +354,7 @@ class JsonStorePublicLookupViewTest(SetUpTestCaseMixin, TestCase):
         cls.view = views.JsonStorePublicLookupView
         cls.test_user = f.UserFactory()
         cls.test_jsonstore = f.JsonStoreFactory(user=cls.test_user)
-        cls.current_test_url = reverse('stores:jsonstore_lookup_public')
+        cls.test_url = reverse('stores:jsonstore_lookup_public')
 
     # request.GET
     def test_request_get_method_unauthenticated_user(self):
@@ -401,7 +401,7 @@ class JsonStoreUpdateViewTest(SetUpTestCaseMixin, TestCase):
         cls.view = views.JsonStoreUpdateView
         cls.test_user = f.UserFactory()
         cls.test_jsonstore = f.JsonStoreFactory(user=cls.test_user)
-        cls.current_test_url = reverse('stores:jsonstore_update', kwargs={
+        cls.test_url = reverse('stores:jsonstore_update', kwargs={
             'jsonstore_pk': cls.test_jsonstore.pk})
 
     # request.GET
@@ -463,7 +463,7 @@ class JsonStoreDeleteViewTest(SetUpTestCaseMixin, TestCase):
         cls.view = views.JsonStoreDeleteView
         cls.test_user = f.UserFactory()
         cls.test_jsonstore = f.JsonStoreFactory(user=cls.test_user)
-        cls.current_test_url = reverse('stores:jsonstore_delete', kwargs={
+        cls.test_url = reverse('stores:jsonstore_delete', kwargs={
             'jsonstore_pk': cls.test_jsonstore.pk})
 
     # request.GET
@@ -508,7 +508,7 @@ class JsonStoreDeleteViewTest(SetUpTestCaseMixin, TestCase):
     # delete()
     def test_method_delete_response_contains_success_message(self):
         # delete test_jsonstore
-        self.response = self.client.post(self.current_test_url)
+        self.response = self.client.post(self.test_url)
 
         # messages contains success_messaage
         messages = list(get_messages(self.response.wsgi_request))
@@ -518,7 +518,7 @@ class JsonStoreDeleteViewTest(SetUpTestCaseMixin, TestCase):
     # FUNCTIONAL TESTS #
     def test_functional_delete_jsonstore(self):
         # old_jsonstore_count = JsonStore.objects.count()
-        # self.response = self.client.post(self.current_test_url)
+        # self.response = self.client.post(self.test_url)
         # new_jsonstore_count = JsonStore.objects.count()
         # self.assertEqual(old_jsonstore_count - 1, new_jsonstore_count)
         pass

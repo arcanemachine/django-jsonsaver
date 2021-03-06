@@ -16,9 +16,9 @@ class SetUpTestCaseMixinTest(SimpleTestCase):
             ht.SetUpTestCaseMixin.get_response(self, True), 'ok')
 
     def test_method_get_response_no_test_url(self):
-        self.current_test_url = 'ok'
+        self.test_url = 'ok'
         self.client = Mock()
-        self.client.get = Mock(return_value=self.current_test_url)
+        self.client.get = Mock(return_value=self.test_url)
         self.assertEqual(
             ht.SetUpTestCaseMixin.get_response(self, None), 'ok')
 

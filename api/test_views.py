@@ -13,7 +13,7 @@ from stores.models import JsonStore
 class ApiRootTest(APITestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.current_test_url = reverse('api:api_root')
+        cls.test_url = reverse('api:api_root')
 
     def setUp(self):
         self.view = views.api_root
@@ -30,12 +30,12 @@ class ApiRootTest(APITestCase):
 
     # request.GET
     def test_request_get_method_unauthenticated_user_with_client(self):
-        response = self.client.get(self.current_test_url)
+        response = self.client.get(self.test_url)
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse('api_generic:schema'))
 
     def test_request_get_method_unauthenticated_user_with_requestfactory(self):
-        request = self.factory.get(self.current_test_url)
+        request = self.factory.get(self.test_url)
         request.user = AnonymousUser()
         response = self.view(request)
         self.assertEqual(response.status_code, 302)

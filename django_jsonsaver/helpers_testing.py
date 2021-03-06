@@ -10,7 +10,7 @@ class SetUpTestCaseMixin:
         if test_url:
             return self.client.get(test_url)
         else:
-            return self.client.get(self.current_test_url)
+            return self.client.get(self.test_url)
 
     def setUp(self, auth=True, test_url=None):
         if auth:
@@ -29,15 +29,14 @@ class SetUpTestCaseMixin:
 
 
 def get_function_args(f):
+    """Returns list of args used in a given function"""
     return inspect.getargspec(f).args
 
 
 def get_function_decorators(function):
-    """Returns list of decorator names used in a given function."""
+    """Returns list of decorator names used in a given function"""
     source = inspect.getsource(function)
     index = source.find("def ")
-    return [
-        line.strip().split()[0]
-        for line in source[:index].strip().splitlines()
-        if line.strip()[0] == "@"
-    ]
+    return [line.strip().split()[0]
+            for line in source[:index].strip().splitlines()
+            if line.strip()[0] == "@"]

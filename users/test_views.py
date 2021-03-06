@@ -18,7 +18,7 @@ UserModel = get_user_model()
 class UsersRootViewTest(SimpleTestCase):
     def setUp(self):
         self.view = views.users_root
-        self.current_test_url = reverse('users:users_root')
+        self.test_url = reverse('users:users_root')
 
     # ATTRIBUTES
     def test_view_function_name(self):
@@ -31,14 +31,14 @@ class UsersRootViewTest(SimpleTestCase):
 
     # request.GET
     def test_request_get_method_unauthenticated_user_with_requestfactory(self):
-        request = RequestFactory().get(self.current_test_url)
+        request = RequestFactory().get(self.test_url)
         request.user = AnonymousUser()
         response = self.view(request)
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse('users:user_detail_me'))
 
     def test_request_get_method_unauthenticated_user_with_client(self):
-        response = self.client.get(self.current_test_url)
+        response = self.client.get(self.test_url)
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse('users:user_detail_me'))
 
@@ -46,7 +46,7 @@ class UsersRootViewTest(SimpleTestCase):
 class UserRegisterViewTest(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.current_test_url = reverse('users:register')
+        cls.test_url = reverse('users:register')
 
     def setUp(self):
         self.view = views.UserRegisterView
@@ -71,7 +71,7 @@ class UserRegisterViewTest(TestCase):
 
     # request.GET
     def test_request_get_method_unauthenticated_user(self):
-        response = self.client.get(self.current_test_url)
+        response = self.client.get(self.test_url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(self.view.template_name)
 
@@ -80,7 +80,7 @@ class UserRegisterViewTest(TestCase):
         self.assertTrue(
             self.client.login(username=test_user.username,
                               password=c.TEST_USER_PASSWORD))
-        response = self.client.get(self.current_test_url)
+        response = self.client.get(self.test_url)
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, self.view.success_url)
 
@@ -89,7 +89,7 @@ class UserRegisterViewTest(TestCase):
     # dispatch()
     def test_method_dispatch_redirects_authenticated_user(self):
         test_user = f.UserFactory()
-        request = RequestFactory().get(self.current_test_url)
+        request = RequestFactory().get(self.test_url)
         request.user = test_user
         response = self.view.as_view()(request)
         self.assertEqual(response.status_code, 302)
@@ -112,7 +112,7 @@ class UserRegisterViewTest(TestCase):
         self.assertTrue(form_instance.is_valid())
 
         # build request
-        request = RequestFactory().post(self.current_test_url)
+        request = RequestFactory().post(self.test_url)
         request.user = AnonymousUser()
 
         # instantiate view class
@@ -145,7 +145,7 @@ class UserRegisterViewTest(TestCase):
         self.assertTrue(form_instance.is_valid())
 
         # build request
-        request = RequestFactory().post(self.current_test_url)
+        request = RequestFactory().post(self.test_url)
         request.user = AnonymousUser()
 
         # add support for messages
@@ -191,7 +191,7 @@ class UserRegisterViewTest(TestCase):
 
         with self.settings(DEBUG=True):
             response = \
-                self.client.post(self.current_test_url, form_data)
+                self.client.post(self.test_url, form_data)
 
         # new user has been created
         new_user_count = UserModel.objects.count()
@@ -221,7 +221,7 @@ class UserRegisterViewTest(TestCase):
 class UserActivationEmailResendViewTest(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.current_test_url = reverse('users:user_activation_email_resend')
+        cls.test_url = reverse('users:user_activation_email_resend')
 
     def setUp(self):
         self.view = views.UserActivationEmailResendView
@@ -247,7 +247,7 @@ class UserActivationEmailResendViewTest(TestCase):
 
     # request.GET
     def test_request_get_method_unauthenticated_user(self):
-        response = self.client.get(self.current_test_url)
+        response = self.client.get(self.test_url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(self.view.template_name)
 
@@ -256,7 +256,7 @@ class UserActivationEmailResendViewTest(TestCase):
         self.assertTrue(
             self.client.login(username=test_user.username,
                               password=c.TEST_USER_PASSWORD))
-        response = self.client.get(self.current_test_url)
+        response = self.client.get(self.test_url)
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, self.view.success_url)
 
@@ -270,7 +270,7 @@ class UserActivationEmailResendViewTest(TestCase):
                      'captcha_0': 'test',
                      'captcha_1': 'PASSED'}
         with self.settings(DEBUG=True):
-            response = self.client.post(self.current_test_url, form_data)
+            response = self.client.post(self.test_url, form_data)
 
         # response contains proper redirect and success message
         self.assertEqual(response.status_code, 302)
@@ -289,7 +289,7 @@ class UserActivationEmailResendViewTest(TestCase):
                      'captcha_0': 'test',
                      'captcha_1': 'PASSED'}
         with self.settings(DEBUG=True):
-            response = self.client.post(self.current_test_url, form_data)
+            response = self.client.post(self.test_url, form_data)
 
         # response contains proper redirect and success message
         self.assertEqual(response.status_code, 302)
@@ -311,7 +311,7 @@ class UserActivationEmailResendViewTest(TestCase):
                      'captcha_0': 'test',
                      'captcha_1': 'PASSED'}
         with self.settings(DEBUG=True):
-            response = self.client.post(self.current_test_url, form_data)
+            response = self.client.post(self.test_url, form_data)
 
         # response contains proper redirect and success message
         self.assertEqual(response.status_code, 302)
@@ -331,7 +331,7 @@ class UserActivateViewTest(TestCase):
     def setUp(self):
         self.view = views.user_activate
         self.test_user = f.UserFactory(is_active=False)
-        self.current_test_url = reverse('users:user_activate', kwargs={
+        self.test_url = reverse('users:user_activate', kwargs={
             'activation_code': self.test_user.profile.activation_code})
         self.success_url = reverse(settings.LOGIN_URL)
 
@@ -347,7 +347,7 @@ class UserActivateViewTest(TestCase):
 
     # request.GET
     def test_request_get_method_unauthenticated_user(self):
-        response = self.client.get(self.current_test_url)
+        response = self.client.get(self.test_url)
 
         # response contains success message
         messages = list(get_messages(response.wsgi_request))
@@ -364,7 +364,7 @@ class UserActivateViewTest(TestCase):
         self.assertTrue(
             self.client.login(username=test_user.username,
                               password=c.TEST_USER_PASSWORD))
-        response = self.client.get(self.current_test_url)
+        response = self.client.get(self.test_url)
         self.assertEqual(response.status_code, 302)
 
         # response contains account_already_active message
@@ -374,16 +374,16 @@ class UserActivateViewTest(TestCase):
             str(messages[0]), c.USER_VIEW_USER_ACTIVATE_ACCOUNT_ALREADY_ACTIVE)
 
     def test_request_get_method_unauthenticated_user_bad_kwargs(self):
-        self.current_test_url = reverse('users:user_activate', kwargs={
+        self.test_url = reverse('users:user_activate', kwargs={
             'activation_code': 'bad_kwargs'})
-        response = self.client.get(self.current_test_url)
+        response = self.client.get(self.test_url)
         self.assertEqual(response.status_code, 404)
 
     # FUNCTIONAL #
     def test_successful_activation_removes_activation_code(self):
         # activation code present before activation
         self.assertTrue(self.test_user.profile.activation_code is not None)
-        self.client.get(self.current_test_url)
+        self.client.get(self.test_url)
 
         # activation code no longer present after activation
         self.test_user.profile.refresh_from_db()
@@ -391,7 +391,7 @@ class UserActivateViewTest(TestCase):
 
     def test_successful_activation_adds_status_is_active_to_user(self):
         self.assertFalse(self.test_user.is_active)
-        self.client.get(self.current_test_url)
+        self.client.get(self.test_url)
         self.test_user.refresh_from_db()
         self.assertTrue(self.test_user.is_active)
 
@@ -399,7 +399,7 @@ class UserActivateViewTest(TestCase):
 class UserLoginViewTest(TestCase):
     def setUp(self):
         self.view = views.UserLoginView
-        self.current_test_url = reverse('users:login')
+        self.test_url = reverse('users:login')
 
     # ATTRIBUTES
     def test_view_name(self):
@@ -429,7 +429,7 @@ class UserLoginViewTest(TestCase):
 
     # request.GET
     def test_request_get_method_unauthenticated_user(self):
-        response = self.client.get(self.current_test_url)
+        response = self.client.get(self.test_url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(self.view.template_name)
 
@@ -438,7 +438,7 @@ class UserLoginViewTest(TestCase):
         self.assertTrue(
             self.client.login(username=test_user.username,
                               password=c.TEST_USER_PASSWORD))
-        response = self.client.get(self.current_test_url)
+        response = self.client.get(self.test_url)
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse(settings.LOGIN_REDIRECT_URL))
 
@@ -448,7 +448,7 @@ class UserLoginViewTest(TestCase):
     def test_method_post_unactivated_user_is_notified_and_redirected(self):
         test_user = f.UserFactory(is_active=False)
         form_data = {'username': test_user.username}
-        response = self.client.post(self.current_test_url, form_data)
+        response = self.client.post(self.test_url, form_data)
 
         # user receives message to activate their account
         messages = list(get_messages(response.wsgi_request))
@@ -469,7 +469,7 @@ class UserLoginViewTest(TestCase):
                      'captcha_0': 'test',
                      'captcha_1': 'PASSED'}
         response = self.client.post(
-            self.current_test_url, form_data)
+            self.test_url, form_data)
 
         # user is logged in and redirected to UserDetailMe
         self.assertEqual(response.wsgi_request.user, test_user)
@@ -480,7 +480,7 @@ class UserLoginViewTest(TestCase):
 class UserDetailMeViewTest(TestCase):
     def setUp(self):
         self.view = views.UserDetailMeView
-        self.current_test_url = reverse('users:user_detail_me')
+        self.test_url = reverse('users:user_detail_me')
 
     # ATTRIBUTES
     def test_view_name(self):
@@ -500,7 +500,7 @@ class UserDetailMeViewTest(TestCase):
 
     # request.GET
     def test_request_get_method_unauthenticated_user(self):
-        response = self.client.get(self.current_test_url)
+        response = self.client.get(self.test_url)
         self.assertEqual(response.status_code, 302)
         self.assertTemplateUsed(self.view.template_name)
         self.assertEqual(
@@ -512,7 +512,7 @@ class UserDetailMeViewTest(TestCase):
         self.assertTrue(
             self.client.login(username=test_user.username,
                               password=c.TEST_USER_PASSWORD))
-        response = self.client.get(self.current_test_url)
+        response = self.client.get(self.test_url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(self.view.template_name)
 
@@ -524,12 +524,12 @@ class UserDetailMeViewTest(TestCase):
         self.assertTrue(
             self.client.login(username=test_user.username,
                               password=c.TEST_USER_PASSWORD))
-        response = self.client.get(self.current_test_url)
+        response = self.client.get(self.test_url)
         self.assertEqual(response.context['object'], test_user)
 
     def test_method_get_object_returns_expected_object_as_requestfactory(self):
         test_user = f.UserFactory()
-        request = RequestFactory().get(self.current_test_url)
+        request = RequestFactory().get(self.test_url)
         request.user = test_user
         view_instance = self.view()
         view_instance.setup(request)
@@ -545,7 +545,7 @@ class UserDetailPublicViewTest(TestCase):
         self.test_user.profile.is_public = True
         self.test_user.profile.save()
 
-        self.current_test_url = reverse('users:user_detail_public', kwargs={
+        self.test_url = reverse('users:user_detail_public', kwargs={
             'username': self.test_user.username})
 
     # ATTRIBUTES
@@ -561,7 +561,7 @@ class UserDetailPublicViewTest(TestCase):
 
     # request.GET
     def test_request_get_method_unauthenticated_user(self):
-        response = self.client.get(self.current_test_url)
+        response = self.client.get(self.test_url)
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(self.view.template_name)
@@ -570,7 +570,7 @@ class UserDetailPublicViewTest(TestCase):
         self.assertTrue(
             self.client.login(username=self.test_user.username,
                               password=c.TEST_USER_PASSWORD))
-        response = self.client.get(self.current_test_url)
+        response = self.client.get(self.test_url)
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(self.view.template_name)
@@ -585,7 +585,7 @@ class UserDetailPublicViewTest(TestCase):
         self.assertTrue(
             self.client.login(username=self.test_user.username,
                               password=c.TEST_USER_PASSWORD))
-        response = self.client.get(self.current_test_url)
+        response = self.client.get(self.test_url)
 
         # show account visiblility status message
         messages = list(get_messages(response.wsgi_request))
@@ -601,7 +601,7 @@ class UserDetailPublicViewTest(TestCase):
         self.test_user.profile.is_public = False
         self.test_user.profile.save()
 
-        response = self.client.get(self.current_test_url)
+        response = self.client.get(self.test_url)
 
         # return 404
         self.assertEqual(response.status_code, 404)
@@ -615,7 +615,7 @@ class UserDetailPublicViewTest(TestCase):
         expected_qs = JsonStore.objects.filter(user=self.test_user) \
             .order_by('-updated_at')
 
-        request = RequestFactory().get(self.current_test_url)
+        request = RequestFactory().get(self.test_url)
         request.user = AnonymousUser()
         view_instance = self.view()
         view_instance.setup(request)
@@ -626,7 +626,7 @@ class UserDetailPublicViewTest(TestCase):
 
     # get_object()
     def test_get_object_returns_expected_object(self):
-        request = RequestFactory().get(self.current_test_url)
+        request = RequestFactory().get(self.test_url)
         request.user = AnonymousUser()
         view_instance = self.view()
         view_instance.setup(request)

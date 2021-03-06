@@ -14,8 +14,8 @@ class ProjectRootTemplateViewTest(TestCase):
         cls.test_user = f.UserFactory()
 
     def setUp(self):
-        self.current_test_url = reverse('project_root')
-        self.response = self.client.get(self.current_test_url)
+        self.test_url = reverse('project_root')
+        self.response = self.client.get(self.test_url)
         self.view_instance = self.response.context['view']
 
     # request.GET
@@ -47,8 +47,8 @@ class ContactUsFormViewTest(TestCase):
         cls.test_user = f.UserFactory()
 
     def setUp(self):
-        self.current_test_url = reverse('contact_us')
-        self.response = self.client.get(self.current_test_url)
+        self.test_url = reverse('contact_us')
+        self.response = self.client.get(self.test_url)
         self.view_instance = self.response.context['view']
 
     # request.GET
@@ -105,7 +105,7 @@ class ContactUsFormViewTest(TestCase):
             'captcha_0': 'test',
             'captcha_1': 'PASSED'}
         self.response = self.client.post(
-            self.current_test_url, valid_contact_form_data)
+            self.test_url, valid_contact_form_data)
 
         # contact_us email has been sent
         self.assertEqual(len(mail.outbox), 1)
@@ -129,7 +129,7 @@ class ContactUsFormViewTest(TestCase):
             'captcha_0': 'test',
             'captcha_1': 'PASSED'}
         self.response = self.client.post(
-            self.current_test_url, invalid_contact_form_data)
+            self.test_url, invalid_contact_form_data)
 
         # no email sent
         self.assertEqual(len(mail.outbox), 0)
@@ -151,8 +151,8 @@ class FaqTemplateViewTest(TestCase):
         cls.test_user = f.UserFactory()
 
     def setUp(self):
-        self.current_test_url = reverse('faq')
-        self.response = self.client.get(self.current_test_url)
+        self.test_url = reverse('faq')
+        self.response = self.client.get(self.test_url)
         self.view_instance = self.response.context['view']
 
     # request.GET
@@ -185,8 +185,8 @@ class TermsOfUseTemplateViewTest(TestCase):
         cls.test_user = f.UserFactory()
 
     def setUp(self):
-        self.current_test_url = reverse('terms_of_use')
-        self.response = self.client.get(self.current_test_url)
+        self.test_url = reverse('terms_of_use')
+        self.response = self.client.get(self.test_url)
         self.view_instance = self.response.context['view']
 
     # view attributes
@@ -220,8 +220,8 @@ class PrivacyPolicyTemplateViewTest(TestCase):
         cls.test_user = f.UserFactory()
 
     def setUp(self):
-        self.current_test_url = reverse('privacy_policy')
-        self.response = self.client.get(self.current_test_url)
+        self.test_url = reverse('privacy_policy')
+        self.response = self.client.get(self.test_url)
         self.view_instance = self.response.context['view']
 
     # view attributes

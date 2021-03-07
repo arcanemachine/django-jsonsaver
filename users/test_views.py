@@ -487,6 +487,101 @@ class UserLoginViewTest(TestCase):
         self.assertEqual(response.url, reverse('users:user_detail_me'))
 
 
+class UserUsernameRecoverViewTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.test_url = reverse('users:user_username_recover')
+        cls.test_user = f.UserFactory()
+
+    def setUp(self):
+        self.view = views.UserUsernameRecoverView
+        self.form_data = {'email': self.test_user.email,
+                          'captcha_0': 'test',
+                          'captcha_1': 'PASSED'}
+
+    # ATTRIBUTES #
+    def test_view_name(self):
+        self.assertEqual(self.view.__name__, 'UserUsernameRecoverView')
+
+    def test_view_parent_class(self):
+        self.assertEqual(self.view.__bases__[-1].__name__, 'FormView')
+
+    def test_view_form_class_name(self):
+        self.assertEqual(
+            self.view.form_class.__name__, 'UserUsernameRecoverForm')
+
+    def test_view_template_name(self):
+        self.assertEqual(
+            self.view.template_name, 'users/user_username_recover.html')
+
+    def test_view_success_message(self):
+        self.assertEqual(
+            self.view.success_message,
+            c.USER_VIEW_USERNAME_RECOVER_SUCCESS_MESSAGE)
+
+    # request.GET
+    def test_request_get_method_unauthenticated_user(self):
+        response = self.client.get(self.test_url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, self.view.template_name)
+
+    def test_request_get_method_authenticated_user(self):
+        self.assertTrue(self.client.login(
+            username=self.test_user.username, password=c.TEST_USER_PASSWORD))
+        response = self.client.get(self.test_url)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, self.view.success_url)
+
+    # METHODS #
+
+    # dispatch()
+    def test_method_dispatch_redirects_authenticated_user(self):
+        request = RequestFactory().get(self.test_url)
+        request.user = self.test_user
+        response = self.view.as_view()(request)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, self.view.success_url)
+
+    # form_valid()
+    def test_method_form_valid(self):
+        # covered by test_user_username_recover_existing_username
+        pass
+
+    # FUNCTIONAL #
+    def test_user_username_recover_existing_username(self):
+        with self.settings(DEBUG=True):
+            response = self.client.post(self.test_url, self.form_data)
+
+        # get response
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, self.view.success_url)
+
+        # user_username_recover email has been sent
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertIn(
+            "jsonSaver: Forgot your username?", mail.outbox[0].subject)
+
+        # response contains success message
+        messages = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(
+            str(messages[0]), c.USER_VIEW_USERNAME_RECOVER_SUCCESS_MESSAGE)
+
+    def test_user_username_recover_non_existent_user_email(self):
+        self.form_data.update({'email': 'non_existent_user@email.com'})
+        response = self.client.post(self.test_url, self.form_data)
+
+        # get response
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, self.view.success_url)
+
+        # response contains success message
+        messages = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(
+            str(messages[0]), c.USER_VIEW_USERNAME_RECOVER_SUCCESS_MESSAGE)
+
+
 class UserLogoutViewTest(TestCase):
     @classmethod
     def setUpTestData(cls):

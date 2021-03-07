@@ -131,20 +131,24 @@ class UserLoginView(SuccessMessageMixin, LoginView):
 class UserUsernameRecoverView(FormView):
     form_class = forms.UserUsernameRecoverForm
     template_name = 'users/user_username_recover.html'
+    success_message = c.USER_VIEW_USERNAME_RECOVER_SUCCESS_MESSAGE
+    success_url = reverse_lazy('users:login')
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return HttpResponseRedirect(self.success_url)
+        return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
         email = form.cleaned_data['email']
         user = UserModel.objects.filter(email=email).first()
-
         if user:
             tasks.send_user_username_recover_email_task.delay(
                 email, user.username)
             if settings.DEBUG:
                 h.send_user_username_recover_email(email, user.username)
-        messages.success(
-            self.request, "If a user account exists with that email address, "
-            "then we have sent them an email containing their username.")
-        return HttpResponseRedirect(reverse('users:login'))
+        messages.success(self.request, self.success_message)
+        return HttpResponseRedirect(self.success_url)
 
 
 class UserLogoutView(LogoutView):

@@ -3,7 +3,7 @@ from django.test import TestCase
 from django.urls import reverse
 from html import unescape
 
-from . import constants as c, factories as f
+from . import constants as c, factories as f, server_config as sc
 from . import views
 
 
@@ -109,7 +109,8 @@ class ContactUsFormViewTest(TestCase):
 
         # contact_us email has been sent
         self.assertEqual(len(mail.outbox), 1)
-        self.assertIn("jsonSaver Contact Form", mail.outbox[0].subject)
+        self.assertIn(
+            f"{sc.PROJECT_NAME} Contact Form", mail.outbox[0].subject)
 
         # user is redirected to project_root
         self.assertEqual(self.response.status_code, 302)

@@ -137,27 +137,6 @@ class ProfileModelTest(TestCase):
             self.test_profile.get_absolute_url(),
             self.test_profile.user.get_absolute_url())
 
-    # get_all_jsonstores_data_size()
-    def test_method_get_all_jsonstores_data_size(self):
-        all_jsonstores_data_size = \
-            self.test_profile.get_all_jsonstores_data_size
-
-        # if no jsonstores, return value is 0
-        self.assertEqual(all_jsonstores_data_size(), 0)
-
-        # if 1 jsonstore, return value is equal to size of that jsonstore
-        first_jsonstore = f.JsonStoreFactory(user=self.test_user)
-        first_jsonstore_data_size = h.get_obj_size(first_jsonstore.data)
-        self.assertEqual(
-            all_jsonstores_data_size(), first_jsonstore_data_size)
-
-        # if 2 jsonstores, return value is equal to sum of both jsonstore sizes
-        second_jsonstore = f.JsonStoreFactory(user=self.test_user)
-        second_jsonstore_data_size = h.get_obj_size(second_jsonstore.data)
-        both_jsonstores_data_size = \
-            first_jsonstore_data_size + second_jsonstore_data_size
-        self.assertEqual(all_jsonstores_data_size(), both_jsonstores_data_size)
-
     # get_all_jsonstores_data_size_in_kb()
     def test_method_get_all_jsonstores_data_size_in_kb(self):
         all_jsonstores_data_size_in_kb = \
@@ -170,25 +149,22 @@ class ProfileModelTest(TestCase):
         first_jsonstore = f.JsonStoreFactory(user=self.test_user)
         first_jsonstore_data_size_in_kb = \
             h.bytes_to_kb(h.get_obj_size(first_jsonstore.data))
-        first_jsonstore_data_size_in_kb_rounded = \
-            round(first_jsonstore_data_size_in_kb, 2)
 
         self.assertEqual(
             all_jsonstores_data_size_in_kb(),
-            first_jsonstore_data_size_in_kb_rounded)
+            first_jsonstore_data_size_in_kb)
 
         # if 2 jsonstores, return value is equal to sum of both jsonstore sizes
         second_jsonstore = f.JsonStoreFactory(user=self.test_user)
         second_jsonstore_data_size_in_kb = \
             h.bytes_to_kb(h.get_obj_size(second_jsonstore.data))
 
-        both_jsonstores_data_size_in_kb_rounded = round(
-            first_jsonstore_data_size_in_kb +
-            second_jsonstore_data_size_in_kb, 2)
+        both_jsonstores_data_size_in_kb = \
+            first_jsonstore_data_size_in_kb + second_jsonstore_data_size_in_kb
 
         self.assertEqual(
             all_jsonstores_data_size_in_kb(),
-            both_jsonstores_data_size_in_kb_rounded)
+            both_jsonstores_data_size_in_kb)
 
     # get_max_jsonstore_count()
     def test_method_get_max_jsonstore_count(self):
@@ -207,13 +183,6 @@ class ProfileModelTest(TestCase):
         expected_value = h.bytes_to_kb(sc.MAX_JSONSTORE_DATA_SIZE_USER_FREE)
         self.assertEqual(
             self.test_profile.get_max_jsonstore_data_size_in_kb(),
-            expected_value)
-
-    # get_max_all_jsonstores_data_size()
-    def test_method_get_max_jsonstore_all_jsonstores_data_size(self):
-        expected_value = sc.MAX_JSONSTORE_ALL_JSONSTORES_DATA_SIZE_USER_FREE
-        self.assertEqual(
-            self.test_profile.get_max_jsonstore_all_jsonstores_data_size(),
             expected_value)
 
     # get_max_jsonstore_all_jsonstores_data_size_in_kb()
@@ -241,8 +210,7 @@ class ProfileModelTest(TestCase):
 
         # methods
         self.assertEqual(profile.get_absolute_url(), user.get_absolute_url())
-        self.assertEqual(profile.get_all_jsonstores_data_size(), 0)
-        self.assertEqual(profile.get_all_jsonstores_data_size_in_kb(), 0.00)
+        self.assertEqual(profile.get_all_jsonstores_data_size_in_kb(), 0)
         self.assertEqual(
             profile.get_max_jsonstore_count(),
             sc.MAX_JSONSTORE_COUNT_USER_FREE)

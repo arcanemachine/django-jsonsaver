@@ -64,7 +64,7 @@ def send_contact_us_email(name, from_email, message):
 
 def send_welcome_email(recipient, activation_code):
     subject = f"{server_config.PROJECT_NAME}: Activate your account"
-    body = "Welcome to jsonSaver!\n\n" +\
+    body = f"Welcome to {server_config.PROJECT_NAME}!\n\n" +\
         "Please visit the following link to activate your account:\n\n" +\
         server_config.BACKEND_SERVER_URL + \
         reverse('users:user_activate', kwargs={

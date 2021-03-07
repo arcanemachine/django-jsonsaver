@@ -24,14 +24,11 @@ class Profile(models.Model):
     def get_absolute_url(self):
         return self.user.get_absolute_url()
 
-    def get_all_jsonstores_data_size(self):
+    def get_all_jsonstores_data_size_in_kb(self):
         result = 0
         for store in self.user.jsonstore_set.all():
-            result += h.get_obj_size(store.data)
+            result += h.bytes_to_kb(h.get_obj_size(store.data))
         return result
-
-    def get_all_jsonstores_data_size_in_kb(self):
-        return round(self.get_all_jsonstores_data_size() / 1024, 2)
 
     def get_max_jsonstore_count(self):
         if self.account_tier == 'free':

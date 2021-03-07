@@ -10,7 +10,7 @@ from rest_framework.authtoken.models import Token
 
 from . import views
 from django_jsonsaver import \
-    constants as c, factories as f, helpers_testing as ht
+    constants as c, factories as f, helpers_testing as ht, server_config as sc
 from stores.models import JsonStore
 
 UserModel = get_user_model()
@@ -166,7 +166,8 @@ class UserRegisterViewTest(TestCase):
         # welcome email sent
         self.assertEqual(len(mail.outbox), 1)
         self.assertIn(
-            "jsonSaver: Activate your account", mail.outbox[0].subject)
+            f"{sc.PROJECT_NAME}: Activate your account",
+            mail.outbox[0].subject)
 
         # user contains expected data
         user = UserModel.objects.last()
@@ -200,7 +201,8 @@ class UserRegisterViewTest(TestCase):
         # welcome email sent
         self.assertEqual(len(mail.outbox), 1)
         self.assertIn(
-            "jsonSaver: Activate your account", mail.outbox[0].subject)
+            f"{sc.PROJECT_NAME}: Activate your account",
+            mail.outbox[0].subject)
 
         # user contains expected data
         user = UserModel.objects.last()
@@ -303,7 +305,8 @@ class UserActivationEmailResendViewTest(TestCase):
         # welcome email has been sent
         self.assertEqual(len(mail.outbox), 1)
         self.assertIn(
-            "jsonSaver: Activate your account", mail.outbox[0].subject)
+            f"{sc.PROJECT_NAME}: Activate your account",
+            mail.outbox[0].subject)
 
     def test_method_form_valid_enter_invalid_email_address(self):
         form_data = {'email': 'fake@email.com',
@@ -559,7 +562,8 @@ class UserUsernameRecoverViewTest(TestCase):
         # user_username_recover email has been sent
         self.assertEqual(len(mail.outbox), 1)
         self.assertIn(
-            "jsonSaver: Forgot your username?", mail.outbox[0].subject)
+            f"{sc.PROJECT_NAME}: Forgot your username?",
+            mail.outbox[0].subject)
 
         # response contains success message
         messages = list(get_messages(response.wsgi_request))
@@ -973,7 +977,7 @@ class UserUpdateEmailViewTest(TestCase):
         # confirmation email has been sent
         self.assertEqual(len(mail.outbox), 1)
         self.assertIn(
-            "jsonSaver: Confirm your new email address",
+            f"{sc.PROJECT_NAME}: Confirm your new email address",
             mail.outbox[0].subject)
 
     # get_object()

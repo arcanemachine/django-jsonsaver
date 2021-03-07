@@ -1,3 +1,5 @@
+from .server_config import PROJECT_NAME
+
 # constants
 JSONSTORE_LIST_PAGINATE_BY = 25
 JSONSTORE_FORBIDDEN_NAMES = ['find']
@@ -75,8 +77,11 @@ USER_VIEW_UPDATE_IS_PUBLIC_SUCCESS_MESSAGE = \
     "Your profile's visibility status has been updated."
 USER_VIEW_DELETE_SUCCESS_MESSAGE = "Your account has been permanently deleted."
 
+
 def USER_VIEW_UPDATE_EMAIL_CONFIRM_SUCCESS_MESSAGE(email):
     return f"Your email address has been updated to '{email}'."
+
+
 def USER_VIEW_UPDATE_API_KEY_SUCCESS_MESSAGE(key):
     return f"Your new API key is '{key}'"
 

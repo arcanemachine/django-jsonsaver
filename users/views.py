@@ -190,9 +190,7 @@ class UserUpdateAccountTierView(LoginRequiredMixin, TemplateView):
 class UserUpdateEmailView(LoginRequiredMixin, FormView):
     form_class = forms.UserUpdateEmailForm
     template_name = 'users/user_update_email.html'
-
-    def get_object(self):
-        return self.request.user.profile
+    success_url = reverse_lazy('users:user_detail_me')
 
     def form_valid(self, form):
         user = self.request.user
@@ -208,13 +206,14 @@ class UserUpdateEmailView(LoginRequiredMixin, FormView):
         tasks.send_email_update_email_task.delay(
             email, user.profile.activation_code)
         if settings.DEBUG:
-            h.send_email_update_email(
-                email, user.profile.activation_code)
+            h.send_email_update_email(email, user.profile.activation_code)
         messages.success(
-            self.request, "Success! Please check your email inbox for "
-            "your confirmation message.")
+            self.request, c.USER_VIEW_UPDATE_EMAIL_SUCCESS_MESSAGE)
 
-        return HttpResponseRedirect(reverse('users:user_detail_me'))
+        return HttpResponseRedirect(self.success_url)
+
+    def get_object(self):
+        return self.request.user.profile
 
 
 @login_required
@@ -230,7 +229,7 @@ def user_update_email_confirm(request, activation_code):
     user.profile.save()
 
     messages.success(
-        request, f"Your email address has been updated to '{user.email}'.")
+        request, c.USER_VIEW_UPDATE_EMAIL_CONFIRM_SUCCESS_MESSAGE(user.email))
     return HttpResponseRedirect(reverse('users:user_detail_me'))
 
 
@@ -239,7 +238,8 @@ class UserUpdateIsPublicView(
     model = Profile
     fields = ('is_public',)
     template_name = 'users/user_update_is_public.html'
-    success_message = "Your profile settings have been updated."
+    success_message = c.USER_VIEW_UPDATE_IS_PUBLIC_SUCCESS_MESSAGE
+    success_url = reverse_lazy('users:user_detail_me')
 
     def get_object(self):
         return self.request.user.profile

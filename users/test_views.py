@@ -16,18 +16,21 @@ UserModel = get_user_model()
 
 
 class UsersRootViewTest(SimpleTestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.test_url = reverse('users:users_root')
+
     def setUp(self):
         self.view = views.users_root
-        self.test_url = reverse('users:users_root')
 
     # ATTRIBUTES
     def test_view_function_name(self):
         self.assertEqual(self.view.__name__, 'users_root')
 
     def test_view_function_args(self):
-        args = ht.get_function_args(self.view)
-        self.assertEqual(len(args), 1)
-        self.assertEqual(args[0], 'request')
+        view_func_args = ht.get_function_args(self.view)
+        self.assertEqual(len(view_func_args), 1)
+        self.assertEqual(view_func_args[0], 'request')
 
     # request.GET
     def test_request_get_method_unauthenticated_user_with_requestfactory(self):
@@ -326,22 +329,25 @@ class UserActivationEmailResendViewTest(TestCase):
 
 
 class UserActivateViewTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.test_user = f.UserFactory(is_active=False)
+        cls.test_url = reverse('users:user_activate', kwargs={
+            'activation_code': cls.test_user.profile.activation_code})
+        cls.success_url = reverse(settings.LOGIN_URL)
+
     def setUp(self):
         self.view = views.user_activate
-        self.test_user = f.UserFactory(is_active=False)
-        self.test_url = reverse('users:user_activate', kwargs={
-            'activation_code': self.test_user.profile.activation_code})
-        self.success_url = reverse(settings.LOGIN_URL)
 
     # ATTRIBUTES
     def test_view_function_name(self):
         self.assertEqual(self.view.__name__, 'user_activate')
 
     def test_view_function_args(self):
-        args = ht.get_function_args(self.view)
-        self.assertEqual(len(args), 2)
-        self.assertEqual(args[0], 'request')
-        self.assertEqual(args[1], 'activation_code')
+        view_func_args = ht.get_function_args(self.view)
+        self.assertEqual(len(view_func_args), 2)
+        self.assertEqual(view_func_args[0], 'request')
+        self.assertEqual(view_func_args[1], 'activation_code')
 
     # request.GET
     def test_request_get_method_unauthenticated_user(self):
@@ -395,9 +401,12 @@ class UserActivateViewTest(TestCase):
 
 
 class UserLoginViewTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.test_url = reverse('users:login')
+
     def setUp(self):
         self.view = views.UserLoginView
-        self.test_url = reverse('users:login')
 
     # ATTRIBUTES
     def test_view_name(self):
@@ -405,8 +414,8 @@ class UserLoginViewTest(TestCase):
 
     def test_view_mixins(self):
         mixins = self.view.__bases__
-        self.assertEqual(mixins[0].__name__, 'SuccessMessageMixin')
         self.assertEqual(len(mixins[:-1]), 1)
+        self.assertEqual(mixins[0].__name__, 'SuccessMessageMixin')
 
     def test_view_parent_class(self):
         self.assertEqual(self.view.__bases__[-1].__name__, 'LoginView')
@@ -475,9 +484,12 @@ class UserLoginViewTest(TestCase):
 
 
 class UserDetailMeViewTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.test_url = reverse('users:user_detail_me')
+
     def setUp(self):
         self.view = views.UserDetailMeView
-        self.test_url = reverse('users:user_detail_me')
 
     # ATTRIBUTES
     def test_view_name(self):
@@ -485,9 +497,8 @@ class UserDetailMeViewTest(TestCase):
 
     def test_view_mixins(self):
         mixins = self.view.__bases__
-        self.assertEqual(
-            self.view.__bases__[0].__name__, 'LoginRequiredMixin')
         self.assertEqual(len(mixins[:-1]), 1)
+        self.assertEqual(self.view.__bases__[0].__name__, 'LoginRequiredMixin')
 
     def test_view_parent_class(self):
         self.assertEqual(self.view.__bases__[-1].__name__, 'DetailView')
@@ -533,15 +544,16 @@ class UserDetailMeViewTest(TestCase):
 
 
 class UserDetailPublicViewTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.test_user = f.UserFactory()
+        cls.test_user.profile.is_public = True
+        cls.test_user.profile.save()
+        cls.test_url = reverse('users:user_detail_public', kwargs={
+            'username': cls.test_user.username})
+
     def setUp(self):
         self.view = views.UserDetailPublicView
-
-        self.test_user = f.UserFactory()
-        self.test_user.profile.is_public = True
-        self.test_user.profile.save()
-
-        self.test_url = reverse('users:user_detail_public', kwargs={
-            'username': self.test_user.username})
 
     # ATTRIBUTES
     def test_view_name(self):
@@ -630,14 +642,15 @@ class UserDetailPublicViewTest(TestCase):
 
 
 class UserUpdateTemplateViewTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.test_user = f.UserFactory()
+        cls.test_user.profile.is_public = True
+        cls.test_user.profile.save()
+        cls.test_url = reverse('users:user_update')
+
     def setUp(self):
         self.view = views.UserUpdateTemplateView
-
-        self.test_user = f.UserFactory()
-        self.test_user.profile.is_public = True
-        self.test_user.profile.save()
-
-        self.test_url = reverse('users:user_update')
 
     # ATTRIBUTES
     def test_view_name(self):
@@ -645,9 +658,9 @@ class UserUpdateTemplateViewTest(TestCase):
 
     def test_view_mixins(self):
         mixins = self.view.__bases__
+        self.assertEqual(len(mixins[:-1]), 2)
         self.assertEqual(mixins[0].__name__, 'LoginRequiredMixin')
         self.assertEqual(mixins[1].__name__, 'SuccessMessageMixin')
-        self.assertEqual(len(mixins[:-1]), 2)
 
     def test_view_parent_class(self):
         self.assertEqual(self.view.__bases__[-1].__name__, 'TemplateView')
@@ -674,3 +687,319 @@ class UserUpdateTemplateViewTest(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(self.view.template_name)
+
+
+class UserUpdateAccountTierViewTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.test_user = f.UserFactory()
+        cls.test_url = reverse('users:user_update_account_tier')
+
+    def setUp(self):
+        self.view = views.UserUpdateAccountTierView
+
+    # ATTRIBUTES #
+    def test_view_name(self):
+        self.assertEqual(self.view.__name__, 'UserUpdateAccountTierView')
+
+    def test_view_mixins(self):
+        mixins = self.view.__bases__
+        self.assertEqual(len(mixins[:-1]), 1)
+        self.assertEqual(mixins[0].__name__, 'LoginRequiredMixin')
+
+    def test_view_parent_class(self):
+        self.assertEqual(self.view.__bases__[-1].__name__, 'TemplateView')
+
+    def test_view_template_name(self):
+        self.assertEqual(
+            self.view.template_name, 'users/user_update_account_tier.html')
+
+    # request.GET
+    def test_request_get_method_unauthenticated_user(self):
+        response = self.client.get(self.test_url)
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(
+            response.url,
+            f"{reverse(settings.LOGIN_URL)}?next={response.wsgi_request.path}")
+
+    def test_request_get_method_authenticated_user(self):
+        self.assertTrue(self.client.login(
+            username=self.test_user.username, password=c.TEST_USER_PASSWORD))
+        response = self.client.get(self.test_url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(self.view.template_name)
+
+
+class UserUpdateEmailViewTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.test_user = f.UserFactory()
+        cls.test_url = reverse('users:user_update_email')
+
+    def setUp(self):
+        self.view = views.UserUpdateEmailView
+
+    # ATTRIBUTES #
+    def test_view_name(self):
+        self.assertEqual(self.view.__name__, 'UserUpdateEmailView')
+
+    def test_view_mixins(self):
+        mixins = self.view.__bases__
+        self.assertEqual(len(mixins[:-1]), 1)
+        self.assertEqual(mixins[0].__name__, 'LoginRequiredMixin')
+
+    def test_view_parent_class(self):
+        self.assertEqual(self.view.__bases__[-1].__name__, 'FormView')
+
+    def test_view_template_name(self):
+        self.assertEqual(
+            self.view.template_name, 'users/user_update_email.html')
+
+    def test_view_success_url(self):
+        self.assertEqual(
+            self.view.success_url, reverse('users:user_detail_me'))
+
+    # request.GET
+    def test_request_get_method_unauthenticated_user(self):
+        response = self.client.get(self.test_url)
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(
+            response.url,
+            f"{reverse(settings.LOGIN_URL)}?next={response.wsgi_request.path}")
+
+    def test_request_get_method_authenticated_user(self):
+        self.assertTrue(self.client.login(
+            username=self.test_user.username, password=c.TEST_USER_PASSWORD))
+        response = self.client.get(self.test_url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(self.view.template_name)
+
+    # METHODS #
+
+    # form_valid()
+    def test_method_form_valid(self):
+        # old user values
+        old_email = self.test_user.email
+        new_email = 'new_' + self.test_user.email
+        self.assertNotEqual(new_email, old_email)
+
+        # old profile values
+        profile = self.test_user.profile
+        old_activation_code = profile.activation_code
+        self.assertEqual(profile.wants_email, None)
+
+        # get response
+        self.assertTrue(self.client.login(
+            username=self.test_user.username, password=c.TEST_USER_PASSWORD))
+        form_data = {'email': new_email,
+                     'captcha_0': 'test',
+                     'captcha_1': 'PASSED'}
+        with self.settings(DEBUG=True):
+            response = self.client.post(self.test_url, form_data)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, self.view.success_url)
+
+        # user profile is updated as expected
+        profile.refresh_from_db()
+        self.assertEqual(profile.wants_email, new_email)
+        self.assertTrue(profile.activation_code != old_activation_code)
+        self.assertIsNotNone(profile.activation_code)
+
+        # response contains success message
+        messages = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(
+            str(messages[0]), c.USER_VIEW_UPDATE_EMAIL_SUCCESS_MESSAGE)
+
+        # confirmation email has been sent
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertIn(
+            "jsonSaver: Confirm your new email address",
+            mail.outbox[0].subject)
+
+    # get_object()
+    def test_get_object_returns_expected_object(self):
+        request = RequestFactory().get(self.test_url)
+        request.user = self.test_user
+        view_instance = self.view()
+        view_instance.setup(request)
+        obj = view_instance.get_object()
+        self.assertEqual(obj, self.test_user.profile)
+
+
+class UserUpdateEmailConfirmViewTest(TestCase):
+    def setUp(self):
+        self.view = views.user_update_email_confirm
+
+        # simulate the first step of user_email_update
+        self.test_user = f.UserFactory()
+        self.new_email = 'new_' + self.test_user.email
+        self.test_user.profile.wants_email = self.new_email
+        self.test_user.profile.save()
+        # use existing activation code instead of generating a new one
+        # as would normally happen during the email updating process
+        self.test_url = reverse('users:user_update_email_confirm', kwargs={
+            'activation_code': self.test_user.profile.activation_code})
+
+    # ATTRIBUTES
+    def test_view_function_name(self):
+        self.assertEqual(self.view.__name__, 'user_update_email_confirm')
+
+    def test_view_function_args(self):
+        view_func_args = ht.get_function_args(self.view)
+        self.assertEqual(len(view_func_args), 2)
+        self.assertEqual(view_func_args[0], 'request')
+        self.assertEqual(view_func_args[1], 'activation_code')
+
+    def test_view_function_decorators(self):
+        decorators = ht.get_function_decorators(self.view)
+        self.assertEqual(len(decorators), 1)
+        self.assertEqual(decorators[0], '@login_required')
+
+    # request.GET
+    def test_request_get_method_unauthenticated_user(self):
+        response = self.client.get(self.test_url)
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(
+            response.url,
+            f"{reverse(settings.LOGIN_URL)}?next={response.wsgi_request.path}")
+
+    def test_request_get_method_authenticated_user(self):
+        self.assertTrue(self.client.login(
+            username=self.test_user.username, password=c.TEST_USER_PASSWORD))
+        response = self.client.get(self.test_url)
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse("users:user_detail_me"))
+
+    # bad kwargs
+    def test_request_get_method_authenticated_user_bad_kwargs(self):
+        self.test_url = reverse('users:user_update_email_confirm', kwargs={
+            'activation_code': 'bad_kwargs'})
+
+        self.assertTrue(self.client.login(
+            username=self.test_user.username, password=c.TEST_USER_PASSWORD))
+        response = self.client.get(self.test_url)
+        self.assertEqual(response.status_code, 404)
+
+    # FUNCTIONAL #
+
+    # success
+    def test_functional_user_update_email_confirm(self):
+        self.assertTrue(self.client.login(
+            username=self.test_user.username, password=c.TEST_USER_PASSWORD))
+        response = self.client.get(self.test_url)
+
+        old_user_email = self.test_user.email
+        old_profile_wants_email = self.test_user.profile.wants_email
+        old_profile_activation_code = self.test_user.profile.wants_email
+
+        # expected values updated
+        self.test_user.refresh_from_db()
+        # email is self.new_email
+        self.assertNotEqual(self.test_user.email, old_user_email)
+        self.assertEqual(self.test_user.email, self.new_email)
+        # profile.wants_email is now None
+        self.assertNotEqual(
+            old_profile_wants_email, self.test_user.profile.wants_email)
+        self.assertEqual(self.test_user.profile.wants_email, None)
+        # profile.activation_code is now None
+        self.assertNotEqual(old_profile_activation_code, None)
+        self.assertEqual(self.test_user.profile.activation_code, None)
+
+        # page redirects as expected
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse("users:user_detail_me"))
+
+
+class UserUpdateIsPublicViewTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.test_user = f.UserFactory()
+        cls.test_url = reverse('users:user_update_is_public')
+
+    def setUp(self):
+        self.view = views.UserUpdateIsPublicView
+
+    # ATTRIBUTES #
+    def test_view_name(self):
+        self.assertEqual(self.view.__name__, 'UserUpdateIsPublicView')
+
+    def test_view_mixins(self):
+        mixins = self.view.__bases__
+        self.assertEqual(len(mixins[:-1]), 2)
+        self.assertEqual(mixins[0].__name__, 'LoginRequiredMixin')
+        self.assertEqual(mixins[1].__name__, 'SuccessMessageMixin')
+
+    def test_view_parent_class(self):
+        self.assertEqual(self.view.__bases__[-1].__name__, 'UpdateView')
+
+    def test_view_model_name(self):
+        self.assertEqual(self.view.model.__name__, 'Profile')
+
+    def test_view_fields(self):
+        self.assertEqual(self.view.fields, ('is_public',))
+
+    def test_view_template_name(self):
+        self.assertEqual(
+            self.view.template_name, 'users/user_update_is_public.html')
+
+    def test_view_success_message(self):
+        self.assertEqual(
+            self.view.success_message,
+            c.USER_VIEW_UPDATE_IS_PUBLIC_SUCCESS_MESSAGE)
+
+    def test_view_success_url(self):
+        self.assertEqual(
+            self.view.success_url, reverse('users:user_detail_me'))
+
+    # request.GET
+    def test_request_get_method_unauthenticated_user(self):
+        response = self.client.get(self.test_url)
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(
+            response.url,
+            f"{reverse(settings.LOGIN_URL)}?next={response.wsgi_request.path}")
+
+    def test_request_get_method_authenticated_user(self):
+        self.assertTrue(self.client.login(
+            username=self.test_user.username, password=c.TEST_USER_PASSWORD))
+        response = self.client.get(self.test_url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(self.view.template_name)
+
+    # METHODS #
+
+    # get_object()
+    def test_get_object_returns_expected_object(self):
+        request = RequestFactory().get(self.test_url)
+        request.user = self.test_user
+        view_instance = self.view()
+        view_instance.setup(request)
+        obj = view_instance.get_object()
+        self.assertEqual(obj, self.test_user.profile)
+
+    # FUNCTIONAL #
+
+    def test_user_update_is_public(self):
+        updated_user = f.UserFactory()
+        self.assertFalse(updated_user.profile.is_public)
+
+        # update form data
+        form_data = {'is_public': ['on']}
+        self.assertTrue(self.client.login(
+            username=updated_user.username, password=c.TEST_USER_PASSWORD))
+        response = self.client.post(self.test_url, form_data)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, self.view.success_url)
+
+        # user profile.is_public is now True
+        updated_user.refresh_from_db()
+        self.assertTrue(updated_user.profile.is_public)

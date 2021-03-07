@@ -24,9 +24,9 @@ class ApiRootTest(APITestCase):
         self.assertEqual(self.view.__name__, 'api_root')
 
     def test_view_function_args(self):
-        args = ht.get_function_args(self.view)
-        self.assertEqual(len(args), 1)
-        self.assertEqual(args[0], 'request')
+        view_func_args = ht.get_function_args(self.view)
+        self.assertEqual(len(view_func_args), 1)
+        self.assertEqual(view_func_args[0], 'request')
 
     # request.GET
     def test_request_get_method_unauthenticated_user_with_client(self):

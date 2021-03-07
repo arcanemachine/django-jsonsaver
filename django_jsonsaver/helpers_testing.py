@@ -30,7 +30,7 @@ class SetUpTestCaseMixin:
 
 def get_function_args(f):
     """Returns list of args used in a given function"""
-    return inspect.getargspec(f).args
+    return list(inspect.signature(f).parameters.keys())
 
 
 def get_function_decorators(function):

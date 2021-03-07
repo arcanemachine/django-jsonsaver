@@ -70,8 +70,8 @@ class ContactUsFormViewTest(TestCase):
 
     def test_view_mixins(self):
         mixins = self.view.__bases__
-        self.assertEqual(mixins[0].__name__, 'SuccessMessageMixin')
         self.assertEqual(len(mixins[:-1]), 1)
+        self.assertEqual(mixins[0].__name__, 'SuccessMessageMixin')
 
     def test_view_parent_class_name(self):
         self.assertEqual(self.view.__bases__[-1].__name__, 'FormView')

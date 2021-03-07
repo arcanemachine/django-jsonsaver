@@ -30,8 +30,8 @@ class JsonStoreListViewTest(SetUpTestCaseMixin, TestCase):
 
     def test_view_mixins(self):
         mixins = self.view.__bases__
-        self.assertEqual(mixins[0].__name__, 'LoginRequiredMixin')
         self.assertEqual(len(mixins[:-1]), 1)
+        self.assertEqual(mixins[0].__name__, 'LoginRequiredMixin')
 
     def test_view_parent_class(self):
         self.assertEqual(self.view.__bases__[-1].__name__, 'ListView')
@@ -88,9 +88,9 @@ class JsonStoreCreateViewTest(SetUpTestCaseMixin, TestCase):
 
     def test_view_mixins(self):
         mixins = self.view.__bases__
+        self.assertEqual(len(mixins[:-1]), 2)
         self.assertEqual(mixins[0].__name__, 'LoginRequiredMixin')
         self.assertEqual(mixins[1].__name__, 'SuccessMessageMixin')
-        self.assertEqual(len(mixins[:-1]), 2)
 
     def test_view_parent_class(self):
         self.assertEqual(self.view.__bases__[-1].__name__, 'CreateView')
@@ -158,9 +158,9 @@ class JsonStoreDetailViewTest(SetUpTestCaseMixin, TestCase):
 
     def test_view_mixins(self):
         mixins = self.view.__bases__
+        self.assertEqual(len(mixins[:-1]), 1)
         self.assertEqual(
             mixins[0].__name__, 'UserHasJsonStorePermissionsMixin')
-        self.assertEqual(len(self.view.__bases__[:-1]), 1)
 
     def test_view_parent_class(self):
         self.assertEqual(self.view.__bases__[-1].__name__, 'DetailView')
@@ -199,8 +199,8 @@ class JsonStoreLookupViewTest(SetUpTestCaseMixin, TestCase):
 
     def test_view_mixins(self):
         mixins = self.view.__bases__
-        self.assertEqual(mixins[0].__name__, 'LoginRequiredMixin')
         self.assertEqual(len(mixins[:-1]), 1)
+        self.assertEqual(mixins[0].__name__, 'LoginRequiredMixin')
 
     def test_view_parent_class(self):
         self.assertEqual(self.view.__bases__[-1].__name__, 'FormView')
@@ -251,10 +251,10 @@ class JsonStoreNameDetailViewTest(SetUpTestCaseMixin, TestCase):
 
     def test_view_mixins(self):
         mixins = self.view.__bases__
+        self.assertEqual(len(mixins[:-1]), 2)
         self.assertEqual(mixins[0].__name__, 'LoginRequiredMixin')
         self.assertEqual(
             mixins[1].__name__, 'UserHasJsonStorePermissionsMixin')
-        self.assertEqual(len(mixins[:-1]), 2)
 
     def test_view_parent_class(self):
         self.assertEqual(self.view.__bases__[-1].__name__, 'DetailView')
@@ -419,10 +419,10 @@ class JsonStoreUpdateViewTest(SetUpTestCaseMixin, TestCase):
 
     def test_view_mixins(self):
         mixins = self.view.__bases__
+        self.assertEqual(len(mixins[:-1]), 2)
         self.assertEqual(
             mixins[0].__name__, 'UserHasJsonStorePermissionsMixin')
         self.assertEqual(mixins[1].__name__, 'SuccessMessageMixin')
-        self.assertEqual(len(mixins[:-1]), 2)
 
     def test_view_parent_class(self):
         self.assertEqual(self.view.__bases__[-1].__name__, 'UpdateView')
@@ -482,9 +482,9 @@ class JsonStoreDeleteViewTest(SetUpTestCaseMixin, TestCase):
 
     def test_view_mixins(self):
         mixins = self.view.__bases__
+        self.assertEqual(len(mixins[:-1]), 1)
         self.assertEqual(
             mixins[0].__name__, 'UserHasJsonStorePermissionsMixin')
-        self.assertEqual(len(mixins[:-1]), 1)
 
     def test_view_parent_class(self):
         self.assertEqual(self.view.__bases__[-1].__name__, 'DeleteView')

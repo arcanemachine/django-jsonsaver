@@ -6,6 +6,7 @@ from django.contrib.messages import get_messages
 from django.contrib.messages.storage.fallback import FallbackStorage
 from django.test import RequestFactory, SimpleTestCase, TestCase
 from django.urls import reverse
+from rest_framework.authtoken.models import Token
 
 from . import views
 from django_jsonsaver import \
@@ -16,12 +17,9 @@ UserModel = get_user_model()
 
 
 class UsersRootViewTest(SimpleTestCase):
-    @classmethod
-    def setUpTestData(cls):
-        cls.test_url = reverse('users:users_root')
-
     def setUp(self):
         self.view = views.users_root
+        self.test_url = reverse('users:users_root')
 
     # ATTRIBUTES
     def test_view_function_name(self):
@@ -399,6 +397,12 @@ class UserActivateViewTest(TestCase):
         self.test_user.refresh_from_db()
         self.assertTrue(self.test_user.is_active)
 
+    def test_successful_activation_creates_user_api_token(self):
+        old_token_count = Token.objects.count()
+        self.client.get(self.test_url)
+        new_token_count = Token.objects.count()
+        self.assertEqual(new_token_count, old_token_count + 1)
+
 
 class UserLoginViewTest(TestCase):
     @classmethod
@@ -408,7 +412,7 @@ class UserLoginViewTest(TestCase):
     def setUp(self):
         self.view = views.UserLoginView
 
-    # ATTRIBUTES
+    # ATTRIBUTES #
     def test_view_name(self):
         self.assertEqual(self.view.__name__, 'UserLoginView')
 
@@ -481,6 +485,62 @@ class UserLoginViewTest(TestCase):
         self.assertEqual(response.wsgi_request.user, test_user)
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse('users:user_detail_me'))
+
+
+class UserLogoutViewTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.test_url = reverse('users:logout')
+        cls.test_user = f.UserFactory()
+
+    def setUp(self):
+        self.view = views.UserLogoutView
+
+    # ATTRIBUTES #
+    def test_view_name(self):
+        self.assertEqual(self.view.__name__, 'UserLogoutView')
+
+    def test_view_parent_class(self):
+        self.assertEqual(self.view.__bases__[-1].__name__, 'LogoutView')
+
+    def test_view_success_message(self):
+        self.assertEqual(
+            self.view.success_message, c.USER_VIEW_LOGOUT_SUCCESS_MESSAGE)
+
+    # request.GET
+    def test_request_get_method_unauthenticated_user(self):
+        response = self.client.get(self.test_url)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse(settings.LOGOUT_REDIRECT_URL))
+
+    def test_request_get_method_authenticated_user(self):
+        test_user = f.UserFactory()
+        self.assertTrue(self.client.login(
+            username=test_user.username, password=c.TEST_USER_PASSWORD))
+        response = self.client.get(self.test_url)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse(settings.LOGOUT_REDIRECT_URL))
+
+    # METHODS #
+
+    # dispatch()
+    def test_method_dispatch_passes_success_message(self):
+        response = self.client.get(self.test_url)
+
+        # response contains success message
+        messages = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), c.USER_VIEW_LOGOUT_SUCCESS_MESSAGE)
+
+    # FUNCTIONAL #
+    def test_logout(self):
+        self.assertTrue(self.client.login(
+            username=self.test_user.username, password=c.TEST_USER_PASSWORD))
+
+        # get user information from dummy response objects
+        self.assertEqual(self.client.get('/').context['user'], self.test_user)
+        self.client.get(self.test_url)
+        self.assertEqual(self.client.get('/').context['user'], AnonymousUser())
 
 
 class UserDetailMeViewTest(TestCase):
@@ -1003,3 +1063,183 @@ class UserUpdateIsPublicViewTest(TestCase):
         # user profile.is_public is now True
         updated_user.refresh_from_db()
         self.assertTrue(updated_user.profile.is_public)
+
+
+class UserUpdateApiKeyViewTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.test_user = f.UserFactory()
+        f.TokenFactory(user=cls.test_user)
+        cls.test_url = reverse('users:user_update_api_key')
+
+    def setUp(self):
+        self.view = views.UserUpdateApiKeyView
+
+    # ATTRIBUTES #
+    def test_view_name(self):
+        self.assertEqual(self.view.__name__, 'UserUpdateApiKeyView')
+
+    def test_view_mixins(self):
+        mixins = self.view.__bases__
+        self.assertEqual(len(mixins[:-1]), 1)
+        self.assertEqual(mixins[0].__name__, 'LoginRequiredMixin')
+
+    def test_view_parent_class(self):
+        self.assertEqual(self.view.__bases__[-1].__name__, 'TemplateView')
+
+    def test_view_template_name(self):
+        self.assertEqual(
+            self.view.template_name, 'users/user_update_api_key.html')
+
+    def test_view_success_url(self):
+        self.assertEqual(
+            self.view.success_url, reverse('users:user_detail_me'))
+
+    # request.GET
+    def test_request_get_method_unauthenticated_user(self):
+        response = self.client.get(self.test_url)
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(
+            response.url,
+            f"{reverse(settings.LOGIN_URL)}?next={response.wsgi_request.path}")
+
+    def test_request_get_method_authenticated_user(self):
+        self.assertTrue(self.client.login(
+            username=self.test_user.username, password=c.TEST_USER_PASSWORD))
+        response = self.client.get(self.test_url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(self.view.template_name)
+
+    # METHODS #
+
+    # post()
+    def test_method_post(self):
+        # get token info before post
+        old_token_count = Token.objects.count()
+        old_token_pk = self.test_user.auth_token.pk
+        old_token_key = self.test_user.auth_token.key
+
+        # get response
+        self.assertTrue(self.client.login(
+            username=self.test_user.username, password=c.TEST_USER_PASSWORD))
+        response = self.client.post(self.test_url)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, self.view.success_url)
+
+        # get token info after post
+        self.test_user.refresh_from_db()
+        new_token_pk = self.test_user.auth_token.pk
+        new_token_key = self.test_user.auth_token.key
+
+        # new token is different from old token
+        self.assertNotEqual(new_token_pk, old_token_pk)
+        self.assertNotEqual(new_token_key, old_token_key)
+
+        # old key has been removed
+        self.assertFalse(Token.objects.filter(pk=old_token_pk).exists())
+
+        # overall token count has not changed
+        self.assertEqual(Token.objects.count(), old_token_count)
+
+        # response contains success message
+        messages = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(
+            str(messages[0]),
+            c.USER_VIEW_UPDATE_API_KEY_SUCCESS_MESSAGE(new_token_key))
+
+
+class UserDeleteViewTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.test_user = f.UserFactory()
+        cls.test_url = reverse('users:user_delete')
+
+    def setUp(self):
+        self.view = views.UserDeleteView
+
+    # ATTRIBUTES #
+    def test_view_name(self):
+        self.assertEqual(self.view.__name__, 'UserDeleteView')
+
+    def test_view_mixins(self):
+        mixins = self.view.__bases__
+        self.assertEqual(len(mixins[:-1]), 1)
+        self.assertEqual(mixins[0].__name__, 'LoginRequiredMixin')
+
+    def test_view_parent_class(self):
+        self.assertEqual(self.view.__bases__[-1].__name__, 'DeleteView')
+
+    def test_view_template_name(self):
+        self.assertEqual(
+            self.view.template_name, 'users/user_delete.html')
+
+    def test_view_success_url(self):
+        self.assertEqual(self.view.success_url, reverse('project_root'))
+
+    # request.GET
+    def test_request_get_method_unauthenticated_user(self):
+        response = self.client.get(self.test_url)
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(
+            response.url,
+            f"{reverse(settings.LOGIN_URL)}?next={response.wsgi_request.path}")
+
+    def test_request_get_method_authenticated_user(self):
+        self.assertTrue(self.client.login(
+            username=self.test_user.username, password=c.TEST_USER_PASSWORD))
+        response = self.client.get(self.test_url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(self.view.template_name)
+
+    # METHODS #
+
+    # delete()
+    def test_method_delete_displays_success_message(self):
+        self.assertTrue(self.client.login(
+            username=self.test_user.username, password=c.TEST_USER_PASSWORD))
+        response = self.client.delete(self.test_url)
+
+        # response contains success message
+        messages = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(
+            str(messages[0]), c.USER_VIEW_DELETE_SUCCESS_MESSAGE)
+
+    # get_object()
+    def test_get_object_returns_expected_object(self):
+        request = RequestFactory().get(self.test_url)
+        request.user = self.test_user
+        view_instance = self.view()
+        view_instance.setup(request)
+        obj = view_instance.get_object()
+        self.assertEqual(obj, self.test_user)
+
+    # FUNCTIONAL #
+
+    def test_user_delete_deletes_user(self):
+        # info before delete
+        old_user_pk = self.test_user.pk
+        old_user_count = UserModel.objects.count()
+
+        # get response
+        self.assertTrue(self.client.login(
+            username=self.test_user.username, password=c.TEST_USER_PASSWORD))
+        response = self.client.delete(self.test_url)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, self.view.success_url)
+
+        # info after delete
+        new_user_count = UserModel.objects.count()
+        self.assertEqual(new_user_count, old_user_count - 1)
+        self.assertFalse(UserModel.objects.filter(pk=old_user_pk).exists())
+
+        # response contains success message
+        messages = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(
+            str(messages[0]), c.USER_VIEW_DELETE_SUCCESS_MESSAGE)

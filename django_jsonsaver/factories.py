@@ -1,10 +1,10 @@
 import factory
 
 from django.contrib.auth import get_user_model
+from rest_framework.authtoken.models import Token
 
 from django_jsonsaver import constants as c
 from stores.models import JsonStore
-# from users.models import Profile
 
 UserModel = get_user_model()
 
@@ -39,3 +39,11 @@ class JsonStoreFactory(factory.django.DjangoModelFactory):
     name = factory.Sequence(lambda n: f'{c.TEST_JSONSTORE_NAME}_{n+1}')
     data = c.TEST_JSONSTORE_DATA
     is_public = False
+
+
+class TokenFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Token
+
+    user = factory.SubFactory(UserFactory)
+    key = Token.generate_key()

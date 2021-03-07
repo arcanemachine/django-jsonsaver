@@ -63,16 +63,19 @@ USER_VIEW_LOGIN_SUCCESS_MESSAGE = "You are now logged in."
 USER_VIEW_LOGIN_ACTIVATE_ACCOUNT_REMINDER = \
     "Your account has not been activated. "\
     "Please check your email inbox for your activation email."
+USER_VIEW_LOGOUT_SUCCESS_MESSAGE = "You are now logged out."
 USER_VIEW_DETAIL_PUBLIC_SAME_USER_IS_PRIVATE = \
     "Your account's visibility is set to private."
 USER_VIEW_UPDATE_EMAIL_SUCCESS_MESSAGE = \
     "Success! Please check your email inbox for your confirmation message."
 USER_VIEW_UPDATE_IS_PUBLIC_SUCCESS_MESSAGE = \
     "Your profile's visibility status has been updated."
-
+USER_VIEW_DELETE_SUCCESS_MESSAGE = "Your account has been permanently deleted."
 
 def USER_VIEW_UPDATE_EMAIL_CONFIRM_SUCCESS_MESSAGE(email):
     return f"Your email address has been updated to '{email}'."
+def USER_VIEW_UPDATE_API_KEY_SUCCESS_MESSAGE(key):
+    return f"Your new API key is '{key}'"
 
 
 # Profile

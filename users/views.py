@@ -99,6 +99,9 @@ def user_activate(request, activation_code):
     user.is_active = True
     user.save()
 
+    # generate an API token for the user
+    Token.objects.create(user=user)
+
     # remove activation code from profile
     user.profile.activation_code = None
     user.profile.save()
@@ -142,6 +145,14 @@ class UserUsernameRecoverView(FormView):
             self.request, "If a user account exists with that email address, "
             "then we have sent them an email containing their username.")
         return HttpResponseRedirect(reverse('users:login'))
+
+
+class UserLogoutView(LogoutView):
+    success_message = c.USER_VIEW_LOGOUT_SUCCESS_MESSAGE
+
+    def dispatch(self, request, *args, **kwargs):
+        messages.success(self.request, self.success_message)
+        return super().dispatch(request, *args, **kwargs)
 
 
 class UserDetailMeView(LoginRequiredMixin, DetailView):
@@ -247,13 +258,15 @@ class UserUpdateIsPublicView(
 
 class UserUpdateApiKeyView(LoginRequiredMixin, TemplateView):
     template_name = 'users/user_update_api_key.html'
+    success_url = reverse_lazy('users:user_detail_me')
 
     def post(self, request, *args, **kwargs):
-        old_token = Token.objects.get(user=request.user)
+        old_token = request.user.auth_token
         old_token.delete()
         new_token = Token.objects.create(user=request.user)
-        messages.success(request, f"Your new API key is '{new_token.key}'")
-        return HttpResponseRedirect(reverse('users:user_detail_me'))
+        messages.success(
+            request, c.USER_VIEW_UPDATE_API_KEY_SUCCESS_MESSAGE(new_token.key))
+        return HttpResponseRedirect(self.success_url)
 
 
 class UserDeleteView(LoginRequiredMixin, DeleteView):
@@ -261,16 +274,8 @@ class UserDeleteView(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy('project_root')
 
     def delete(self, request, *args, **kwargs):
-        messages.success(self.request, "Your account has been deleted.")
+        messages.success(self.request, c.USER_VIEW_DELETE_SUCCESS_MESSAGE)
         return super().delete(request, *args, **kwargs)
 
     def get_object(self):
         return self.request.user
-
-
-class UserLogoutView(LogoutView):
-    success_message = "You have successfully logged out."
-
-    def dispatch(self, request, *args, **kwargs):
-        messages.success(self.request, self.success_message)
-        return super().dispatch(request, *args, **kwargs)

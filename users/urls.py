@@ -33,6 +33,9 @@ urlpatterns = [
              form_class=UserPasswordResetForm,
              template_name='users/password_reset_form.html'),
          name='password_reset'),
+    path('logout/',
+         views.UserLogoutView.as_view(),
+         name='logout'),
     path('me/',
          views.UserDetailMeView.as_view(),
          name='user_detail_me'),
@@ -64,7 +67,4 @@ urlpatterns = [
     path('me/delete-account/',
          views.UserDeleteView.as_view(),
          name='user_delete'),
-    path('logout/',
-         views.UserLogoutView.as_view(),
-         name='logout'),
 ]

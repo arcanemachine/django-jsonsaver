@@ -15,7 +15,7 @@ fixture `Homepage`
 	.requestHooks(logger);
 
 
-test('Page returns 200', async t => {
+test('sanity check', async t => {
 	await t
 		.expect(logger.contains(r => r.response.statusCode === 200))
 		.ok();

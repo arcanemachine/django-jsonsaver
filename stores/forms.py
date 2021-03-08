@@ -29,6 +29,12 @@ class JsonStoreForm(forms.ModelForm):
         user = self.user
         obj = self.obj
 
+        # name cannot be numbers only
+        if invalidators.jsonstore_name_cannot_be_numbers_only(name):
+            self.add_error('name', ValidationError(
+                c.FORM_ERROR_JSONSTORE_NAME_CANNOT_BE_NUMBERS_ONLY,
+                code='jsonstore_name_cannot_be_numbers_only'))
+
         # public jsonstore name cannot be blank
         if invalidators.jsonstore_public_name_cannot_be_blank(name, is_public):
             self.add_error('name', ValidationError(

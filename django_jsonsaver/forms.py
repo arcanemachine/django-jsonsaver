@@ -6,8 +6,8 @@ from . import constants as c
 
 class ContactUsForm(forms.Form):
     first_name = forms.CharField(label="Name", max_length=128)
-    # honeypot field
-    last_name = forms.CharField(widget=forms.HiddenInput(), required=False)
+    last_name = forms.CharField(  # honeypot field
+        widget=forms.HiddenInput(), required=False)
     email = forms.EmailField()
     message = forms.CharField(widget=forms.widgets.Textarea)
     captcha = CaptchaField(

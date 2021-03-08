@@ -3,6 +3,15 @@ from django_jsonsaver import constants as c
 
 # JSONSTORE #
 
+# store name cannot be numbers only
+def jsonstore_name_cannot_be_numbers_only(name):
+    try:
+        if int(name):
+            return True
+    except ValueError:
+        pass
+
+
 # public jsonstore name cannot be blank
 def jsonstore_public_name_cannot_be_blank(name, is_public):
     if is_public and not name:

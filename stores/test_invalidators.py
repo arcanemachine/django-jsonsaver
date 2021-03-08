@@ -7,6 +7,14 @@ from django_jsonsaver import \
 
 
 class JsonStorePublicNameCannotBeBlankTest(SimpleTestCase):
+    def test_jsonstore_name_cannot_be_numbers_only(self):
+        name = '5'
+
+        self.assertTrue(
+            iv.jsonstore_name_cannot_be_numbers_only(name))
+
+
+class JsonStorePublicNameCannotBeBlankTest(SimpleTestCase):
     def test_jsonstore_public_name_cannot_be_blank(self):
         name = ''
         is_public = True

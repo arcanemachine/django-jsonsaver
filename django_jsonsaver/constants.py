@@ -1,5 +1,3 @@
-from .server_config import PROJECT_NAME
-
 # constants
 JSONSTORE_LIST_PAGINATE_BY = 25
 JSONSTORE_FORBIDDEN_NAMES = ['find']
@@ -45,7 +43,7 @@ JSONSTORE_CREATE_SUCCESS_MESSAGE = "Store created successfully"
 JSONSTORE_UPDATE_SUCCESS_MESSAGE = "Store updated successfully"
 JSONSTORE_DELETE_SUCCESS_MESSAGE = "Store deleted successfully"
 
-# User
+# user
 USER_FORM_EMAIL_ERROR_DUPLICATE = \
     "This email address is registered to another account."
 USER_FORM_EMAIL_ERROR_SAME_EMAIL = \
@@ -95,6 +93,8 @@ PROFILE_MODEL_IS_PUBLIC_HELP_TEXT = \
 
 FORM_ERROR_JSONSTORE_NAME_DUPLICATE = \
     "You cannot have multiple JSON stores with the same name."
+FORM_ERROR_JSONSTORE_NAME_CANNOT_BE_NUMBERS_ONLY = \
+    "JSON store names cannot be numbers only."
 FORM_ERROR_JSONSTORE_PUBLIC_NAME_BLANK = \
     "Publicly-accessible JSON stores must be given a name."
 FORM_ERROR_JSONSTORE_PUBLIC_NAME_DUPLICATE = \

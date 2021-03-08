@@ -44,9 +44,9 @@ class JsonStoreSerializerTest(APITestCase):
         mock_self = Mock()
         mock_self.context = {'request': Mock()}
         mock_self.context['request'].user = self.test_user
-        validated_data = {"data": {},
-                          "name": '',
-                          "is_public": False}
+        validated_data = {'data': {},
+                          'name': '',
+                          'is_public': False}
         result = self.test_serializer.create(mock_self, validated_data)
         self.assertEqual(result.user, self.test_user)
 
@@ -58,11 +58,25 @@ class JsonStoreSerializerTest(APITestCase):
 
     # VALIDATION #
 
+    def test_validation_jsonstore_name_cannot_be_numbers_only(self):
+        test_url = reverse('api:jsonstore-list')
+        data = {'name': '5'}
+        request = self.factory.post(test_url, data)
+        request.user = self.test_user
+        serializer = \
+            self.test_serializer(data=data, context={'request': request})
+        self.assertFalse(serializer.is_valid())
+        self.assertEqual(len(serializer.errors), 1)
+        # self.assertTrue('non_field_errors' in serializer.errors)
+        self.assertEqual(
+            serializer.errors['non_field_errors'][0].__str__(),
+            c.FORM_ERROR_JSONSTORE_NAME_CANNOT_BE_NUMBERS_ONLY)
+
     def test_validation_jsonstore_public_name_cannot_be_blank(self):
         test_url = reverse('api:jsonstore-list')
-        data = {"data": {},
-                "name": '',
-                "is_public": True}
+        data = {'data': {},
+                'name': '',
+                'is_public': True}
         request = self.factory.post(test_url, data)
         request.user = self.test_user
         serializer = \
@@ -76,9 +90,9 @@ class JsonStoreSerializerTest(APITestCase):
 
     def test_validation_jsonstore_forbidden_name_not_allowed(self):
         test_url = reverse('api:jsonstore-list')
-        data = {"data": {},
-                "name": c.JSONSTORE_FORBIDDEN_NAMES[0],
-                "is_public": False}
+        data = {'data': {},
+                'name': c.JSONSTORE_FORBIDDEN_NAMES[0],
+                'is_public': False}
         request = self.factory.post(test_url, data)
         request.user = self.test_user
         serializer = \
@@ -100,9 +114,9 @@ class JsonStoreSerializerTest(APITestCase):
             f.JsonStoreFactory(user=self.test_user)
 
         test_url = reverse('api:jsonstore-list')
-        data = {"data": {},
-                "name": '',
-                "is_public": False}
+        data = {'data': {},
+                'name': '',
+                'is_public': False}
         request = self.factory.post(test_url, data)
         request.user = self.test_user
         serializer = \
@@ -122,9 +136,9 @@ class JsonStoreSerializerTest(APITestCase):
             user=self.test_user, name='other_jsonstore_name')
 
         test_url = reverse('api:jsonstore-list')
-        data = {"data": {},
-                "name": other_jsonstore.name,
-                "is_public": False}
+        data = {'data': {},
+                'name': other_jsonstore.name,
+                'is_public': False}
         request = self.factory.post(test_url, data)
         request.user = self.test_user
         serializer = \
@@ -145,7 +159,7 @@ class JsonStoreSerializerTest(APITestCase):
         test_url = reverse('api:jsonstore-detail', kwargs={
             'pk': self.test_jsonstore.pk})
 
-        data = {"name": other_jsonstore.name}
+        data = {'name': other_jsonstore.name}
         request = self.factory.patch(test_url, data)
         request.user = self.test_user
         serializer = \
@@ -165,9 +179,9 @@ class JsonStoreSerializerTest(APITestCase):
             is_public=True)
 
         test_url = reverse('api:jsonstore-list')
-        data = {"data": {},
-                "name": other_jsonstore.name,
-                "is_public": True}
+        data = {'data': {},
+                'name': other_jsonstore.name,
+                'is_public': True}
         request = self.factory.post(test_url, data)
         request.user = self.test_user
         serializer = \
@@ -185,9 +199,9 @@ class JsonStoreSerializerTest(APITestCase):
         large_jsonstore_data = 'a' * sc.MAX_JSONSTORE_DATA_SIZE_USER_FREE
 
         test_url = reverse('api:jsonstore-list')
-        data = {"data": large_jsonstore_data,
-                "name": '',
-                "is_public": False}
+        data = {'data': large_jsonstore_data,
+                'name': '',
+                'is_public': False}
         request = self.factory.post(test_url, data)
         request.user = self.test_user
         serializer = \
@@ -208,9 +222,9 @@ class JsonStoreSerializerTest(APITestCase):
         f.JsonStoreFactory(user=self.test_user, data=large_jsonstore_data)
 
         test_url = reverse('api:jsonstore-list')
-        data = {"data": large_jsonstore_data,
-                "name": '',
-                "is_public": False}
+        data = {'data': large_jsonstore_data,
+                'name': '',
+                'is_public': False}
         request = self.factory.post(test_url, data)
         request.user = self.test_user
         serializer = \

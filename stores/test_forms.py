@@ -60,6 +60,13 @@ class JsonStoreFormTest(TestCase):
         self.assertEqual(form.clean_name(), 'test-jsonstore-name')
 
     # clean()
+    def test_validation_jsonstore_name_cannot_be_numbers_only(self):
+        self.form_data.update({'name': '5'})
+        form = forms.JsonStoreForm(self.form_data, **self.form_kwargs_create)
+        self.assertFalse(form.is_valid())
+        self.assertTrue(
+            form.has_error('name', 'jsonstore_name_cannot_be_numbers_only'))
+
     def test_validation_jsonstore_public_name_cannot_be_blank(self):
         self.form_data.update({'name': '',
                                'is_public': True})

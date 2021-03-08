@@ -30,6 +30,12 @@ class JsonStoreSerializer(serializers.ModelSerializer):
         user = self.context['request'].user
         obj = self.instance
 
+        # name cannot be numbers only
+        if invalidators.jsonstore_name_cannot_be_numbers_only(name):
+            raise serializers.ValidationError(
+                c.FORM_ERROR_JSONSTORE_NAME_CANNOT_BE_NUMBERS_ONLY,
+                code='jsonstore_name_cannot_be_numbers_only')
+
         # public jsonstore name cannot be blank
         if invalidators.jsonstore_public_name_cannot_be_blank(name, is_public):
             raise serializers.ValidationError(

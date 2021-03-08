@@ -1,6 +1,6 @@
 from django.contrib.auth.models import AnonymousUser
 from django.test import TestCase, RequestFactory
-from mock import Mock
+from unittest.mock import Mock
 
 from .permissions import UserHasJsonStorePermissionsMixin
 from django_jsonsaver import factories as f

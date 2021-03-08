@@ -33,19 +33,20 @@ class JsonStoreSerializer(serializers.ModelSerializer):
         # name cannot be numbers only
         if invalidators.jsonstore_name_cannot_be_numbers_only(name):
             raise serializers.ValidationError(
-                c.FORM_ERROR_JSONSTORE_NAME_CANNOT_BE_NUMBERS_ONLY,
+                {'name': c.FORM_ERROR_JSONSTORE_NAME_CANNOT_BE_NUMBERS_ONLY},
                 code='jsonstore_name_cannot_be_numbers_only')
 
         # public jsonstore name cannot be blank
         if invalidators.jsonstore_public_name_cannot_be_blank(name, is_public):
             raise serializers.ValidationError(
-                c.FORM_ERROR_JSONSTORE_PUBLIC_NAME_BLANK,
+                {'name': c.FORM_ERROR_JSONSTORE_PUBLIC_NAME_BLANK},
                 code='jsonstore_public_name_cannot_be_blank')
 
         # forbidden jsonstore name not allowed
         if invalidators.jsonstore_forbidden_name_not_allowed(name):
             raise serializers.ValidationError(
-                c.FORM_ERROR_JSONSTORE_FORBIDDEN_NAME_NOT_ALLOWED(name),
+                {'name':
+                    c.FORM_ERROR_JSONSTORE_FORBIDDEN_NAME_NOT_ALLOWED(name)},
                 code='jsonstore_forbidden_name_not_allowed')
 
         # user jsonstore count over max
@@ -63,21 +64,21 @@ class JsonStoreSerializer(serializers.ModelSerializer):
         if invalidators.jsonstore_name_duplicate_same_user_create(
                 name, user, obj, stores_with_same_name):
             raise serializers.ValidationError(
-                c.FORM_ERROR_JSONSTORE_NAME_DUPLICATE,
+                {'name': c.FORM_ERROR_JSONSTORE_NAME_DUPLICATE},
                 code='jsonstore_name_duplicate_same_user_create')
 
         # jsonstore_name_duplicate_same_user_update
         if invalidators.jsonstore_name_duplicate_same_user_update(
                 name, user, obj, stores_with_same_name):
             raise serializers.ValidationError(
-                c.FORM_ERROR_JSONSTORE_NAME_DUPLICATE,
+                {'name': c.FORM_ERROR_JSONSTORE_NAME_DUPLICATE},
                 code='jsonstore_name_duplicate_same_user_update')
 
         # jsonstore_public_name_duplicate
         if invalidators.jsonstore_public_name_duplicate(
                 name, is_public, user, stores_with_same_name):
             raise serializers.ValidationError(
-                c.FORM_ERROR_JSONSTORE_PUBLIC_NAME_DUPLICATE,
+                {'name': c.FORM_ERROR_JSONSTORE_PUBLIC_NAME_DUPLICATE},
                 code='jsonstore_public_name_duplicate')
 
         jsonstore_data_size = h.get_obj_size(jsonstore_data)
@@ -86,8 +87,8 @@ class JsonStoreSerializer(serializers.ModelSerializer):
         if invalidators.jsonstore_data_size_over_max(
                 jsonstore_data, user, jsonstore_data_size):
             raise serializers.ValidationError(
-                c.FORM_ERROR_JSONSTORE_DATA_SIZE_OVER_MAX(
-                    user, jsonstore_data_size),
+                {'data': c.FORM_ERROR_JSONSTORE_DATA_SIZE_OVER_MAX(
+                    user, jsonstore_data_size)},
                 code='jsonstore_data_size_over_max')
 
         # jsonstore size will exceed user's total storage allowance

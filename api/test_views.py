@@ -2,8 +2,8 @@ import json
 
 from django.contrib.auth.models import AnonymousUser
 from django.urls import reverse
-from mock import Mock
 from rest_framework.test import APIRequestFactory, APITestCase
+from unittest.mock import Mock
 
 from . import views
 from django_jsonsaver import factories as f, helpers_testing as ht

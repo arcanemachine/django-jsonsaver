@@ -1,7 +1,7 @@
 from django.contrib.messages import get_messages
 from django.test import TestCase
 from django.urls import reverse
-from mock import Mock
+from unittest.mock import Mock
 
 from django_jsonsaver import constants as c, factories as f
 from django_jsonsaver.helpers_testing import SetUpTestCaseMixin

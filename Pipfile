@@ -4,12 +4,12 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-django = "*"
+Django = "*"
 djangorestframework = "*"
 django-cors-headers = "*"
 ipython = "*"
 django-simple-captcha = "*"
-pillow = "*"
+Pillow = "*"
 django-crispy-forms = "*"
 celery = "*"
 redis = "*"
@@ -18,7 +18,6 @@ requests = "*"
 drf-spectacular = "*"
 psycopg2 = "*"
 factory-boy = "*"
-mock = "*"
 
 [dev-packages]
 

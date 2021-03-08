@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.test import SimpleTestCase
-from mock import Mock
+from unittest.mock import Mock
 
 from . import helpers_testing as ht
 

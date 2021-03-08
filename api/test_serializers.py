@@ -67,9 +67,9 @@ class JsonStoreSerializerTest(APITestCase):
             self.test_serializer(data=data, context={'request': request})
         self.assertFalse(serializer.is_valid())
         self.assertEqual(len(serializer.errors), 1)
-        # self.assertTrue('non_field_errors' in serializer.errors)
+        self.assertTrue('name' in serializer.errors)
         self.assertEqual(
-            serializer.errors['non_field_errors'][0].__str__(),
+            serializer.errors['name'][0].__str__(),
             c.FORM_ERROR_JSONSTORE_NAME_CANNOT_BE_NUMBERS_ONLY)
 
     def test_validation_jsonstore_public_name_cannot_be_blank(self):
@@ -83,9 +83,9 @@ class JsonStoreSerializerTest(APITestCase):
             self.test_serializer(data=data, context={'request': request})
         self.assertFalse(serializer.is_valid())
         self.assertEqual(len(serializer.errors), 1)
-        # self.assertTrue('non_field_errors' in serializer.errors)
+        self.assertTrue('name' in serializer.errors)
         self.assertEqual(
-            serializer.errors['non_field_errors'][0].__str__(),
+            serializer.errors['name'][0].__str__(),
             c.FORM_ERROR_JSONSTORE_PUBLIC_NAME_BLANK)
 
     def test_validation_jsonstore_forbidden_name_not_allowed(self):
@@ -100,11 +100,11 @@ class JsonStoreSerializerTest(APITestCase):
 
         self.assertFalse(serializer.is_valid())
         self.assertEqual(len(serializer.errors), 1)
-        # self.assertTrue('non_field_errors' in serializer.errors)
+        self.assertTrue('name' in serializer.errors)
 
         name = serializer.validate_name(data['name'])
         self.assertEqual(
-            serializer.errors['non_field_errors'][0].__str__(),
+            serializer.errors['name'][0].__str__(),
             c.FORM_ERROR_JSONSTORE_FORBIDDEN_NAME_NOT_ALLOWED(name))
 
     def test_validation_jsonstore_user_jsonstore_count_over_max(self):
@@ -124,7 +124,7 @@ class JsonStoreSerializerTest(APITestCase):
 
         self.assertFalse(serializer.is_valid())
         self.assertEqual(len(serializer.errors), 1)
-        # self.assertTrue('non_field_errors' in serializer.errors)
+        self.assertTrue('non_field_errors' in serializer.errors)
 
         self.assertEqual(
             serializer.errors['non_field_errors'][0].__str__(),
@@ -146,10 +146,10 @@ class JsonStoreSerializerTest(APITestCase):
 
         self.assertFalse(serializer.is_valid())
         self.assertEqual(len(serializer.errors), 1)
-        # self.assertTrue('non_field_errors' in serializer.errors)
+        self.assertTrue('name' in serializer.errors)
 
         self.assertEqual(
-            serializer.errors['non_field_errors'][0].__str__(),
+            serializer.errors['name'][0].__str__(),
             c.FORM_ERROR_JSONSTORE_NAME_DUPLICATE)
 
     def test_validation_jsonstore_name_duplicate_same_user_update(self):
@@ -167,10 +167,10 @@ class JsonStoreSerializerTest(APITestCase):
 
         self.assertFalse(serializer.is_valid())
         self.assertEqual(len(serializer.errors), 1)
-        # self.assertTrue('non_field_errors' in serializer.errors)
+        self.assertTrue('name' in serializer.errors)
 
         self.assertEqual(
-            serializer.errors['non_field_errors'][0].__str__(),
+            serializer.errors['name'][0].__str__(),
             c.FORM_ERROR_JSONSTORE_NAME_DUPLICATE)
 
     def test_validation_jsonstore_public_name_duplicate(self):
@@ -189,10 +189,9 @@ class JsonStoreSerializerTest(APITestCase):
 
         self.assertFalse(serializer.is_valid())
         self.assertEqual(len(serializer.errors), 1)
-        # self.assertTrue('non_field_errors' in serializer.errors)
 
         self.assertEqual(
-            serializer.errors['non_field_errors'][0].__str__(),
+            serializer.errors['name'][0].__str__(),
             c.FORM_ERROR_JSONSTORE_PUBLIC_NAME_DUPLICATE)
 
     def test_validation_jsonstore_data_size_over_max(self):
@@ -209,10 +208,10 @@ class JsonStoreSerializerTest(APITestCase):
 
         self.assertFalse(serializer.is_valid())
         self.assertEqual(len(serializer.errors), 1)
-        # self.assertTrue('non_field_errors' in serializer.errors)
+        self.assertTrue('data' in serializer.errors)
 
         self.assertEqual(
-            serializer.errors['non_field_errors'][0].__str__(),
+            serializer.errors['data'][0].__str__(),
             c.FORM_ERROR_JSONSTORE_DATA_SIZE_OVER_MAX(
                 self.test_user, h.get_obj_size(large_jsonstore_data)))
 
@@ -232,7 +231,7 @@ class JsonStoreSerializerTest(APITestCase):
 
         self.assertFalse(serializer.is_valid())
         self.assertEqual(len(serializer.errors), 1)
-        # self.assertTrue('non_field_errors' in serializer.errors)
+        self.assertTrue('non_field_errors' in serializer.errors)
 
         self.assertEqual(
             serializer.errors['non_field_errors'][0].__str__(),

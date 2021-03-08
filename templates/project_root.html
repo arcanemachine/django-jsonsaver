@@ -7,17 +7,17 @@
 
 {% block content %}
 
+<h3 class="content-title">What is {{ PROJECT_NAME }}?</h3>
+
+<p>{{ PROJECT_NAME }} is a free service that provides an easy way for users to store and retrieve arbitrary JSON data.</p>
+
 <div class="top-links">
   <p><a href="{% url 'stores:jsonstore_create' %}">Create a JSON store</a></p>
   <p><a href="{% url 'stores:jsonstore_lookup_public' %}">Lookup a public JSON store by name</a></p>
   <p><a href="{% url 'faq' %}">Frequently Asked Questions</a></p>
 </div>
 
-<h2 class="content-title">What is {{ PROJECT_NAME }}?</h2>
-
-<p>{{ PROJECT_NAME }} is a free service that provides an easy way for users to store and retrieve arbitrary JSON data.</p>
-
-<h2 class="content-title">Use Cases</h2>
+<h3 class="content-title">Use Cases</h3>
 <p>{{ PROJECT_NAME }} can be used to:</p>
 <ul>
   <li>Save user settings and config info for frontend apps without having to setup a backend database,</li>
@@ -31,15 +31,19 @@
 
 {% block style %}
 
+.content-container {
+  margin: 1.5rem auto;
+}
+
 .top-links {
+  margin: 2rem auto 3rem;
   text-align: center;
   font-size: 1.2rem;
 }
 
 .content-title {
   text-align: center;
-  margin-top: 3.5rem;
-  margin-bottom: 1rem;
+  margin: 1rem auto;
 }
 
 {% endblock style %}

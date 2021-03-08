@@ -19,6 +19,7 @@ drf-spectacular = "*"
 psycopg2 = "*"
 factory-boy = "*"
 coverage = "*"
+beautifulsoup4 = "*"
 
 [dev-packages]
 

@@ -73,6 +73,6 @@ test('CRUD JSON store with no name', async t => {
 	await t.click('#form-button-submit');
 
 	// page contains jsonstore_delete success message
-	const successMessageDelete = (await Selector('.message-item').textContent).trim();
+	const successMessageDelete = (await Selector('.jsonstore-delete-success').textContent).trim();
 	await t.expect(successMessageDelete).eql('Store deleted successfully');
 })

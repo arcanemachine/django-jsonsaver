@@ -25,7 +25,7 @@ test('sanity check', async t => {
 
 test('Successful user registration and activation', async t => {
 	let username = 'test_registration';
-	let password = 'ppassword';
+	let password = ht.testUserPassword;
 
 	const usernameField = await Selector('#id_username');
 	const emailField = await Selector('#id_email');

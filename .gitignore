@@ -11,6 +11,7 @@ todo-test
 base_template.html
 menus/templatetags/
 deleteme/
+scripts/
 
 # npm #
 node_modules/

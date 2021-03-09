@@ -36,7 +36,9 @@ test('Cookie notice permanently disappears after clicking "I understand" button'
 	// cookie notice is no longer visible
 	await t.expect(cookieNotice.getStyleProperty('display')).eql('none');
 
+
 	// localStorage - cookie notice accepted
+	// const localStorageSet = ClientFunction((prop, value) => localStorage.setItem(prop, value));
 	const localStorageGet = ClientFunction(prop => localStorage.getItem(prop));
 	const cookieNoticeAccepted = localStorageGet('cookieNoticeAccepted');
 

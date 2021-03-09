@@ -93,9 +93,9 @@
         {% endcomment %}
 
         {% if messages %}
-          <div id="info-message-container" class="info-message-container">
+          <div id="message-container" class="message-container">
             {% for message in messages %}
-              <div class="info-message-item">
+              <div class="message-item{% if message.tags %} {{ message.tags}}{% endif %}">
                 <strong>{{ message }}</strong>
               </div>
             {% endfor %}

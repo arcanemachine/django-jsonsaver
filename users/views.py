@@ -51,7 +51,18 @@ class UserRegisterView(CreateView):
         if settings.DEBUG:
             h.send_welcome_email(
                 user.email, user.profile.activation_code)
-        messages.success(self.request, c.USER_VIEW_REGISTER_SUCCESS_MESSAGE)
+        messages.success(
+            self.request,
+            c.USER_VIEW_REGISTER_SUCCESS_MESSAGE,
+            extra_tags='success-message-user-register')
+
+        # test_code
+        if settings.DEBUG and user.username == 'test_registration':
+            messages.success(
+                self.request,
+                f'{user.profile.activation_code}',
+                extra_tags='success-message-user-register-debug')
+
         return HttpResponseRedirect(self.success_url)
 
 
@@ -106,8 +117,14 @@ def user_activate(request, activation_code):
     user.profile.activation_code = None
     user.profile.save()
 
+    # test_code
+    if settings.DEBUG and user.username == 'test_registration':
+        user.delete()
+
     # show success_message and redirect to success_url
-    messages.success(request, c.USER_VIEW_USER_ACTIVATE_SUCCESS_MESSAGE)
+    messages.success(
+        request, c.USER_VIEW_USER_ACTIVATE_SUCCESS_MESSAGE,
+        extra_tags='success-message-user-activate')
     return HttpResponseRedirect(success_url)
 
 

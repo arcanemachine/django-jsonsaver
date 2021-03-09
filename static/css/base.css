@@ -57,7 +57,7 @@ ul {
   margin-top: 2.5rem;
 }
 
-.info-message-container {
+.message-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -69,12 +69,12 @@ ul {
   transition: opacity 0.5s;
 }
 
-.info-message-item {
+.message-item {
   text-align: center;
   margin: auto 2rem;
 }
 
-.info-message-item:not(:first-child) {
+.message-item:not(:first-child) {
   margin-top: 1rem;
 }
 

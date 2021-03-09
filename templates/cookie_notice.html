@@ -16,7 +16,7 @@
 <script>
 
   function cookieNoticeAccept() {
-    localStorage.setItem('cookieNoticeAccept', 1);
+    localStorage.setItem('cookieNoticeAccepted', '1');
     let cookieNotice = document.querySelector('#cookie-notice');
     cookieNotice.style.opacity = '0';
     setTimeout(() => {
@@ -24,7 +24,7 @@
     }, 500)
   }
 
-  if (!localStorage.getItem('cookieNoticeAccept')) {
+  if (!localStorage.getItem('cookieNoticeAccepted')) {
     let cookieNotice = document.querySelector('#cookie-notice');
     cookieNotice.style.display = 'block';
     setTimeout(() => {

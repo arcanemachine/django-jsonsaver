@@ -40,4 +40,4 @@ class JsonStore(models.Model):
             'jsonstore_pk': self.pk})
 
     def get_data_size(self):
-        return round(h.get_obj_size(self.data) / 1024, 2)
+        return h.bytes_to_kb(h.get_obj_size(self.data))

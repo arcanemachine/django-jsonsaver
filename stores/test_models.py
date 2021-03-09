@@ -3,7 +3,7 @@ from django.db import models
 from django.test import TestCase
 from django.urls import reverse
 
-from django_jsonsaver import constants as c, factories as f
+from django_jsonsaver import constants as c, factories as f, helpers as h
 from stores.models import JsonStore
 
 UserModel = get_user_model()
@@ -151,6 +151,11 @@ class JsonStoreModelTest(TestCase):
         expected_url = reverse('stores:jsonstore_detail', kwargs={
             'jsonstore_pk': self.test_jsonstore.pk})
         self.assertEqual(self.test_jsonstore.get_absolute_url(), expected_url)
+
+    def test_get_data_size(self):
+        self.assertEqual(
+            self.test_jsonstore.get_data_size(),
+            h.bytes_to_kb(h.get_obj_size(self.test_jsonstore.data)))
 
     # FUNCTIONAL #
     def test_model_object_content_and_methods(self):

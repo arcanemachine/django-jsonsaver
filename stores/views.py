@@ -22,7 +22,7 @@ class JsonStoreListView(LoginRequiredMixin, ListView):
         return self.request.user.jsonstore_set.order_by('-updated_at')
 
 
-class JsonStoreCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+class JsonStoreCreateView(LoginRequiredMixin, CreateView):
     model = JsonStore
     form_class = forms.JsonStoreForm
     success_message = c.JSONSTORE_CREATE_SUCCESS_MESSAGE
@@ -41,6 +41,9 @@ class JsonStoreCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         self.object = form.save(commit=False)
         self.object.user = self.request.user
         self.object.save()
+        messages.success(
+            self.request, self.success_message,
+            extra_tags='jsonstore-create-success')
         return HttpResponseRedirect(self.get_success_url())
 
 

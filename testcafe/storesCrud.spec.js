@@ -30,20 +30,17 @@ test('CRUD JSON store with no name', async t => {
 	// CREATE
 	
 	await t.useRole(roles.testUser);
-	// await t.typeText('#id_data', data);
-	// await t.typeText('#id_name', name);
 	await t.click('#form-button-submit');
+
+	// next page contains jsonstore_create success message
+	const successMessageCreate = (await Selector('.jsonstore-create-success').textContent).trim();
+	await t.expect(successMessageCreate).eql('Store created successfully');
 
 
 	// DETAIL
 
-	// user is redirected to item_detail
+	// page title matches jsonstore_detail body_title
 	await t.expect(Selector('#body-title').textContent).eql('JSON Store');
-
-	// page contains success_message
-	const successMessageCreate = (await Selector('.jsonstore-create-success').textContent).trim();
-	await t.expect(successMessageCreate).eql('Store created successfully');
-
 
 	// UPDATE
 
@@ -61,9 +58,21 @@ test('CRUD JSON store with no name', async t => {
 		.typeText('#id_data', updatedData);
 	await t.click('#form-button-submit');
 
-	// page contains jsonstore_update success_message
+	// page contains jsonstore_update success message
 	const successMessageUpdate = (await Selector('.message-item').textContent).trim();
 	await t.expect(successMessageUpdate).eql('Store updated successfully');
 
 
+	// DELETE
+
+	// navigate to jsonstore_delete
+	await t.navigateTo(getUrlDelete(currentStoreId));
+
+	// click on the confirmation checkbox and submit the form
+	await t.click('#confirm_checkbox');
+	await t.click('#form-button-submit');
+
+	// page contains jsonstore_delete success message
+	const successMessageDelete = (await Selector('.message-item').textContent).trim();
+	await t.expect(successMessageDelete).eql('Store deleted successfully');
 })

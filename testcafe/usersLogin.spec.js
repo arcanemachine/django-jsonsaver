@@ -12,13 +12,9 @@ const logger = RequestLogger({testUrl}, {
 });
 
 
-fixture `User Login`
+fixture `User login`
 	.page(testUrl)
 	.requestHooks(logger)
-	.before(() => {
-		ht.localStorageSet('cookieNoticeAccepted', '1');
-	});
-
 
 test('sanity check', async t => {
 	await t.expect(logger.contains(r => r.response.statusCode === 200)).ok()

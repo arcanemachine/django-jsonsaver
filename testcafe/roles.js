@@ -7,8 +7,9 @@ const backendUrl = ht.BACKEND_SERVER_URL;
 let loginUrl = `${backendUrl}/users/login/`;
 
 export const testUser = Role(loginUrl, async t => {
+	await ht.localStorageSet('cookieNoticeAccepted', '1');
 	let username = 'testcafe_user';
-	let password = ht.TEST_USER_PASSWORD;
+	let password = keys.TEST_USER_PASSWORD;
 
 	await t.typeText('#id_username', username);
 	await t.typeText('#id_password', password);

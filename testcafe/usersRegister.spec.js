@@ -1,7 +1,7 @@
 import { ClientFunction, RequestLogger, Selector } from 'testcafe';
 
-import * as ht from './helpersTesting.js'
-import * as keys from './keys.js'
+import * as ht from './helpersTesting.js';
+import * as keys from './keys.js';
 
 
 const backendUrl = ht.BACKEND_SERVER_URL;
@@ -12,12 +12,9 @@ const logger = RequestLogger({testUrl}, {
 });
 
 
-fixture `New User Registration`
+fixture `New user registration`
 	.page(testUrl)
 	.requestHooks(logger)
-	.before(() => {
-		ht.localStorageSet('cookieNoticeAccepted', '1');
-	});
 
 
 test('sanity check', async t => {

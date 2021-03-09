@@ -1,1 +1,0 @@
-testcafe chromium . -L

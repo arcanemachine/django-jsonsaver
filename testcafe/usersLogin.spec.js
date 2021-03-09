@@ -24,7 +24,7 @@ test('sanity check', async t => {
 })
 
 test('Successful user login', async t => {
-	let username = 'test_login';
+	let username = 'testcafe_user';
 	let password = ht.TEST_USER_PASSWORD;
 
 	const usernameField = await Selector('#id_username');

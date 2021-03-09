@@ -88,9 +88,8 @@ class JsonStoreCreateViewTest(SetUpTestCaseMixin, TestCase):
 
     def test_view_mixins(self):
         mixins = self.view.__bases__
-        self.assertEqual(len(mixins[:-1]), 2)
+        self.assertEqual(len(mixins[:-1]), 1)
         self.assertEqual(mixins[0].__name__, 'LoginRequiredMixin')
-        self.assertEqual(mixins[1].__name__, 'SuccessMessageMixin')
 
     def test_view_parent_class(self):
         self.assertEqual(self.view.__bases__[-1].__name__, 'CreateView')

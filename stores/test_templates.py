@@ -38,8 +38,8 @@ class JsonStoreListTemplateTest(TestCase):
         cls.test_url = reverse('stores:jsonstore_list')
 
     def setUp(self):
-        self.assertTrue(self.client.login(username=self.test_user.username,
-                                          password=c.TEST_USER_PASSWORD))
+        self.assertTrue(self.client.login(
+            username=self.test_user.username, password=c.TEST_USER_PASSWORD))
 
     def test_small_item_count_is_not_paginated(self):
         response = self.client.get(self.test_url)

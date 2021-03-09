@@ -59,11 +59,15 @@
 
     {% if page_obj.has_next %}
     <li class="page-item">
-      <a class="page-link" href="?page={{ page_obj.paginator.count }}">&raquo;</a>
+      <a id="page-link-last"
+         class="page-link"
+         href="?page={{ page_obj.paginator.count }}">
+        &raquo;
+      </a>
     </li>
     {% else %}
     <li class="page-item disabled" tabindex="-1">
-      <a class="page-link">&raquo;</a>
+      <a class="page-link-last">&raquo;</a>
     </li>
     {% endif %}
 

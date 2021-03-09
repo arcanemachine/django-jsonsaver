@@ -1,5 +1,7 @@
 import { ClientFunction, RequestLogger, Selector } from 'testcafe';
+
 import * as ht from './helpersTesting.js'
+import * as keys from './keys.js'
 
 
 const backendUrl = ht.BACKEND_SERVER_URL;
@@ -14,8 +16,7 @@ fixture `New User Registration`
 	.page(testUrl)
 	.requestHooks(logger)
 	.before(() => {
-		const localStorageSet = ClientFunction((prop, value) => localStorage.setItem(prop, value))
-		localStorageSet('cookieNoticeAccepted', '1');
+		ht.localStorageSet('cookieNoticeAccepted', '1');
 	});
 
 
@@ -25,7 +26,7 @@ test('sanity check', async t => {
 
 test('Successful user registration and activation', async t => {
 	let username = 'test_registration';
-	let password = ht.testUserPassword;
+	let password = keys.TEST_USER_PASSWORD;
 
 	const usernameField = await Selector('#id_username');
 	const emailField = await Selector('#id_email');
@@ -40,14 +41,13 @@ test('Successful user registration and activation', async t => {
 	await t.typeText(captchaField, 'PASSED');
 	await t.click('#form-button-submit');
 
+	// user is redirected to login view
+	await t.expect(ht.getWindowLocation()).eql(`${backendUrl}/users/login/`);
+
 	// page contains success-message-registration and success-message-registration-debug 
 	const registrationSuccessMessage = (await Selector('.success-message-user-register').textContent).trim();
 	const activationCode = (await Selector('.success-message-user-register-debug').textContent).trim();
 	await t.expect(registrationSuccessMessage).eql('Success! Please check your email inbox for your confirmation message.');
-
-
-	// user is redirected to login view
-	await t.expect(ht.getWindowLocation()).eql(`${backendUrl}/users/login/`);
 
 	// navigate to activation url
 	await t.navigateTo(`${backendUrl}/users/activate/${activationCode}`)

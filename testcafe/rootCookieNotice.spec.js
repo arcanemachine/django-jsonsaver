@@ -1,6 +1,6 @@
 import { ClientFunction, RequestLogger, Selector } from 'testcafe';
-import * as ht from './helpersTesting.js'
 
+import * as ht from './helpersTesting.js'
 
 const backendUrl = ht.BACKEND_SERVER_URL;
 let testUrl = `${backendUrl}`;
@@ -36,11 +36,8 @@ test('Cookie notice permanently disappears after clicking "I understand" button'
 	// cookie notice is no longer visible
 	await t.expect(cookieNotice.getStyleProperty('display')).eql('none');
 
-
 	// localStorage - cookie notice accepted
-	// const localStorageSet = ClientFunction((prop, value) => localStorage.setItem(prop, value));
-	const localStorageGet = ClientFunction(prop => localStorage.getItem(prop));
-	const cookieNoticeAccepted = localStorageGet('cookieNoticeAccepted');
+	const cookieNoticeAccepted = ht.localStorageGet('cookieNoticeAccepted');
 
 	// reload the page
 	await t.eval(() => location.reload(true));

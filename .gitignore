@@ -5,6 +5,7 @@ data.dump
 geckodriver.log
 secret_key.py
 keys.py
+keys.js
 gunicorn.sh 
 todo
 todo-test

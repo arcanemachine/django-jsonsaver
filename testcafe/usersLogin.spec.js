@@ -1,5 +1,7 @@
 import { ClientFunction, RequestLogger, Selector } from 'testcafe';
+
 import * as ht from './helpersTesting.js'
+import * as keys from './keys.js'
 
 
 const backendUrl = ht.BACKEND_SERVER_URL;
@@ -14,8 +16,7 @@ fixture `User Login`
 	.page(testUrl)
 	.requestHooks(logger)
 	.before(() => {
-		const localStorageSet = ClientFunction((prop, value) => localStorage.setItem(prop, value))
-		localStorageSet('cookieNoticeAccepted', '1');
+		ht.localStorageSet('cookieNoticeAccepted', '1');
 	});
 
 
@@ -25,7 +26,7 @@ test('sanity check', async t => {
 
 test('Successful user login', async t => {
 	let username = 'testcafe_user';
-	let password = ht.TEST_USER_PASSWORD;
+	let password = keys.TEST_USER_PASSWORD;
 
 	const usernameField = await Selector('#id_username');
 	const passwordField = await Selector('#id_password');

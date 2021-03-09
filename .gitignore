@@ -5,12 +5,14 @@ data.dump
 geckodriver.log
 secret_key.py
 keys.py
+keys.js
 gunicorn.sh 
 todo
 todo-test
 base_template.html
 menus/templatetags/
 deleteme/
+scripts/
 
 # npm #
 node_modules/

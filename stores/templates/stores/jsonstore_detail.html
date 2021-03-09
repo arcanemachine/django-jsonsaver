@@ -55,15 +55,15 @@
     <span class="ml-1">
       {% if jsonstore.name %}
         {{ jsonstore.name }}
+        {% if request.user == jsonstore.user and request.resolver_match.view_name != 'stores:jsonstore_detail_name' %}
+          <span class="ml-1">
+            (<a href="{% url 'stores:jsonstore_detail_name' jsonstore_name=jsonstore.name %}">private link</a>)
+          </span>
+        {% endif %}
       {% else %}
         N/A
       {% endif %}
     </span>
-    {% if request.user == jsonstore.user and request.resolver_match.view_name != 'stores:jsonstore_detail_name' %}
-      <span class="ml-1">
-        (<a href="{% url 'stores:jsonstore_detail_name' jsonstore_name=jsonstore.name %}">private link</a>)
-      </span>
-    {% endif %}
   </p>
 
   <p>

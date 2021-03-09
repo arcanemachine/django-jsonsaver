@@ -171,9 +171,21 @@ class JsonStoreDetailViewTest(SetUpTestCaseMixin, TestCase):
     def test_view_pk_url_kwarg(self):
         self.assertEqual(self.view.pk_url_kwarg, 'jsonstore_pk')
 
+    def test_jsonstore_with_no_name_returns_200(self):
+        test_jsonstore = f.JsonStoreFactory(user=self.test_user, name='')
+        test_url = reverse('stores:jsonstore_detail', kwargs={
+            'jsonstore_pk': test_jsonstore.pk})
+
+        self.assertTrue(self.client.login(
+            username=self.test_user.username, password=c.TEST_USER_PASSWORD))
+        response = self.client.get(test_url)
+        self.assertEqual(response.status_code, 200)
+
+
     # TEMPLATES
     def test_template_shows_alert_if_jsonstore_is_public(self):
         pass
+
 
 
 class JsonStoreLookupViewTest(SetUpTestCaseMixin, TestCase):

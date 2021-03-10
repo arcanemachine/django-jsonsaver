@@ -1,3 +1,5 @@
+![Coverage Badge](/static/img/coverage.svg "Coverage Badge")
+
 # jsonSaver
 
 jsonSaver is a free service that provides an easy way for users to store and retrieve arbitrary JSON data.

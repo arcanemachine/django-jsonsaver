@@ -208,7 +208,6 @@ paths:
           multipart/form-data:
             schema:
               $ref: '#/components/schemas/JsonStore'
-        required: true
       security:
       - cookieAuth: []
       - tokenAuth: []
@@ -265,7 +264,6 @@ paths:
           multipart/form-data:
             schema:
               $ref: '#/components/schemas/JsonStore'
-        required: true
       security:
       - cookieAuth: []
       - tokenAuth: []
@@ -371,6 +369,7 @@ paths:
           multipart/form-data:
             schema:
               $ref: '#/components/schemas/JsonStoreName'
+        required: true
       security:
       - cookieAuth: []
       - tokenAuth: []
@@ -480,30 +479,42 @@ components:
         user:
           type: integer
           readOnly: true
-        is_public:
-          type: boolean
-          description: Allow this JSON store to be publicly accessible by name.
+        data:
+          type: object
+          additionalProperties: {}
         name:
           type: string
           nullable: true
           description: Name will be lowercased and hyphenated for use in URLs.
           maxLength: 128
-        data:
-          type: object
-          additionalProperties: {}
+        is_public:
+          type: boolean
+          description: Allow this JSON store to be publicly accessible by name.
       required:
-      - data
       - id
       - user
     JsonStoreName:
       type: object
       properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          type: integer
         data:
           type: object
           additionalProperties: {}
+        name:
+          type: string
+          nullable: true
+          description: Name will be lowercased and hyphenated for use in URLs.
+          maxLength: 128
         is_public:
           type: boolean
           description: Allow this JSON store to be publicly accessible by name.
+      required:
+      - id
+      - user
     JsonStorePublic:
       type: object
       properties:
@@ -511,8 +522,13 @@ components:
           type: object
           additionalProperties: {}
           readOnly: true
+        name:
+          type: string
+          readOnly: true
+          description: Name will be lowercased and hyphenated for use in URLs.
       required:
       - data
+      - name
     PatchedJsonStore:
       type: object
       properties:
@@ -522,23 +538,33 @@ components:
         user:
           type: integer
           readOnly: true
-        is_public:
-          type: boolean
-          description: Allow this JSON store to be publicly accessible by name.
+        data:
+          type: object
+          additionalProperties: {}
         name:
           type: string
           nullable: true
           description: Name will be lowercased and hyphenated for use in URLs.
           maxLength: 128
-        data:
-          type: object
-          additionalProperties: {}
+        is_public:
+          type: boolean
+          description: Allow this JSON store to be publicly accessible by name.
     PatchedJsonStoreName:
       type: object
       properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          type: integer
         data:
           type: object
           additionalProperties: {}
+        name:
+          type: string
+          nullable: true
+          description: Name will be lowercased and hyphenated for use in URLs.
+          maxLength: 128
         is_public:
           type: boolean
           description: Allow this JSON store to be publicly accessible by name.

@@ -21,8 +21,8 @@
 
 {% block content %}
 
-{% if jsonstore.user == request.user and jsonstore.is_public %}
-  <div class="my-2 alert alert-info font-weight-bold">
+{% if request.user == jsonstore.user and jsonstore.is_public %}
+  <div id="alert-info-jsonstore-is-public" class="my-2 alert alert-info font-weight-bold">
     <div>
       This store is publicly viewable by anyone with access to its 
       <a href="{{ BACKEND_SERVER_URL }}{% url 'stores:jsonstore_detail_public' jsonstore_name=jsonstore.name %}">

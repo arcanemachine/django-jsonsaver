@@ -58,3 +58,28 @@ class JsonStoreListTemplateTest(TestCase):
         html = response.content.decode('utf-8')
         soup = bs(html, 'html5lib')
         self.assertIsNotNone(soup.find(id='page-link-last'))
+
+
+class JsonStoreDetailTemplateTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.test_user = f.UserFactory()
+        cls.test_jsonstore = \
+            f.JsonStoreFactory(user=cls.test_user, is_public=True)
+        cls.test_url = reverse('stores:jsonstore_detail', kwargs={
+            'jsonstore_pk': cls.test_jsonstore.pk})
+
+    def test_public_jsonstore_shows_public_alert_to_store_owner(self):
+        self.assertTrue(self.client.login(
+            username=self.test_user.username,
+            password=c.TEST_USER_PASSWORD))
+        response = self.client.get(self.test_url)
+        html = response.content.decode('utf-8')
+        soup = bs(html, 'html5lib')
+        self.assertIsNone(soup.find('alert-info-jsonstore-is-public'))
+
+    def test_public_jsonstore_shows_no_public_alert_to_non_store_owner(self):
+        response = self.client.get(self.test_url)
+        html = response.content.decode('utf-8')
+        soup = bs(html, 'html5lib')
+        self.assertIsNone(soup.find('alert-info-jsonstore-is-public'))

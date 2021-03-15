@@ -135,6 +135,7 @@ class JsonStoreDeleteView(UserHasJsonStorePermissionsMixin, DeleteView):
     success_url = reverse_lazy('stores:jsonstore_list')
 
     def delete(self, request, *args, **kwargs):
-        messages.success(request, self.success_message,
+        messages.success(
+            request, self.success_message,
             extra_tags='jsonstore-delete-success')
         return super().delete(request, *args, **kwargs)

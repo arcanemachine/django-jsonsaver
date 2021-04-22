@@ -21,7 +21,7 @@ node_modules/
 ## local scripts
 runserver
 runserver_insecure.sh
-shell
+# shell
 
 # Django #
 *.log

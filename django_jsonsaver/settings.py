@@ -7,6 +7,7 @@ from django_jsonsaver import keys, server_config
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField' 
 
 SECRET_KEY = keys.SECRET_KEY
 DEBUG = server_config.DEBUG

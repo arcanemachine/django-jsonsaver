@@ -16,10 +16,10 @@ redis = "*"
 django-ses = "*"
 requests = "*"
 drf-spectacular = "*"
-psycopg2 = "*"
 factory-boy = "*"
 coverage = "*"
 beautifulsoup4 = "*"
+psycopg2-binary = "*"
 
 [dev-packages]
 

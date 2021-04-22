@@ -19,7 +19,6 @@ mediafiles/
 node_modules/
 
 ## local scripts
-makenmigrate
 runserver
 runserver_insecure.sh
 shell

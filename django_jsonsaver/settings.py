@@ -72,7 +72,7 @@ elif server_config.USE_DATABASE == 'postgres':
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'jsonsaver',
+            'NAME': keys.DATABASE_NAME,
             'USER': keys.DATABASE_USER,
             'PASSWORD': keys.DATABASE_PASSWORD,
             'HOST': 'localhost',

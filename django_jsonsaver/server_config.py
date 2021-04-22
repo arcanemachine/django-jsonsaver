@@ -6,7 +6,7 @@ from .helpers import kb_to_bytes
 PROJECT_NAME = 'jsonSaver'
 
 BACKEND_SERVER_TYPE = 'dev'
-BACKEND_SERVER_EMAIL = 'no-reply@your-domain.com'
+SERVER_EMAIL = 'no-reply@your-domain.com'
 CONTACT_FORM_EMAIL_RECIPIENT = 'your-email@your-domain.com'
 
 BACKEND_SERVER_PROTOCOL = 'http://'

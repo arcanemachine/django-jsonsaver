@@ -76,7 +76,7 @@ elif server_config.USE_DATABASE == 'postgres':
             'USER': keys.DATABASE_USER,
             'PASSWORD': keys.DATABASE_PASSWORD,
             'HOST': 'localhost',
-            'POST': ''}}
+            'PORT': ''}}
 
 PV_PREFIX = 'django.contrib.auth.password_validation'
 AUTH_PASSWORD_VALIDATORS = [

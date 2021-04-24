@@ -20,6 +20,7 @@ factory-boy = "*"
 coverage = "*"
 beautifulsoup4 = "*"
 psycopg2-binary = "*"
+gunicorn = "*"
 
 [dev-packages]
 

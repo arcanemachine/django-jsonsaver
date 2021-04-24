@@ -49,7 +49,7 @@ def bytes_to_kb(bt):
 def send_test_email(recipient):
     subject = "Test Message"
     body = "Test message sent successfully!"
-    sender = server_config.BACKEND_SERVER_EMAIL
+    sender = server_config.SERVER_EMAIL
     recipient = [recipient]
     return send_mail(subject, body, sender, recipient)
 
@@ -57,7 +57,7 @@ def send_test_email(recipient):
 def send_contact_us_email(name, from_email, message):
     subject = f"{server_config.PROJECT_NAME} Contact Form: Submitted by {name}"
     body = f"Name: {name}\nEmail: {from_email}\n\nMessage: {message}"
-    sender = server_config.BACKEND_SERVER_EMAIL
+    sender = server_config.SERVER_EMAIL
     recipient = [server_config.CONTACT_FORM_EMAIL_RECIPIENT]
     return send_mail(subject, body, sender, recipient)
 
@@ -69,7 +69,7 @@ def send_welcome_email(recipient, activation_code):
         server_config.BACKEND_SERVER_URL + \
         reverse('users:user_activate', kwargs={
                 'activation_code': activation_code})
-    sender = server_config.BACKEND_SERVER_EMAIL
+    sender = server_config.SERVER_EMAIL
     recipient = [recipient]
     return send_mail(subject, body, sender, recipient)
 
@@ -80,7 +80,7 @@ def send_email_update_email(recipient, activation_code):
         "new email address:\n\n" + server_config.BACKEND_SERVER_URL + \
         reverse('users:user_update_email_confirm',
                 kwargs={'activation_code': activation_code})
-    sender = server_config.BACKEND_SERVER_EMAIL
+    sender = server_config.SERVER_EMAIL
     recipient = [recipient]
     return send_mail(subject, body, sender, recipient)
 
@@ -90,6 +90,6 @@ def send_user_username_recover_email(email, username):
     body = f"Your username is '{username}'.\n\n" +\
         "You may login to your account here: " +\
         server_config.BACKEND_SERVER_URL + reverse('users:login')
-    sender = server_config.BACKEND_SERVER_EMAIL
+    sender = server_config.SERVER_EMAIL
     recipient = [email]
     return send_mail(subject, body, sender, recipient)

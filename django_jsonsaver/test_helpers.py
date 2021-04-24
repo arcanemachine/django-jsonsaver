@@ -63,7 +63,7 @@ class SendEmailFunctionsTest(TestCase):
         test_email = mail.outbox[0]
         self.assertEqual(test_email.subject, "Test Message")
         self.assertEqual(test_email.body, "Test message sent successfully!")
-        self.assertEqual(test_email.from_email, sc.BACKEND_SERVER_EMAIL)
+        self.assertEqual(test_email.from_email, sc.SERVER_EMAIL)
         self.assertEqual(test_email.to, [recipient])
 
     def test_send_contact_us_email(self):
@@ -81,7 +81,7 @@ class SendEmailFunctionsTest(TestCase):
         self.assertEqual(
             test_email.body,
             f"Name: {name}\nEmail: {from_email}\n\nMessage: {message}")
-        self.assertEqual(test_email.from_email, sc.BACKEND_SERVER_EMAIL)
+        self.assertEqual(test_email.from_email, sc.SERVER_EMAIL)
         self.assertEqual(test_email.to, [sc.CONTACT_FORM_EMAIL_RECIPIENT])
 
     def test_send_welcome_email(self):
@@ -101,7 +101,7 @@ class SendEmailFunctionsTest(TestCase):
             sc.BACKEND_SERVER_URL +
             reverse('users:user_activate',
                     kwargs={'activation_code': activation_code}))
-        self.assertEqual(test_email.from_email, sc.BACKEND_SERVER_EMAIL)
+        self.assertEqual(test_email.from_email, sc.SERVER_EMAIL)
         self.assertEqual(test_email.to, [recipient])
 
     def test_send_email_update_email(self):
@@ -121,7 +121,7 @@ class SendEmailFunctionsTest(TestCase):
             "new email address:\n\n" + sc.BACKEND_SERVER_URL +
             reverse('users:user_update_email_confirm',
                     kwargs={'activation_code': activation_code}))
-        self.assertEqual(test_email.from_email, sc.BACKEND_SERVER_EMAIL)
+        self.assertEqual(test_email.from_email, sc.SERVER_EMAIL)
         self.assertEqual(test_email.to, [recipient])
 
     def test_send_user_username_recover_email(self):
@@ -141,5 +141,5 @@ class SendEmailFunctionsTest(TestCase):
             f"Your username is '{username}'.\n\n" +
             "You may login to your account here: " +
             sc.BACKEND_SERVER_URL + reverse('users:login'))
-        self.assertEqual(test_email.from_email, sc.BACKEND_SERVER_EMAIL)
+        self.assertEqual(test_email.from_email, sc.SERVER_EMAIL)
         self.assertEqual(test_email.to, [recipient])

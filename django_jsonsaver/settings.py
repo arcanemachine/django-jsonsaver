@@ -7,7 +7,7 @@ from django_jsonsaver import keys, server_config
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-DEFAULT_AUTO_FIELD = 'django.db.models.AutoField' 
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 SECRET_KEY = keys.SECRET_KEY
 DEBUG = server_config.DEBUG
@@ -123,6 +123,7 @@ SPECTACULAR_SETTINGS = {
 
 # email
 SERVER_EMAIL = server_config.SERVER_EMAIL
+DEFAULT_FROM_EMAIL = SERVER_EMAIL
 EMAIL_BACKEND = server_config.EMAIL_BACKEND
 
 AWS_ACCESS_KEY_ID = keys.AWS_ACCESS_KEY_ID
